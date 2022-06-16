@@ -22,3 +22,6 @@ yarn-error.log*
 
 # next.js
 .next/
+
+# don't track images in git, use git-lfs
+/posts/drafts/images
