@@ -37,12 +37,14 @@ So if you're going for the RS3 and want the phone holder and Image Transmitter, 
 
 ## So what does the Ronin Image Transmitter do for me?
 
-Easy. It transmits a feed camera feed to a smarthphone over wifi. 
+Three things: 1) it transmits a feed camera feed to a smarthphone over wifi, 2) it allows you to pull focus remotely, and 3) it allows you to use Force Mobile mode.
 
-But some of you, like me, might say that they don't need that since their Sony Alpha camera can transmit a live feed to their iPhone over Wi-Fi. 
+### Transmitting Camera Feed
+Some of you, like me, might say that they don't need that since their Sony Alpha camera can transmit a live feed to their iPhone over Wi-Fi. 
 
 Well for those people, the win you get is being able to pull focus remotely (if you have the DJI Focus Motor), the key word here being _remotely_; we'll come back to that. The Image Transmitter connects via cable to both the camera and the gimbal, meaning that it can communicate with the Focus Motor.
 
+### Pulling Focus Remotely
 The _remote_ part is key because you can actually pull focus on Sony cameras with DJI gimbals without the Image Transmitter. When a device connects to a Sony Alpha camera by cable, it has the ability to send the camera focus pull instructions. However, Sony cameras do not support these instructions being sent via Wi-Fi. 
 
 So for pulling focus remotely you have three options:
@@ -50,10 +52,13 @@ So for pulling focus remotely you have three options:
 - £419 - Get the RS3 Pro and the [DJI Ronin Expansion Base Kit](https://store.dji.com/uk/product/ronin-expansion-base-kit)
 - £1,979 - Get the [DJI Transmission](https://store.dji.com/uk/product/dji-transmission-combo?vid=116751) kit
 
-## Why would you need to pull focus remotely?
+So why would you need to pull focus remotely?
 
 - Cinematic shots where careful control is needed - this is far to hard to do as the gimbal user, you need someone with a dedicated monitor and sole focus on the focus wheel
 - Difficult Targetting - if you have a subject that's really hard to keep focus nailed in on and you don't want any errors from the AF system on the camera
+
+### Force Mobile
+
 
 ## Which one am I going for?
 
@@ -65,3 +70,12 @@ One concern stops me from wanting the Pro:
 1. What if it's just a bit to big size wise to go on the side of my backback like [I've seen the RS3 carried](https://www.youtube.com/watch?v=qKGowtrEvZU) - see below
 
 ![](images/ronin-rs3-side-backpack.png)
+
+
+So if I can cover the last one, I suppose I'll go with the Pro just in case 😅. I've usually taken this approach with tech I buy because I hate wishing I'd got another version when I end up not being able to.
+
+- Folded RS3 dimensions: 254×230×68 mm  (L×W×H, excluding camera, grip, and the Extended Grip/Tripod)
+- Folded RS3 Pro dimensions: 268×276×68 mm (L×W×H, excluding camera, grip, and the Extended Grip/Tripod)
+- Diff: 14mm longer, 46mm wider same height (suppose this is the thickness from the side?)
+
+Longer is not a bigger, just 1.4cm., but the widgth is substatial - 4.6cm.
