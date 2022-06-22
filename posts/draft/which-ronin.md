@@ -72,10 +72,12 @@ One concern stops me from wanting the Pro:
 ![](images/ronin-rs3-side-backpack.png)
 
 
-So if I can cover the last one, I suppose I'll go with the Pro just in case 😅. I've usually taken this approach with tech I buy because I hate wishing I'd got another version when I end up not being able to.
+So if I can cover one concern, perhaps I should get the Pro. I've usually taken the approach of getting a touch more than I need with tech because I hate wishing I'd got another version when I end up not being able to.
 
 - Folded RS3 dimensions: 254×230×68 mm  (L×W×H, excluding camera, grip, and the Extended Grip/Tripod)
 - Folded RS3 Pro dimensions: 268×276×68 mm (L×W×H, excluding camera, grip, and the Extended Grip/Tripod)
 - Diff: 14mm longer, 46mm wider same height (suppose this is the thickness from the side?)
 
-Longer is not a bigger, just 1.4cm., but the widgth is substatial - 4.6cm.
+Longer is not a bigger, just 1.4cm., but the width is substatial - 4.6cm.
+
+I think to make this decision I need to see both in the flesh.
