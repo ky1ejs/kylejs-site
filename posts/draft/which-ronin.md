@@ -6,7 +6,7 @@ The features/benefits you get when you choose the RS3 Pro over the RS3 are:
 - Works with the beefy transmitter, DJI Transmission (probably only useful if you're making money off this gig)
 - Carry a bigger, heavier camera (probably the same as above)
 - Use with vehicle mount, steadicam, slider, cable cam, jib
-- Works with new lidar focus system (probably great for manual lenses)
+- Works with new lidar focus system (probably for those with manual focus lenses)
 - RSA port (which allows you to use an additional control grip) and charing adatpter port (port powering the gimbal off a source other than the battery)
 
 
