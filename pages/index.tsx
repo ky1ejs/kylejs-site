@@ -95,11 +95,12 @@ const { publicRuntimeConfig } = getConfig()
 
 const Home: React.FC = () => {
   const links: { color: string; url: string; name: string }[] = publicRuntimeConfig.siteMetadata.links
+  const title = publicRuntimeConfig.siteMetadata.title ?? "kylejs";
   return (
     <Container>
       <Head>
         <title>
-          {publicRuntimeConfig.siteMetadata.title ?? "kylejm"}
+          {title}
         </title>
       </Head>
       <ImageContainer>
@@ -107,7 +108,7 @@ const Home: React.FC = () => {
       </ImageContainer>
       <Title>
         <H1>
-          kylejm
+          {title}
         </H1>
       </Title>
       <Subtitle>

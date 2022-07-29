@@ -3,7 +3,7 @@ module.exports = {
   target: 'serverless',
   publicRuntimeConfig: {
     siteMetadata: {
-      title: "kylejm",
+      title: "kylejs",
       links: [
         {
           name: "Twitter",
