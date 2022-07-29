@@ -7,12 +7,12 @@ module.exports = {
       links: [
         {
           name: "Twitter",
-          url: "https://twitter.com/kylejm_",
+          url: "https://twitter.com/_kylejs_",
           color: "#00acee"
         },
         {
           name: "GitHub",
-          url: "https://github.com/kylejm",
+          url: "https://github.com/ky1ejs",
           color: "#333"
         },
         {
@@ -22,12 +22,12 @@ module.exports = {
         },
         {
           name: "LinkedIn",
-          url: "https://www.linkedin.com/in/kylejmcalpine/",
+          url: "https://www.linkedin.com/in/kylejs/",
           color: "#0077b5"
         },
         {
           name: "Instagram",
-          url: "https://instagram.com/kylejm_",
+          url: "https://instagram.com/_kylejs_",
           color: "#e1306c"
         },
       ]
