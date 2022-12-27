@@ -80,7 +80,7 @@ const Home: React.FC = () => {
         />
       </div>
       <div className="mb-1">
-        <div className="text-3xl text-violet-500">{title}</div>
+        <div className="text-3xl font-bold text-violet-500">{title}</div>
       </div>
       <div className="pb-5">I like to build teams, products and software.</div>
       <div className="flex gap-4">
