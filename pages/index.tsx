@@ -1,130 +1,100 @@
-import React, { useCallback, useEffect, useState } from "react"
-import styled from 'styled-components'
-import Head from 'next/head'
-import meImage from '../public/me.jpg'
-import Image from 'next/image'
-import getConfig from 'next/config'
+import React from "react";
+import Head from "next/head";
+import meImage from "../public/me.jpg";
+import TwitterSvg from "../public/socials/twitter.svg";
+import InstagramSvg from "../public/socials/instagram.svg";
+import GithubSvg from "../public/socials/github.svg";
+import LinkedinSvg from "../public/socials/linkedin.svg";
+import SpotifySvg from "../public/socials/spotify.svg";
+import MastodonSvg from "../public/socials/mastodon.svg";
+import Image from "next/image";
+import getConfig from "next/config";
 
-const ImageContainer = styled.div`
-  border-radius: 50%;
-  overflow: hidden;
-  height: 200px;
-  width: 200px;
-  margin: auto;
-`
+const SocialLink = ({
+  SvgFile,
+  link,
+  color,
+}: {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  SvgFile: any;
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+  link: string;
+  color: string;
+}) => (
+  <a href={link}>
+    <SvgFile style={{ fill: color }} className={`h-10 w-10 ${color}`} />
+  </a>
+);
 
-const Grid = styled.div`
-  display: flex;
-  gap: 20px;
-  margin-top: 36px;
-`
-
-const ColorLink = styled.a<{color: string}>`
-  color: black;
-  text-decoration: none;
-  &:visited {
-    color: black;
-  }
-  &:hover {
-    color: white;
-    background-color: ${(props) => props.color};
-    transition: all linear 0.1s;
-    box-shadow: 2px 2px 6px 1px #b8b8b8;
-  }
-  padding: 4px 6px;
-  border-radius: 6px;
-  display: inline-block;
-`
-
-const Title = styled.div`
-  text-align: center;
-`
-
-const H1 = styled.h1`
-  font-size: 20pt;
-  color: #714ef2;
-`
-
-const Subtitle = styled.div`
-  text-align: center;
-`
-
-const Container = styled.div`
-  font-family: "Arial";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`
-
-const CenterContainer = styled.div`
-  font-family: "Arial";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`
-
-const useMediaQuery = (width: number) => {
-  const [targetReached, setTargetReached] = useState(false);
-
-  const updateTarget = useCallback((e) => {
-    if (e.matches) {
-      setTargetReached(true);
-    } else {
-      setTargetReached(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const media = window.matchMedia(`(max-width: ${width}px)`);
-    media.addListener(updateTarget);
-
-    // Check on mount (callback is not called until a change occurs)
-    if (media.matches) {
-      setTargetReached(true);
-    }
-
-    return () => media.removeListener(updateTarget);
-  }, []);
-
-  return targetReached;
-};
-
-const { publicRuntimeConfig } = getConfig()
-
+const { publicRuntimeConfig } = getConfig();
 const Home: React.FC = () => {
-  const links: { color: string; url: string; name: string }[] = publicRuntimeConfig.siteMetadata.links
   const title = publicRuntimeConfig.siteMetadata.title ?? "kylejs";
+  const socials = [
+    {
+      name: "Twitter",
+      url: "https://twitter.com/_kylejs_",
+      color: "hover:fill-[#00acee]",
+      svg: TwitterSvg,
+    },
+    {
+      name: "GitHub",
+      url: "https://github.com/ky1ejs",
+      color: "hover:fill-[#333]",
+      svg: GithubSvg,
+    },
+    {
+      name: "Spotify",
+      url: "https://open.spotify.com/user/kylejm_",
+      color: "hover:fill-[#1db954]",
+      svg: SpotifySvg,
+    },
+    {
+      name: "LinkedIn",
+      url: "https://www.linkedin.com/in/kylejs/",
+      color: "hover:fill-[#0077b5]",
+      svg: LinkedinSvg,
+    },
+    {
+      name: "Instagram",
+      url: "https://instagram.com/_kylejs_",
+      color: "hover:fill-[#e1306c]",
+      svg: InstagramSvg,
+    },
+    {
+      name: "Mastodon",
+      url: "https://techhub.social/@kylejs",
+      color: "hover:fill-[#5d50e6]",
+      svg: MastodonSvg,
+    },
+  ];
   return (
-    <Container>
+    <div className="transform-minus-half fixed top-1/2 left-1/2 text-center">
       <Head>
-        <title>
-          {title}
-        </title>
+        <title>{title}</title>
       </Head>
-      <ImageContainer>
-        <Image src={meImage} placeholder="blur" />
-      </ImageContainer>
-      <Title>
-        <H1>
-          {title}
-        </H1>
-      </Title>
-      <Subtitle>
-        I like to build teams, products and software.
-      </Subtitle>
-      <Grid>
-        {links.map((link => (
-          <div key={link.url}>
-            <ColorLink color={link.color} href={link.url}>
-              {link.name}
-            </ColorLink>
-          </div>    
-        )))}
-      </Grid>
-    </Container>
-  )
-}
+      <div className="mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
+        <Image
+          src={meImage}
+          placeholder="blur"
+          aria-label="Headshot of Kyle Satti"
+        />
+      </div>
+      <div className="mb-1">
+        <div className="text-3xl text-violet-500">{title}</div>
+      </div>
+      <div className="pb-5">I like to build teams, products and software.</div>
+      <div className="flex gap-4">
+        {socials.map((s) => (
+          <SocialLink
+            key={s.name}
+            SvgFile={s.svg}
+            link={s.url}
+            color={s.color}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default Home;

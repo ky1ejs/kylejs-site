@@ -9,6 +9,7 @@ junit.xml
 
 # build
 /build
+/dist
 .tsbuildinfo
 tsconfig.tsbuildinfo
 
