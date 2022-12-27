@@ -79,8 +79,9 @@ const Home: React.FC = () => {
           aria-label="Headshot of Kyle Satti"
         />
       </div>
-      <div className="mb-1">
-        <div className="text-3xl font-bold text-violet-500">{title}</div>
+      <div className="mb-4">
+        <div className="text-3xl font-bold text-violet-500">Kyle Satti</div>
+        <div className="text-xl text-violet-400">kylejs</div>
       </div>
       <div className="pb-5">I like to build teams, products and software.</div>
       <div className="flex gap-4">
