@@ -2,25 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@layer base {
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  }
 
-* {
-  box-sizing: border-box;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
 }
 
 @layer components {
   .transform-minus-half {
     transform: translate(-50%, -50%);
+  }
+}
+
+@layer utilities {
+  @keyframes reset{0%{opacity:0.0}50%{opacity:0}100%{opacity:0}}
+  @keyframes fade-in{0%{opacity:0.0}50%{opacity:0}100%{opacity:1.0}}
+
+  .fade-in {
+    animation-name: reset, fade-in;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
   }
 }

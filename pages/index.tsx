@@ -72,7 +72,7 @@ const Home: React.FC = () => {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
+      <div className="fade-in mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
         <Image
           src={meImage}
           placeholder="blur"
