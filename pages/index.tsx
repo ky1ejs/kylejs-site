@@ -70,6 +70,12 @@ const Home: React.FC = () => {
   return (
     <div className="transform-minus-half fixed top-1/2 left-1/2 text-center">
       <Head>
+        <meta
+          name="description"
+          content="Hi, my name's Kyle. I'm a Software Engineer based in Brooklyn, NY."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
         <title>{title}</title>
       </Head>
       <div className="fade-in mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
