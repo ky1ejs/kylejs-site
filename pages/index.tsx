@@ -68,7 +68,7 @@ const Home: React.FC = () => {
     },
   ];
   return (
-    <div className="transform-minus-half fixed top-1/2 left-1/2 text-center">
+    <>
       <Head>
         <meta
           name="description"
@@ -78,29 +78,33 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
         <title>{title}</title>
       </Head>
-      <div className="fade-in mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
-        <Image
-          src={meImage}
-          placeholder="blur"
-          aria-label="Headshot of Kyle Satti"
-        />
-      </div>
-      <div className="mb-4">
-        <div className="text-3xl font-bold text-violet-500">Kyle Satti</div>
-        <div className="text-xl text-violet-400">kylejs</div>
-      </div>
-      <div className="pb-5">I like to build teams, products and software.</div>
-      <div className="flex gap-4">
-        {socials.map((s) => (
-          <SocialLink
-            key={s.name}
-            SvgFile={s.svg}
-            link={s.url}
-            color={s.color}
+      <div className="transform-minus-half fade-in fixed top-1/2 left-1/2 text-center">
+        <div className="mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
+          <Image
+            src={meImage}
+            placeholder="blur"
+            aria-label="Headshot of Kyle Satti"
           />
-        ))}
+        </div>
+        <div className="mb-4">
+          <div className="text-3xl font-bold text-violet-500">Kyle Satti</div>
+          <div className="text-xl text-violet-400">kylejs</div>
+        </div>
+        <div className="pb-5">
+          I like to build teams, products and software.
+        </div>
+        <div className="flex gap-4">
+          {socials.map((s) => (
+            <SocialLink
+              key={s.name}
+              SvgFile={s.svg}
+              link={s.url}
+              color={s.color}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
