@@ -78,7 +78,7 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
         <title>{title}</title>
       </Head>
-      <div className="transform-minus-half fixed top-1/2 left-1/2 text-center">
+      <div className="transform-minus-half border-grey-300 fixed top-1/2 left-1/2 rounded-xl border-b-2 bg-white px-8 py-16 text-center shadow-lg">
         <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
           <Image
             src={meImage}
