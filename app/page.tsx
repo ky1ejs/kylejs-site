@@ -1,4 +1,3 @@
-import React from "react";
 import Head from "next/head";
 import meImage from "../public/me.jpg";
 import TwitterSvg from "../public/socials/twitter.svg";
@@ -15,9 +14,8 @@ const SocialLink = ({
   link,
   color,
 }: {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   SvgFile: any;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   link: string;
   color: string;
 }) => (
@@ -27,7 +25,7 @@ const SocialLink = ({
 );
 
 const { publicRuntimeConfig } = getConfig();
-const Home: React.FC = () => {
+function Home() {
   const title = publicRuntimeConfig.siteMetadata.title ?? "kylejs";
   const socials = [
     {
@@ -85,6 +83,7 @@ const Home: React.FC = () => {
             placeholder="blur"
             aria-label="Headshot of Kyle Satti"
             priority
+            alt="Headshot of Kyle Satti"
           />
         </div>
         <div className="fade-in one mb-4">
@@ -107,6 +106,6 @@ const Home: React.FC = () => {
       </div>
     </>
   );
-};
+}
 
 export default Home;
