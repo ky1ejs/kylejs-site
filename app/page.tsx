@@ -6,27 +6,38 @@ import GithubSvg from "../public/socials/github.svg";
 import LinkedinSvg from "../public/socials/linkedin.svg";
 import SpotifySvg from "../public/socials/spotify.svg";
 import MastodonSvg from "../public/socials/mastodon.svg";
+import ThreadsBwSvg from "../public/socials/threads-bw.svg";
+import ThreadsColorSvg from "../public/socials/threads-color.svg";
 import Image from "next/image";
-import getConfig from "next/config";
 
 const SocialLink = ({
-  SvgFile,
+  Svg,
   link,
   color,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  SvgFile: any;
+  Svg: any;
   link: string;
   color: string;
 }) => (
   <a href={link}>
-    <SvgFile style={{ fill: color }} className={`h-10 w-10 ${color}`} />
+    <Svg className={`fill-red-black h-10 w-10 ${color}`} alt={""} />
   </a>
 );
 
-const { publicRuntimeConfig } = getConfig();
-function Home() {
-  const title = publicRuntimeConfig.siteMetadata.title ?? "kylejs";
+const ThreadsIcon = () => {
+  return (
+    <div className="relative h-[36px] w-[36px]">
+      <a href="https://www.threads.net/@_kylejs_">
+        <ThreadsBwSvg />
+        <ThreadsColorSvg className="absolute left-0 top-0 h-full w-full opacity-0 hover:opacity-100" />
+      </a>
+    </div>
+  );
+};
+
+export default async function Home() {
+  const title = "kylejs";
   const socials = [
     {
       name: "Twitter",
@@ -93,19 +104,13 @@ function Home() {
         <div className="fade-in two pb-5">
           I like to build teams, products and software.
         </div>
-        <div className="fade-in three flex gap-4">
+        <div className="fade-in three flex items-center gap-4">
+          <ThreadsIcon />
           {socials.map((s) => (
-            <SocialLink
-              key={s.name}
-              SvgFile={s.svg}
-              link={s.url}
-              color={s.color}
-            />
+            <SocialLink key={s.name} Svg={s.svg} link={s.url} color={s.color} />
           ))}
         </div>
       </div>
     </>
   );
 }
-
-export default Home;
