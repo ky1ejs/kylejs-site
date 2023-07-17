@@ -56,7 +56,7 @@ export default async function Home() {
       url: "https://open.spotify.com/user/kylejm_",
       color: "hover:fill-[#1db954]",
       svg: SpotifySvg,
-    }
+    },
   ];
   const secondRowSocials = [
     {
@@ -76,8 +76,8 @@ export default async function Home() {
       url: "https://techhub.social/@kylejs",
       color: "hover:fill-[#5d50e6]",
       svg: MastodonSvg,
-    }
-  ]
+    },
+  ];
   return (
     <>
       <Head>
@@ -89,7 +89,7 @@ export default async function Home() {
         <link rel="icon" href="/favicon.ico" />
         <title>{title}</title>
       </Head>
-      <div className="transform-minus-half border-grey-300 fixed left-1/2 top-1/2 rounded-xl border-b-2 bg-white px-4 pt-16 pb-10 text-center shadow-lg min-w-[85%] sm:min-w-fit">
+      <div className="transform-minus-half border-grey-300 fixed left-1/2 top-1/2 min-w-[85%] rounded-xl border-b-2 bg-white px-4 pb-10 pt-16 text-center shadow-lg sm:min-w-fit">
         <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
           <Image
             src={meImage}
@@ -103,16 +103,16 @@ export default async function Home() {
           <div className="text-3xl font-bold text-violet-500">Kyle Satti</div>
           <div className="text-xl text-violet-400">kylejs</div>
         </div>
-        <div className="fade-in two pb-10 w-full">
+        <div className="fade-in two w-full pb-10">
           I like to build teams, products and software.
         </div>
-        <div className="fade-in three pb-4 flex items-center gap-4 justify-center">
+        <div className="fade-in three flex items-center justify-center gap-4 pb-4">
           <ThreadsIcon />
           {firstRowSocials.map((s) => (
             <SocialLink key={s.name} Svg={s.svg} link={s.url} color={s.color} />
           ))}
         </div>
-        <div className="fade-in three flex items-center gap-4 justify-center">
+        <div className="fade-in three flex items-center justify-center gap-4">
           {secondRowSocials.map((s) => (
             <SocialLink key={s.name} Svg={s.svg} link={s.url} color={s.color} />
           ))}
