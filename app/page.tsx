@@ -38,7 +38,7 @@ const ThreadsIcon = () => {
 
 export default async function Home() {
   const title = "kylejs";
-  const socials = [
+  const firstRowSocials = [
     {
       name: "Twitter",
       url: "https://twitter.com/_kylejs_",
@@ -56,7 +56,9 @@ export default async function Home() {
       url: "https://open.spotify.com/user/kylejm_",
       color: "hover:fill-[#1db954]",
       svg: SpotifySvg,
-    },
+    }
+  ];
+  const secondRowSocials = [
     {
       name: "LinkedIn",
       url: "https://www.linkedin.com/in/kylejs/",
@@ -74,8 +76,8 @@ export default async function Home() {
       url: "https://techhub.social/@kylejs",
       color: "hover:fill-[#5d50e6]",
       svg: MastodonSvg,
-    },
-  ];
+    }
+  ]
   return (
     <>
       <Head>
@@ -87,7 +89,7 @@ export default async function Home() {
         <link rel="icon" href="/favicon.ico" />
         <title>{title}</title>
       </Head>
-      <div className="transform-minus-half border-grey-300 fixed left-1/2 top-1/2 rounded-xl border-b-2 bg-white px-4 py-16 text-center shadow-lg md:px-8">
+      <div className="transform-minus-half border-grey-300 fixed left-1/2 top-1/2 rounded-xl border-b-2 bg-white px-4 pt-16 pb-10 text-center shadow-lg min-w-[85%] sm:min-w-fit">
         <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
           <Image
             src={meImage}
@@ -97,16 +99,21 @@ export default async function Home() {
             alt="Headshot of Kyle Satti"
           />
         </div>
-        <div className="fade-in one mb-4">
+        <div className="fade-in one mb-2">
           <div className="text-3xl font-bold text-violet-500">Kyle Satti</div>
           <div className="text-xl text-violet-400">kylejs</div>
         </div>
-        <div className="fade-in two pb-5">
+        <div className="fade-in two pb-10 w-full">
           I like to build teams, products and software.
         </div>
-        <div className="fade-in three flex items-center gap-4">
+        <div className="fade-in three pb-4 flex items-center gap-4 justify-center">
           <ThreadsIcon />
-          {socials.map((s) => (
+          {firstRowSocials.map((s) => (
+            <SocialLink key={s.name} Svg={s.svg} link={s.url} color={s.color} />
+          ))}
+        </div>
+        <div className="fade-in three flex items-center gap-4 justify-center">
+          {secondRowSocials.map((s) => (
             <SocialLink key={s.name} Svg={s.svg} link={s.url} color={s.color} />
           ))}
         </div>
