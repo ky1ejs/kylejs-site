@@ -1,17 +1,12 @@
-module.exports = {
-  reactStrictMode: true,
-  target: "serverless",
-  publicRuntimeConfig: {
-    siteMetadata: {
-      title: "kylejs",
-    },
-  },
-  webpack(config) {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config, options) => {
     config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      use: ["@svgr/webpack"],
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
     });
     return config;
   },
-};
+}
+
+module.exports = nextConfig
