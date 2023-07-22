@@ -1,44 +1,42 @@
-import * as runtime from "react/jsx-runtime"
-import { getAllPostIds, getPostData } from '@/lib/posts'
-import {compile, evaluate, run} from "@mdx-js/mdx"
-import { ReactNode } from "react"
-
-
-type Params = {
-  id: string
-}
+import * as runtime from "react/jsx-runtime";
+import { getAllPostIds, getPostData } from "@/lib/posts";
+import { compile, run } from "@mdx-js/mdx";
+import { MDXComponents } from "mdx/types";
+import calculateReadingTime from "@/lib/reading-time";
 
 type Props = {
-  params: Params
+  params: { id: string };
+};
+
+const components: MDXComponents = {};
+
+export default async function Post({ params }: Props) {
+  const post = await getPostData(params.id);
+  const compiled = await compile(post.content, {
+    outputFormat: "function-body",
+    development: false,
+  });
+  const result = await run(compiled, runtime);
+  const Content = result.default;
+  return (
+    <>
+      <h1>{post.metadata.title}</h1>
+      <h4>{calculateReadingTime(post.content)}</h4>
+      <Content components={components} />;
+    </>
+  );
 }
 
 export async function generateMetadata({ params }: Props) {
-  const post = await getPostData(params.id)
+  const post = await getPostData(params.id);
 
   return {
-    title: "blog",
-  }
-}
-
-const H1 = ({children}: {children: ReactNode}) => <h1 className="text-lg text-red-500">{children}</h1>
-const Test = () => (
-  <div className="text-center">
-    This is a centerd Div rendered from mdx
-  </div> 
-)
-
-
-// -< Post >-
-export default async function Post({ params }: Props) {
-  const file = await getPostData(params.id)
-  const compiled = await compile(file.fileContents, {outputFormat: "function-body", development: false}) 
-  console.log(`compiled: ${compile}`)
-  // const {default: Content} = await run(compiled, runtime) 
-  const result = await run(compiled, runtime) 
-  const Content = result.default as JSX.ElementType
-  return (<Content components={{h2: H1, Test}}/>)
+    title: post.metadata.title,
+  };
 }
 
 export async function generateStaticParams(): Promise<Props[]> {
-  return getAllPostIds()
+  return getAllPostIds().map((post) => {
+    return { params: post };
+  });
 }

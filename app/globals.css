@@ -27,6 +27,7 @@
   .transform-minus-half {
     transform: translate(-50%, -50%);
   }
+  @import "./posts/[id]/post.css";
 }
 
 @layer utilities {

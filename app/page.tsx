@@ -92,48 +92,50 @@ export default async function Home() {
       </Head>
       <div className="mt-16 flex items-center justify-center sm:absolute sm:bottom-0 sm:left-0 sm:right-0 sm:top-0 sm:m-auto sm:mt-0">
         <div>
-        <div className="border-grey-300 w-[85%] rounded-xl border-b-2 bg-white px-6 pb-10 pt-16 text-center shadow-lg sm:w-fit">
-          <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
-            <Image
-              src={meImage}
-              placeholder="blur"
-              aria-label="Headshot of Kyle Satti"
-              priority
-              alt="Headshot of Kyle Satti"
-            />
-          </div>
-          <div className="fade-in one mb-2">
-            <div className="text-3xl font-bold text-violet-500">Kyle Satti</div>
-            <div className="text-xl text-violet-400">kylejs</div>
-          </div>
-          <div className="fade-in two pb-10">
-            I like to build teams, products and software.
-          </div>
-          <div className="fade-in three flex items-center justify-center gap-4 pb-4">
-            <ThreadsIcon />
-            {firstRowSocials.map((s) => (
-              <SocialLink
-                key={s.name}
-                Svg={s.svg}
-                link={s.url}
-                color={s.color}
+          <div className="border-grey-300 w-[85%] rounded-xl border-b-2 bg-white px-6 pb-10 pt-16 text-center shadow-lg sm:w-fit">
+            <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
+              <Image
+                src={meImage}
+                placeholder="blur"
+                aria-label="Headshot of Kyle Satti"
+                priority
+                alt="Headshot of Kyle Satti"
               />
-            ))}
+            </div>
+            <div className="fade-in one mb-2">
+              <div className="text-3xl font-bold text-violet-500">
+                Kyle Satti
+              </div>
+              <div className="text-xl text-violet-400">kylejs</div>
+            </div>
+            <div className="fade-in two pb-10">
+              I like to build teams, products and software.
+            </div>
+            <div className="fade-in three flex items-center justify-center gap-4 pb-4">
+              <ThreadsIcon />
+              {firstRowSocials.map((s) => (
+                <SocialLink
+                  key={s.name}
+                  Svg={s.svg}
+                  link={s.url}
+                  color={s.color}
+                />
+              ))}
+            </div>
+            <div className="fade-in three flex items-center justify-center gap-4">
+              {secondRowSocials.map((s) => (
+                <SocialLink
+                  key={s.name}
+                  Svg={s.svg}
+                  link={s.url}
+                  color={s.color}
+                />
+              ))}
+            </div>
           </div>
-          <div className="fade-in three flex items-center justify-center gap-4">
-            {secondRowSocials.map((s) => (
-              <SocialLink
-                key={s.name}
-                Svg={s.svg}
-                link={s.url}
-                color={s.color}
-              />
-            ))}
+          <div className="my-4 text-center">
+            <Link href="/posts">Test</Link>
           </div>
-        </div>
-        <div className="text-center my-4">
-          <Link href="/posts">Test</Link>
-        </div>
         </div>
       </div>
     </>
