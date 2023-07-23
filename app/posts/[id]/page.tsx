@@ -27,7 +27,7 @@ const components: MDXComponents = {
 };
 
 export default async function Post({ params }: Props) {
-  const post = await getPostData(params.id)
+  const post = await getPostData(params.id);
   const compiled = await compile(post.content, {
     outputFormat: "function-body",
     development: false,
