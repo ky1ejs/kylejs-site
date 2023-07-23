@@ -10,24 +10,26 @@ const NavItem = ({ title, route }: { title: string; route: string }) => (
 );
 
 const Header = () => (
-  <div className="mb-6 mt-2 flex items-center justify-between">
-    <div>
-      <Link href="/">
-        <h1 className="text-3xl">kylejs</h1>
-      </Link>
-    </div>
-    <div>
-      <NavItem title="Posts" route="/posts" />
-      <div></div>
+  <div className="sticky top-0 bg-default pb-4 pt-4">
+    <div className="content-inset flex items-center justify-between">
+      <div>
+        <Link href="/">
+          <h1 className="text-3xl">kylejs</h1>
+        </Link>
+      </div>
+      <div>
+        <NavItem title="Posts" route="/posts" />
+        <div></div>
+      </div>
     </div>
   </div>
 );
 
 export default function PostsLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-4">
+    <>
       <Header />
-      <div>{children}</div>
-    </div>
+      <div className="content-inset mx-auto max-w-[800px]">{children}</div>
+    </>
   );
 }
