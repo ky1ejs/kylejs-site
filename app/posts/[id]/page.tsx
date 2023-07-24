@@ -5,8 +5,8 @@ import { MDXComponents } from "mdx/types";
 import { DownloadFile } from "@/components/DownloadFile";
 import remarkGfm from "remark-gfm";
 import { JSX } from "react";
-import PostMetadata from "@/components/PostMetadata";
 import PostFooter from "@/components/PostFooter";
+import PostHeader from "@/components/PostHeader";
 
 type Props = {
   params: { id: string };
@@ -36,7 +36,7 @@ export default async function Post({ params: { id } }: Props) {
   return (
     <>
       <article>
-        <PostMetadata post={post} />
+        <PostHeader post={post} />
         <Content components={components} />
       </article>
       <PostFooter />
