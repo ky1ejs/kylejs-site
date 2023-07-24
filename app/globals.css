@@ -6,7 +6,7 @@
 @layer base {
   html,
   body {
-    @apply bg-slate-100;
+    @apply bg-default;
     padding: 0;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -27,14 +27,16 @@
   .transform-minus-half {
     transform: translate(-50%, -50%);
   }
+  @import "./posts/[id]/post.css";
 }
 
 @layer utilities {
+  @import "./posts/layout.css";
+
   @keyframes reset{0%{opacity:0.0}50%{opacity:0}100%{opacity:0}}
   @-webkit-keyframes reset{0%{opacity:0.0}50%{opacity:0}100%{opacity:0}}
   @keyframes fade-in{0%{opacity:0.0}50%{opacity:0}100%{opacity:1.0}}
   @-webkit-keyframes fade-in{0%{opacity:0.0}50%{opacity:0}100%{opacity:1.0}}
-
 
   .fade-in {
     animation-name: reset, fade-in;

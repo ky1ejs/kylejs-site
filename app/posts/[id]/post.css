@@ -1,0 +1,74 @@
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .post {
+    h1 {
+      @apply text-4xl mt-6;
+    }
+
+    h2 {
+      @apply text-2xl mt-10 mb-3;
+    }
+
+    h3, h4, h5, h6 {
+      @apply mb-1 mt-4;
+    }
+
+    h3 {
+      @apply text-slate-700 text-xl;
+    }
+
+    h4 {
+      @apply text-lg;
+    }
+
+    h5 {
+      @apply text-lg;
+    }
+
+    h6 {
+      @apply text-lg;
+    }
+
+    p + p {
+        @apply pt-4;
+    }
+
+    li {
+      @apply mt-2 ml-6;
+      list-style-type: disc;
+    }
+
+    th { 
+      @apply text-left pb-2 px-2;
+    }
+
+    td {
+      @apply border-t-[1px] border-gray-400 py-1 px-2;
+    }
+
+    table { 
+      @apply my-2;
+    }
+  }
+}
+
+@layer utilities {
+  .wave {
+    animation-name: wave-animation; 
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+    transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+    display: inline-block;
+  }
+  
+  @keyframes wave-animation {
+    0% { transform: rotate( -2.0deg) }
+    25% { transform: rotate( 14.0deg) }
+    50% { transform: rotate(-8.0deg) }
+    75% { transform: rotate(14.0deg) }
+    100% { transform: rotate(-2.0deg) }
+  }
+  
+}

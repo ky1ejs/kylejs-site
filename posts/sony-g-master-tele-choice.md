@@ -1,3 +1,8 @@
+---
+title: Which Sony FE Tele Lens?
+date: 2023-07-22
+published: false
+---
 
 ## 70-200 GM MK 1
 Bunch of reddit posts claiming that it's soft and Manny also has a video about it back focusing.
