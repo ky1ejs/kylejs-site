@@ -91,8 +91,8 @@ export default async function Home() {
         <title>{title}</title>
       </Head>
       <div className="mt-16 flex items-center justify-center sm:absolute sm:bottom-0 sm:left-0 sm:right-0 sm:top-0 sm:m-auto sm:mt-0">
-        <div>
-          <div className="border-grey-300 w-[85%] rounded-xl border-b-2 bg-white px-6 pb-10 pt-16 text-center shadow-lg sm:w-fit">
+        <div className="w-[85%] text-center sm:w-fit">
+          <div className="border-grey-300 rounded-xl border-b-2 bg-white px-6 pb-10 pt-12 shadow-lg">
             <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
               <Image
                 src={meImage}
@@ -133,8 +133,12 @@ export default async function Home() {
               ))}
             </div>
           </div>
-          <div className="my-4 text-center">
-            <Link href="/posts">Test</Link>
+          <div className="my-4 text-center text-gray-500">
+            I sometimes blog{" "}
+            <Link className="underline hover:text-primary" href="/posts">
+              here
+            </Link>{" "}
+            ✍️.
           </div>
         </div>
       </div>
