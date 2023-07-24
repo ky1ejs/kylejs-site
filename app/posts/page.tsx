@@ -4,8 +4,6 @@ import Link from "next/link";
 export default async function Posts() {
   const posts = getSortedPostMetadata();
 
-  console.log(posts.map((p) => p.metadata.title));
-
   return (
     <div>
       {posts.map((p) => (
