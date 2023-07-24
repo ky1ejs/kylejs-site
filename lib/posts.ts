@@ -2,11 +2,12 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-const postsDirectory = path.join(process.cwd(), "posts/live");
+const postsDirectory = path.join(process.cwd(), "posts");
 
 export type PostMetadata = {
   title: string;
   date: Date;
+  published: boolean;
 };
 
 export type Post = {
@@ -22,7 +23,10 @@ export function getSortedPostMetadata() {
   const mdFiles = fileNames.filter(
     (filename) => filename.endsWith(".md") || filename.endsWith(".mdx"),
   );
-  const posts = mdFiles.map(readPostWithFileName);
+
+  const posts = mdFiles
+    .map(readPostWithFileName)
+    .filter((post) => post.metadata.published);
 
   return posts.sort((a, b) => {
     if (a.metadata.date < b.metadata.date) {

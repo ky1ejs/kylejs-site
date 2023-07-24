@@ -1,3 +1,9 @@
+---
+title: Which Ronin Shall I Buy? 
+date: 2023-07-22
+published: false
+---
+
 # DJI RS3 vs RS3 Pro - which one should a prosumer get?
 
 ## There's not an awful lot between them
@@ -235,7 +241,7 @@ As you can see from the photo of the RS2 (although it has got the base handle on
 
 
 ### Debunked myths (or invalidated initial assumptions)
-__On the RS3, the only way to control focus remotely was via the DJI Image Transmitter as it connected to the camera via cable__ <br>
+__On the RS3, the only way to control focus remotely was via the DJI Image Transmitter as it connected to the camera via cable__ <br/>
 **NOPE** - you can do this via the Monitor+ app - it seems that this capability is totally there wirelessly, it's just that Sony's own app does not expose it.
 However, the latency on Monitor+ is quite high. I'd hope that the DJI Image Transmission fares better than this. If it doesn't, you'll need to explore another setup for remotely controlling focus. That could be pricy, but as you're controlling focus remotely you're probably a bigger production crew or have lofty goals with bigger budgets.
 

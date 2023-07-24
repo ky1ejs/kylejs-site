@@ -1,3 +1,9 @@
+---
+title: Automated Dolly & Movement Research
+date: 2023-07-22
+published: false
+---
+
 ## Moza Slypod Pro
 The Moza Slypod Pro is the most appealing concept due to it's monopod design. When it pushes out you have no need to try hit the rails of usually automated sliders. It can also push through tight gaps and mounting it to a tripod seems more trivial that chunky track sliders.
 
