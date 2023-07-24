@@ -1,5 +1,5 @@
 import * as runtime from "react/jsx-runtime";
-import { getAllPostIds, getPostData } from "@/lib/posts";
+import { getAllPosts, readPostWithId } from "@/lib/posts";
 import { compile, run } from "@mdx-js/mdx";
 import { MDXComponents } from "mdx/types";
 import calculateReadingTime from "@/lib/reading-time";
@@ -26,8 +26,8 @@ const components: MDXComponents = {
   h3,
 };
 
-export default async function Post({ params }: Props) {
-  const post = await getPostData(params.id);
+export default async function Post({ params: { id } }: Props) {
+  const post = await readPostWithId(id);
   const compiled = await compile(post.content, {
     outputFormat: "function-body",
     development: false,
@@ -70,7 +70,7 @@ export default async function Post({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const post = await getPostData(params.id);
+  const post = await readPostWithId(params.id);
 
   return {
     title: post.metadata.title,
@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export async function generateStaticParams(): Promise<Props[]> {
-  return getAllPostIds().map((post) => {
-    return { params: post };
+  return getAllPosts().map((post) => {
+    return { params: { id: post.id } };
   });
 }

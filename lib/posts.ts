@@ -4,28 +4,28 @@ import matter from "gray-matter";
 
 const postsDirectory = path.join(process.cwd(), "posts/live");
 
-type PostMetadata = {
+export type PostMetadata = {
   title: string;
   date: Date;
+};
+
+export type Post = {
+  path: string;
+  id: string;
+  content: string;
+  metadata: PostMetadata;
 };
 
 export function getSortedPostMetadata() {
   const fileNames = fs.readdirSync(postsDirectory);
 
-  const allPostsData = fileNames.map((filename) => {
-    const id = filename.replace(/\.md$/, "");
-    const fullPath = path.join(postsDirectory, filename);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const matterResult = matter(fileContents);
+  const mdFiles = fileNames.filter(
+    (filename) => filename.endsWith(".md") || filename.endsWith(".mdx"),
+  );
+  const posts = mdFiles.map(readPostWithFileName);
 
-    return {
-      id,
-      ...(matterResult.data as PostMetadata),
-    };
-  });
-
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
+  return posts.sort((a, b) => {
+    if (a.metadata.date < b.metadata.date) {
       return 1;
     } else {
       return -1;
@@ -33,24 +33,31 @@ export function getSortedPostMetadata() {
   });
 }
 
-export function getAllPostIds() {
+export function getAllPosts(): Post[] {
   const fileNames = fs.readdirSync(postsDirectory);
-
-  return fileNames.map((fileName) => {
-    return {
-      id: fileName.replace(/\.md$/, ""),
-    };
-  });
+  return fileNames.map(readPostWithFileName);
 }
 
-export async function getPostData(id: string) {
-  const fullPath = path.join(postsDirectory, `${id}.md`);
-  const file = fs.readFileSync(fullPath, "utf8");
-  const { content, data } = matter(file);
+export function readPostWithId(id: string): Post {
+  try {
+    return readPostWithFileName(`${id}.md`);
+  } catch {
+    return readPostWithFileName(`${id}.mdx`);
+  }
+}
+
+function readPostWithFileName(fileName: string): Post {
+  const path = `${postsDirectory}/${fileName}`;
+  const fileContents = fs.readFileSync(path, "utf8");
+  const { content, data: metadata } = matter(fileContents);
+
+  const fileExtension = path.split(".").pop();
+  const id = fileName.replace(`.${fileExtension}`, "");
 
   return {
+    path,
     id,
     content,
-    metadata: data as PostMetadata,
+    metadata: metadata as PostMetadata,
   };
 }

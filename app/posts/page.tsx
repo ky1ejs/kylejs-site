@@ -8,7 +8,7 @@ export default async function Posts() {
     <div>
       {posts.map((p) => (
         <Link key={p.id} href={`/posts/${p.id}`}>
-          {p.title}
+          {p.metadata.title}
         </Link>
       ))}
     </div>
