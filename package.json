@@ -21,7 +21,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^5.0.0",
     "gray-matter": "^4.0.3",
-    "next": "13.4.11",
+    "next": "13.4.12",
     "postcss": "8.4.26",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
