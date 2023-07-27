@@ -25,7 +25,7 @@ const components: MDXComponents = {
   DownloadFile,
   h3,
   // eslint-disable-next-line jsx-a11y/alt-text
-  Image: (props) => <Image {...props} />,
+  Image: (props) => <Image placeholder="blur" {...props} />,
 };
 
 export default async function Post({ params: { id } }: Props) {

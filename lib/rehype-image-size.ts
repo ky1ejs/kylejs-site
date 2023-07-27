@@ -3,6 +3,8 @@ import path from "path";
 import { Node } from "unist";
 import { visit } from "unist-util-visit";
 import { promisify } from "util";
+import fs from "fs";
+import { getPlaiceholder } from "plaiceholder";
 
 // This file is an adapeted version of the code snippet from:
 // https://kylepfromer.com/blog/nextjs-image-component-blog
@@ -42,7 +44,13 @@ async function addMetadata(node: ImageNode): Promise<void> {
   const src = keyedAttributes.get("src");
   if (!src) throw Error(`Invalid image with src "${src}"`);
 
-  const res = await sizeOf(path.join(process.cwd(), "public", src.toString()));
+  const imagePath = path.join(process.cwd(), "public", src.toString());
+  const res = await sizeOf(imagePath);
+
+  // approach for creating a blurred version of the image taken from:
+  // https://stackoverflow.com/a/69066202/3053366
+  const image = fs.readFileSync(imagePath);
+  const { base64: imageBase64 } = await getPlaiceholder(image);
 
   if (!res) throw Error(`Invalid image with src "${src}"`);
 
@@ -54,6 +62,11 @@ async function addMetadata(node: ImageNode): Promise<void> {
   node.attributes.push({
     name: "height",
     value: res.height ?? null,
+    type: "mdxJsxAttribute",
+  });
+  node.attributes.push({
+    name: "blurDataURL",
+    value: imageBase64,
     type: "mdxJsxAttribute",
   });
 }
