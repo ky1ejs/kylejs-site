@@ -7,6 +7,8 @@ import remarkGfm from "remark-gfm";
 import { JSX } from "react";
 import PostFooter from "@/components/PostFooter";
 import PostHeader from "@/components/PostHeader";
+import Image from "next/image";
+import imageMetadata from "@/lib/rehype-image-size";
 
 type Props = {
   params: { id: string };
@@ -22,6 +24,8 @@ const h3 = ({ children }: JSX.IntrinsicElements["h3"]) => (
 const components: MDXComponents = {
   DownloadFile,
   h3,
+  // eslint-disable-next-line jsx-a11y/alt-text
+  Image: (props) => <Image {...props} />,
 };
 
 export default async function Post({ params: { id } }: Props) {
@@ -30,6 +34,7 @@ export default async function Post({ params: { id } }: Props) {
     outputFormat: "function-body",
     development: false,
     remarkPlugins: [remarkGfm],
+    rehypePlugins: [imageMetadata],
   });
   const result = await run(compiled, runtime);
   const Content = result.default;
