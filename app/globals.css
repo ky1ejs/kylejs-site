@@ -68,4 +68,11 @@
     -webkit-animation-delay:0s, 0.7s;
     animation-delay: 0s, 0.7s;
   }
+
+  .fade-in-fast {
+    animation-name: reset, fade-in;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
+  }
 }
