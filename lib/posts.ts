@@ -38,8 +38,11 @@ export function getSortedPostMetadata() {
 }
 
 export function getAllPosts(): Post[] {
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map(readPostWithFileName);
+  const posts = fs
+    .readdirSync(postsDirectory)
+    .map(readPostWithFileName)
+    .filter((post) => post.metadata.published);
+  return posts;
 }
 
 export function readPostWithId(id: string): Post {
