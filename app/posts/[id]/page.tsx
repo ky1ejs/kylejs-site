@@ -10,8 +10,8 @@ import PostHeader from "@/components/PostHeader";
 import Image from "next/image";
 import imageMetadata from "@/lib/rehype-image-size";
 
-type Props = {
-  params: { id: string };
+type PostParams = {
+  id: string;
 };
 
 const h3 = ({ children }: JSX.IntrinsicElements["h3"]) => (
@@ -28,7 +28,7 @@ const components: MDXComponents = {
   Image: (props) => <Image placeholder="blur" {...props} />,
 };
 
-export default async function Post({ params: { id } }: Props) {
+export default async function Post({ params: { id } }: { params: PostParams }) {
   const post = await readPostWithId(id);
   const compiled = await compile(post.content, {
     outputFormat: "function-body",
@@ -49,7 +49,7 @@ export default async function Post({ params: { id } }: Props) {
   );
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: { params: PostParams }) {
   const post = await readPostWithId(params.id);
 
   return {
@@ -57,8 +57,8 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export async function generateStaticParams(): Promise<Props[]> {
+export async function generateStaticParams() {
   return getAllPosts().map((post) => {
-    return { params: { id: post.id } };
+    return { id: post.id };
   });
 }
