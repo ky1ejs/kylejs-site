@@ -6,9 +6,9 @@ export function getRelativeTimeString(date: Date): string {
   const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
   if (diffDays > 7) {
-    const day = today.getDate();
-    const month = today.toLocaleString("default", { month: "long" });
-    const year = today.getFullYear();
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
     return `${ordinalStringForNumber(day)} of ${month}, ${year}`;
   }
 
