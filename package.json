@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "@mdx-js/mdx": "^2.3.0",
