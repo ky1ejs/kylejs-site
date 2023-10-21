@@ -32,5 +32,5 @@ function daysAgoString(n: number): string {
 
 export default function RelativeDateLabel({ date }: { date: Date }) {
   const formatted = getRelativeTimeString(date);
-  return <p>{formatted}</p>;
+  return <div>{formatted}</div>;
 }

@@ -21,6 +21,14 @@
   * {
     box-sizing: border-box;
   }
+
+  h2 {
+    @apply text-2xl pb-2 pt-4;
+  }
+  
+  p {
+    @apply pb-3;
+  }
 }
 
 @layer components {
