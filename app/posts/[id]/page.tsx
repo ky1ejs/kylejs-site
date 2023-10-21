@@ -9,6 +9,7 @@ import PostFooter from "@/components/PostFooter";
 import PostHeader from "@/components/PostHeader";
 import Image from "next/image";
 import imageMetadata from "@/lib/rehype-image-size";
+import BlogWipNotice from "@/components/BlogWipNotice";
 
 type PostParams = {
   id: string;
@@ -40,6 +41,7 @@ export default async function Post({ params: { id } }: { params: PostParams }) {
   const Content = result.default;
   return (
     <>
+      <BlogWipNotice />
       <article>
         <PostHeader post={post} />
         <Content components={components} />

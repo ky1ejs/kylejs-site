@@ -11,7 +11,7 @@ const PostMetadata = ({
   post: Post;
   showAvatar?: boolean;
 }) => (
-  <div className="mt-2 flex items-center divide-x-[1px] divide-gray-400 text-sm text-gray-500">
+  <div className="flex items-center divide-x-[1px] divide-gray-400 text-sm text-gray-500">
     <div className="flex items-center gap-2 pr-2">
       <Link href="/">
         {(showAvatar ?? true) && (
@@ -27,7 +27,7 @@ const PostMetadata = ({
         <span className="transition hover:text-primary">Kyle Satti</span>
       </Link>
     </div>
-    <p className="px-2">{calculateReadingTime(post.content)}</p>
+    <div className="px-2">{calculateReadingTime(post.content)}</div>
     <div className="pl-2">
       <RelativeDateLabel date={post.metadata.date} />
     </div>
