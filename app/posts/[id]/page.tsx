@@ -37,7 +37,10 @@ export default async function Post({ params: { id } }: { params: PostParams }) {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [imageMetadata],
   });
-  const result = await run(compiled, runtime);
+  // ts-expect-error was found here: https://github.com/mdx-js/mdx/compare/2.3.0...3.0.0#diff-ead2c92c57b58b3a1ee4c9e220bf9dfc4cd613baab3fc6596cbe14e7819e1bc3R41
+  // without it TS complains that `Fragment` is missing from the runtime.
+  // @ts-expect-error: the automatic react runtime is untyped.
+  const result = await run(compiled, { ...runtime, baseUrl: import.meta.url });
   const Content = result.default;
   return (
     <>
