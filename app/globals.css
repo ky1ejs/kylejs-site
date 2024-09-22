@@ -41,14 +41,12 @@
 @layer utilities {
   @import "./posts/layout.css";
 
-  @keyframes reset{0%{opacity:0.0}50%{opacity:0}100%{opacity:0}}
-  @-webkit-keyframes reset{0%{opacity:0.0}50%{opacity:0}100%{opacity:0}}
-  @keyframes fade-in{0%{opacity:0.0}50%{opacity:0}100%{opacity:1.0}}
-  @-webkit-keyframes fade-in{0%{opacity:0.0}50%{opacity:0}100%{opacity:1.0}}
+  @keyframes reset{0%{opacity:0}100%{opacity:0}}
+  @keyframes fade-in{0%{opacity:0}100%{opacity:1}}
 
   .fade-in {
     animation-name: reset, fade-in;
-    -webkit-animation-name:reset, fade-in;
+    -webkit-animation-name: reset, fade-in;
     animation-duration: 1s;
     -webkit-animation-duration:1s;
     animation-timing-function: ease-in;
@@ -86,5 +84,36 @@
     -webkit-animation-timing-function:ease-in;
     animation-iteration-count: 1;
     -webkit-animation-iteration-count:1;
+  }
+
+  @keyframes drop-down{
+    from{transform: translateY(-25%)}
+    to{transform: translateY(0)}
+  }
+
+  @keyframes reset-drop-down{
+    from{transform: translateY(-25%)}
+    to{transform: translateY(-25%)}
+  }
+
+  .rise-up {
+    animation-name: reset, reset-drop-down, drop-down, fade-in;
+    animation-delay: 0s, 0s, 0s, 0.4s;
+    animation-duration: 0.4s, 0.1s, 1s, 0.6s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
+  }
+
+  @keyframes background-and-shadow{
+    0%{background-color: transparent; box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); border: 0}
+    /* 80%{box-shadow: 0 0 0 0 rgba(0, 0, 0, 0)} */
+    100%{}
+  }
+
+  .background-and-shadow {
+    animation-name: background-and-shadow;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
   }
 }

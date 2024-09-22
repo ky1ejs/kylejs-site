@@ -1,11 +1,9 @@
 import Head from "next/head";
 import meImage from "../public/me.jpg";
-import TwitterSvg from "../public/socials/twitter.svg";
 import InstagramSvg from "../public/socials/instagram.svg";
 import GithubSvg from "../public/socials/github.svg";
 import LinkedinSvg from "../public/socials/linkedin.svg";
 import SpotifySvg from "../public/socials/spotify.svg";
-import MastodonSvg from "../public/socials/mastodon.svg";
 import ThreadsBwSvg from "../public/socials/threads-bw.svg";
 import ThreadsColorSvg from "../public/socials/threads-color.svg";
 import Image from "next/image";
@@ -41,12 +39,6 @@ export default async function Home() {
   const title = "kylejs";
   const firstRowSocials = [
     {
-      name: "Twitter",
-      url: "https://twitter.com/_kylejs_",
-      color: "hover:fill-[#00acee]",
-      svg: TwitterSvg,
-    },
-    {
       name: "GitHub",
       url: "https://github.com/ky1ejs",
       color: "hover:fill-[#333]",
@@ -72,12 +64,6 @@ export default async function Home() {
       color: "hover:fill-[#e1306c]",
       svg: InstagramSvg,
     },
-    {
-      name: "Mastodon",
-      url: "https://techhub.social/@kylejs",
-      color: "hover:fill-[#5d50e6]",
-      svg: MastodonSvg,
-    },
   ];
   return (
     <>
@@ -92,7 +78,7 @@ export default async function Home() {
       </Head>
       <div className="mt-16 flex items-center justify-center sm:absolute sm:bottom-0 sm:left-0 sm:right-0 sm:top-0 sm:m-auto sm:mt-0">
         <div className="w-[85%] text-center sm:w-fit">
-          <div className="border-grey-300 rounded-xl border-b-2 bg-white px-6 pb-10 pt-12 shadow-lg">
+          <div className="background-and-shadow border-grey-300 rounded-xl border-b-2 bg-white px-6 pb-10 pt-12 shadow-lg">
             <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
               <Image
                 src={meImage}
@@ -102,7 +88,7 @@ export default async function Home() {
                 alt="Headshot of Kyle Satti"
               />
             </div>
-            <div className="fade-in one mb-2">
+            <div className="rise-up mb-2">
               <div className="text-3xl font-bold text-violet-500">
                 Kyle Satti
               </div>
