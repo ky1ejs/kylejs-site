@@ -1,8 +1,8 @@
 import * as runtime from "react/jsx-runtime";
 import { getAllPosts, readPostWithId } from "@/lib/posts";
 import { compile, run } from "@mdx-js/mdx";
-import { MDXComponents } from "mdx/types";
 import { DownloadFile } from "@/components/DownloadFile";
+import { MDXComponents } from "mdx/types";
 import remarkGfm from "remark-gfm";
 import { JSX } from "react";
 import PostFooter from "@/components/PostFooter";
