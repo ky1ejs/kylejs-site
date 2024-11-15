@@ -37,7 +37,7 @@ const ThreadsIcon = () => {
 
 export default async function Home() {
   const title = "kylejs";
-  const firstRowSocials = [
+  const socials = [
     {
       name: "GitHub",
       url: "https://github.com/ky1ejs",
@@ -50,8 +50,6 @@ export default async function Home() {
       color: "hover:fill-[#1db954]",
       svg: SpotifySvg,
     },
-  ];
-  const secondRowSocials = [
     {
       name: "LinkedIn",
       url: "https://www.linkedin.com/in/kylejs/",
@@ -99,17 +97,7 @@ export default async function Home() {
             </div>
             <div className="fade-in three flex items-center justify-center gap-4 pb-4">
               <ThreadsIcon />
-              {firstRowSocials.map((s) => (
-                <SocialLink
-                  key={s.name}
-                  Svg={s.svg}
-                  link={s.url}
-                  color={s.color}
-                />
-              ))}
-            </div>
-            <div className="fade-in three flex items-center justify-center gap-4">
-              {secondRowSocials.map((s) => (
+              {socials.map((s) => (
                 <SocialLink
                   key={s.name}
                   Svg={s.svg}
