@@ -1,3 +1,6 @@
+@import "./posts/[id]/post.css";
+@import "./posts/layout.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,16 +34,15 @@
   }
 }
 
+
 @layer components {
+  
   .transform-minus-half {
     transform: translate(-50%, -50%);
   }
-  @import "./posts/[id]/post.css";
 }
 
 @layer utilities {
-  @import "./posts/layout.css";
-
   @keyframes reset{0%{opacity:0}100%{opacity:0}}
   @keyframes fade-in{0%{opacity:0}100%{opacity:1}}
 

@@ -29,7 +29,13 @@ const components: MDXComponents = {
   Image: (props) => <Image placeholder="blur" {...props} />,
 };
 
-export default async function Post({ params: { id } }: { params: PostParams }) {
+export default async function Post(props: { params: Promise<PostParams> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const post = await readPostWithId(id);
   const compiled = await compile(post.content, {
     outputFormat: "function-body",
@@ -54,7 +60,8 @@ export default async function Post({ params: { id } }: { params: PostParams }) {
   );
 }
 
-export async function generateMetadata({ params }: { params: PostParams }) {
+export async function generateMetadata(props: { params: Promise<PostParams> }) {
+  const params = await props.params;
   const post = await readPostWithId(params.id);
 
   return {
