@@ -32,9 +32,7 @@ const components: MDXComponents = {
 export default async function Post(props: { params: Promise<PostParams> }) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const post = await readPostWithId(id);
   const compiled = await compile(post.content, {
