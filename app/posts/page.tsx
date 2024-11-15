@@ -54,12 +54,14 @@ export default async function Posts() {
       <BlogWipNotice />
       <Intro />
       {posts.map((p) => (
-        <Link key={p.id} href={`/posts/${p.id}`}>
-          <div className="bg-gray-200 py-2 transition hover:text-primary sm:bg-transparent">
+        <div key={p.id}>
+          <Link href={`/posts/${p.id}`} className="hover:text-primary">
             <h2 className="p-0 text-xl">{p.metadata.title}</h2>
+          </Link>
+          <div className="bg-gray-200 pb-2 transition hover:text-primary sm:bg-transparent">
             <PostMetadata post={p} showAvatar={false} />
           </div>
-        </Link>
+        </div>
       ))}
     </div>
   );

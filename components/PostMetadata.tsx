@@ -12,7 +12,8 @@ const PostMetadata = ({
   showAvatar?: boolean;
 }) => (
   <div className="flex items-center divide-x-[1px] divide-gray-400 text-sm text-gray-500">
-    <div className="flex items-center gap-2 pr-2">
+    <div className="pr-2">
+      Written by{" "}
       <Link href="/">
         {(showAvatar ?? true) && (
           <Image
@@ -23,7 +24,6 @@ const PostMetadata = ({
             className="mr-2 inline rounded-full transition hover:scale-110"
           />
         )}
-        Written by{" "}
         <span className="transition hover:text-primary">Kyle Satti</span>
       </Link>
     </div>
