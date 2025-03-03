@@ -20,7 +20,7 @@
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@vercel/analytics": "^1.5.0",
     "autoprefixer": "10.4.20",
-    "eslint": "8.57.0",
+    "eslint": "9.21.0",
     "eslint-config-next": "15.2.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.3",
