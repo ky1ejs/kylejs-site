@@ -18,7 +18,7 @@ export const PillCollection = ({
   collections: PillCollectionProps[];
   hex: string;
 }) => (
-  <div className="mt-2 flex flex-wrap gap-2">
+  <div className="mt-2 flex flex-wrap gap-2 text-black">
     {collections
       .map((collection) =>
         collection.titles.map((title) => (

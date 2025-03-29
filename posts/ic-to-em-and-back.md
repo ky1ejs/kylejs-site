@@ -7,7 +7,7 @@ published: true
 # Summary
 In 2023, 3.5 years after joining Spotify as an Individual Contributor (IC), I transitioned to a management role for the second time in my career. After 2 years in that Engineering Manager role, I’m transitioning back to being an IC. 
 
-In this post I’m going to share my reasoning for moving back to IC both so I can revisit my current thinking in the future and for others considering the moves between IC and Manager roles. 
+In this post I’m going to share my reasoning for moving back to IC both. I cover the benefits of being an EM vs a Senior Engineer, my thoughts on job security in the current tech job climiate and a little bit on how AI could be influencing the future of the IC role.
 
 
 # What prompted my move back to EM?
