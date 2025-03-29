@@ -7,16 +7,18 @@ published: true
 # Summary
 In 2023, 3.5 years after joining Spotify as an Individual Contributor (IC), I transitioned to a management role for the second time in my career. After 2 years in that Engineering Manager role, I’m transitioning back to being an IC.
 
-In this post I’m going to share my reasoning for moving back to IC. I cover the benefits of being an EM compared to a Senior Engineer, my thoughts on job security in the current tech job climate, and a little bit on how AI may influence the future of the IC role.
+In this post I’m going to share my reasoning for moving back to IC. I cover the benefits of being an EM compared to a Senior Engineer, my thoughts on job security in the current tech job market, and a little bit on how AI may influence the future of the IC role.
+
+I mainly want to capture this decision ƒor my future self to review, but I hope it’s useful for others who are considering a similar move.
 
 # What prompted my move back to EM?
 **TL;DR: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs. Unfortunately, I can’t share much about what the product is and what it does.**
 
-In the new tech era of being ruthlessly efficient and having intense focus on the bottom line, organizational leaders must be crystal clear on headcount needs and budget allocation.
-
-Especially after a recent “reduction in force”, Spotify leaders are increasingly concerned with ensuring optimal staffing for their teams so they both have the skillsets required to meet their goals and to prevent further layoffs. Part of this includes thinking critically before increasing headcount.
+In the new tech era of being ruthlessly efficient and having intense focus on the bottom line, organizational leaders must be crystal clear on headcount needs and budget allocation. Especially after a recent “reduction in force”, Spotify leaders are increasingly concerned with ensuring optimal staffing for their teams so they both have the skillsets required to meet their goals and prevent further layoffs. 
 
 The organization that has been chosen as the home for the product I founded has a sufficient number of managers, so in order for me to stick with the project, I was asked to transition back to an IC role.
+
+Prior to the recent change in the tech climate, Spotify would have very likely moved me in to the new org as an EM without a second though. However, the current climate has made it clear that this is not a sustainable practice.
 
 After one has founded a product, it might seem like an easy decision to follow it wherever it goes. There were trade-offs involved, and this was not a move without inherent risk.
 Risks of going back to IC from EM
@@ -28,24 +30,23 @@ This is excellent for gaining visibility, growing a network outside of your team
 
 **The risk**: As I move back to an IC role, I open myself up to no longer being invited to higher-level strategic discussions, having these opportunities to make new connections with leaders across the company, and losing visibility to senior leaders who facilitate future growth opportunities (e.g. projects to drive, general involvement, and direct visibility to others of contribution and behavior).
 
-In the near term, as technical lead of this product, I'll continue to have influence over the product at a high strategic level. But, as long as I have the title of “Senior Engineer”, I could lose this influence at any point, such as if ownership moves to a new org where a Staff Engineer is assigned to this Tech Lead position.
+In the near term, as technical lead of this project, I'll continue to have influence over the project at a high strategic level. But, as long as I have the title of “Senior Engineer”, I could lose this influence at any point, such as if ownership moves to a new org where a Staff Engineer is assigned to this Tech Lead position.
 
 Some might immediately think that it would be unjust for me to lose the Tech Lead position of a product that I've founded, but I would offer the following perspective:
-* **Equity is not guaranteed**: don’t let yourself believe that the growth and recognition practices of any large corporation are grounded in equality and justice. The powers that be frequently, whether consciously or unconsciously, will sometimes bypass fairness for what they perceive as the best path forward for the success of the business, managing their biases or not.
-* **Founders often leave**: the founders of many products around the world have eventually been replaced by more experienced candidates as the product or company matures and requires more experienced leadership. The project could outgrow me, either in terms of scale or impact (big impact typically incentivizes leaders to put one of their Staff+ ICs at the helm, and those ICs typically want to work on those types of things for the exposure and impact), or a senior leader simply prefers another Tech Lead over me because they may not have enough visibility into my skillset or contributions.
+* **Equity is not guaranteed**: don’t let yourself believe that the growth and recognition practices of any large corporation are grounded in equality and justice. The powers that be, whether consciously or unconsciously, will sometimes bypass fairness for what they perceive as the best path forward for the success of the business, managing their biases or not.
+* **Founders often leave**: the founders of many products around the world have eventually been replaced by more experienced candidates as the product or company matures and requires more experienced leadership. The project could outgrow me, either in terms of scale or impact (high impact projects typically incentivize leaders to put one of their Staff+ ICs at the helm, and those ICs typically want to work on those types of projects for the exposure and impact). Or, even if the project doesn't outgrow me, a senior leader could simply prefer another Tech Lead over me because they may not have enough visibility into my skillset or contributions.
 
 ## Risk 2. – Potential to be made redundant by working on a fledgling product
 The product I've founded has been very well received so far but has not as-yet proven its product-market fit. Should this product ultimately fail and we choose to use another instead, what will happen to me? Will I be made redundant?
 
 Previous to 2023, I wouldn’t have been concerned about this, but, as already mentioned in this post, the current tech climate shows this to be a very real concern at present.
-Redundancy is particularly precarious for me since I live in the US on a visa that depends on my employment at Spotify. As soon as that employment ends, my wife and I would have 3 months to leave the country.
+Redundancy is particularly precarious for me since I live in the US on a visa that depends on my employment specifically at Spotify; my visa cannot be transferred to another employer. If my employment at Spotify were to end, my wife and I would have 3 months to leave the country.
 
 # Rewards & opportunities of going back to IC from EM
-
-##Benefit 1. – the obvious one – Visibility and impact in continuing to Tech Lead a new product
+## Benefit 1. – the obvious one – Visibility and impact in continuing to Tech Lead a new product
 It's very rare that one gets the opportunity to found and build a significant product from scratch at a big tech company. I'm so deeply grateful for this opportunity and for each of the individuals that have been involved in getting it off the ground.
 
-The product I've founded solves an immense pain that Spotify experiences in disseminating high-level company goals and in carrying out a series of dependency resolution and prioritization discussions.
+The product I've founded aims to solve immense pain that Spotify experiences in disseminating high-level company goals and in carrying out a series of dependency resolution and prioritization discussions.
 This means that the project offers high visibility with senior leaders across the company and grows my network as a result.
 
 Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away.
@@ -70,7 +71,12 @@ I generally think of the EM role at Spotify as having three main components: peo
 
 I like all three of these areas, but the one that lights me up the most is strategy. It's the closest to the creation process out of the EM facets. Closer still would be designing and writing software, and I hear some whispers of EMs becoming more involved in that these days, but it's rare for EMs to get time to design systems or write code at Spotify.
 
-However, strategy is the area in which similarly leveled EMs are least often involved (depending on the area, chemistry, skillset of the EM, among other factors). EMs are guaranteed to have to handle people and, most of the time, handle delivery, but strategy is often handled by their managers and skip managers.
+However, strategy is the area in which EMs of my level are least often involved (depending on the area, chemistry, skillset of the EM, among other factors). EMs are guaranteed to have to handle people and, most of the time, delivery, but strategy is often handled by their managers and skip managers.
 
-Moving back to an IC role takes me closer to having direct contribution to the creation process.
+Moving back to an IC role takes me closer to having direct contribution to the creation process which keeps me motivated and engagement with me work. I wouldn't say that I outright prefer IC to EM, but I do prefer to be in a creator role rather than a people/delivery role.
+
+# Wrap-up
+I've been thinking for the past couple of years that I've not taken a decent risk in my career for a while. I was fearing that I was becoming to safe and comfortable, so the timing felt right to take this move. 
+
+If you're considering you're next move and risk to take, I encourage you to lay out the pros/cons, take thoughtful risks and do the best you can with the information you have at the time.
 
