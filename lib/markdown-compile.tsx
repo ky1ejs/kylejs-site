@@ -15,10 +15,13 @@ const components: MDXComponents = {
   Image: (props) => <Image placeholder="blur" {...props} />,
   Pill,
   PillCollection,
-  Link
+  Link,
 };
 
-export default async function compileMarkdown(markdown: any): Promise<() => JSX.Element> {
+export default async function compileMarkdown(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  markdown: any,
+): Promise<() => JSX.Element> {
   const compiled = await compile(markdown, {
     outputFormat: "function-body",
     development: process.env.NODE_ENV === "development",
@@ -26,5 +29,6 @@ export default async function compileMarkdown(markdown: any): Promise<() => JSX.
     rehypePlugins: [imageMetadata],
   });
   const result = await run(compiled, { ...runtime, baseUrl: import.meta.url });
-  return () => <result.default components={components} />
+  // eslint-disable-next-line react/display-name
+  return () => <result.default components={components} />;
 }

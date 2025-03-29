@@ -12,14 +12,14 @@ const NavItem = ({ title, route }: { title: string; route: string }) => (
 );
 
 const Header = () => (
-  <div className="sticky top-0 bg-background-primary pb-4 pt-4 z-[1000]">
+  <div className="sticky top-0 z-[1000] bg-background-primary pb-4 pt-4">
     <div className="content-inset flex items-center justify-between">
       <div>
         <Link href="/">
           <span className="text-3xl">kylejs</span>
         </Link>
       </div>
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center gap-4">
         <NavItem title="About" route="/about" />
         <NavItem title="Posts" route="/posts" />
         <ThemeButton />
@@ -30,19 +30,15 @@ const Header = () => (
 );
 
 const Footer = () => (
-  <div className="text-center pt-12 pb-4 content-inset text-muted">
-    <hr className="border-t-1 border-gray-300 mb-3" />
-    <div className="flex gap-4 justify-center">
-      <Link href="/about">
-        About
-      </Link>
-      <Link href="/posts">
-        Posts
-      </Link>
+  <div className="content-inset pb-4 pt-12 text-center text-muted">
+    <hr className="border-t-1 mb-3 border-gray-300" />
+    <div className="flex justify-center gap-4">
+      <Link href="/about">About</Link>
+      <Link href="/posts">Posts</Link>
     </div>
     <Copyright />
   </div>
-)
+);
 
 export default function PostsLayout({ children }: { children: ReactNode }) {
   return (

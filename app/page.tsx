@@ -1,4 +1,3 @@
-import Head from "next/head";
 import meImage from "../public/me.jpg";
 import InstagramSvg from "../public/socials/instagram.svg";
 import GithubSvg from "../public/socials/github.svg";
@@ -24,7 +23,7 @@ const SocialLink = ({
   color: string;
 }) => (
   <a href={link}>
-    <Svg className={`fill-secondary h-10 w-10 ${color}`} alt={""} />
+    <Svg className={`h-10 w-10 fill-secondary ${color}`} alt={""} />
   </a>
 );
 
@@ -73,7 +72,7 @@ export default async function Home() {
   ];
   return (
     <>
-      <div className="mt-6 z-[1000] relative flex justify-end px-6">
+      <div className="relative z-[1000] mt-6 flex justify-end px-6">
         <ThemeButton />
       </div>
       <div className="mt-16 flex items-center justify-center sm:absolute sm:bottom-0 sm:left-0 sm:right-0 sm:top-0 sm:m-auto sm:mt-0">
@@ -89,13 +88,12 @@ export default async function Home() {
               />
             </div>
             <div className="rise-up mb-2">
-              <div className="text-3xl font-bold text-primary">
-                Kyle Satti
-              </div>
+              <div className="text-3xl font-bold text-primary">Kyle Satti</div>
               <div className="text-xl text-secondary">kylejs</div>
             </div>
             <div className="fade-in two pb-10">
-              I like to build teams and create things, <br /> mostly with an IDE, camera or 3D printer.
+              I like to build teams and create things, <br /> mostly with an
+              IDE, camera or 3D printer.
             </div>
             <div className="fade-in three flex items-center justify-center gap-4 pb-4">
               <ThreadsIcon />

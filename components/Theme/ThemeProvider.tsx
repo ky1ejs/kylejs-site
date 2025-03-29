@@ -3,8 +3,13 @@
 import React from "react";
 import { useEffect } from "react";
 import cookies from "js-cookie";
-import { EffectiveTheme, effectiveThemeForTheme, MEDIA_QUERY, Theme, themeFromString } from "@/components/Theme/Theme";
-
+import {
+  EffectiveTheme,
+  effectiveThemeForTheme,
+  MEDIA_QUERY,
+  Theme,
+  themeFromString,
+} from "@/components/Theme/Theme";
 
 export default function SystemThemeObserver() {
   useEffect(() => {
@@ -34,14 +39,13 @@ function readAndApplyTheme() {
 }
 
 function readCurrentSetTheme(): Theme | undefined {
-  let theme: Theme | undefined;;
+  let theme: Theme | undefined;
   if (typeof window !== "undefined") {
     const themeString = cookies.get("theme");
     theme = themeFromString(themeString);
   }
   return theme;
 }
-
 
 function readCurrentEffectiveTheme(): EffectiveTheme | undefined {
   const chosenTheme = readCurrentSetTheme();
@@ -60,12 +64,11 @@ function updateDocTheme(theme: EffectiveTheme) {
   document.documentElement.setAttribute("data-theme", theme);
 }
 
-
-
 // Create react context for theme and allow theme to be updated
 export const ThemeContext = React.createContext({
   theme: readCurrentSetTheme(),
-  setTheme: (theme: Theme) => { }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setTheme: (theme: Theme) => {},
 });
 
 export const useTheme = () => {
@@ -74,15 +77,23 @@ export const useTheme = () => {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-}
+};
 
-export const ThemeProviderWrapper = ({ children, initialValue }: { children: React.ReactNode, initialValue?: Theme }) => {
-  const [theme, setTheme] = React.useState(initialValue ?? readCurrentSetTheme());
+export const ThemeProviderWrapper = ({
+  children,
+  initialValue,
+}: {
+  children: React.ReactNode;
+  initialValue?: Theme;
+}) => {
+  const [theme, setTheme] = React.useState(
+    initialValue ?? readCurrentSetTheme(),
+  );
 
   const st = (theme: Theme) => {
     setTheme(theme);
     storeTheme(theme);
-  }
+  };
 
   return (
     <>
@@ -92,4 +103,4 @@ export const ThemeProviderWrapper = ({ children, initialValue }: { children: Rea
       <SystemThemeObserver />
     </>
   );
-}
+};

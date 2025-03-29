@@ -10,7 +10,8 @@ const Intro = () => (
       in an effort to connect with others.
     </p>
     <p>
-      You can read more about my thoughts on blogging/writing in <Link href="/posts/why-blog">this post</Link>.
+      You can read more about my thoughts on blogging/writing in{" "}
+      <Link href="/posts/why-blog">this post</Link>.
     </p>
     <p>
       Please reach out to me if you see something you like! My socials{" "}

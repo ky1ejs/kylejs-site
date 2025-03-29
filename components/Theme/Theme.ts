@@ -13,10 +13,14 @@ export const MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 export function readBrowserTheme(): EffectiveTheme {
   if (typeof window === "undefined") return EffectiveTheme.Light;
-  return window.matchMedia(MEDIA_QUERY).matches ? EffectiveTheme.Dark : EffectiveTheme.Light;
+  return window.matchMedia(MEDIA_QUERY).matches
+    ? EffectiveTheme.Dark
+    : EffectiveTheme.Light;
 }
 
-export function effectiveThemeForTheme(theme: Theme | undefined): EffectiveTheme | undefined {
+export function effectiveThemeForTheme(
+  theme: Theme | undefined,
+): EffectiveTheme | undefined {
   switch (theme) {
     case Theme.Dark:
       return EffectiveTheme.Dark;

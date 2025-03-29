@@ -4,14 +4,21 @@ import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProviderWrapper } from "@/components/Theme/ThemeProvider";
 import { cookies } from "next/headers";
-import { effectiveThemeForTheme, Theme, themeFromString } from "@/components/Theme/Theme";
+import {
+  effectiveThemeForTheme,
+  themeFromString,
+} from "@/components/Theme/Theme";
 
 export const metadata: Metadata = {
   title: "kylejs",
   description: "Kyle Satti | Product Engineer based in Brooklyn, NY.",
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   // get theme from cookies
   const themeString = (await cookies()).get("theme")?.value;
   console.log("themeString", themeString);
@@ -20,8 +27,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" data-theme={effectiveTheme} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{
-          __html: `
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
             (function() {
               console.log("theme check");
               try {
@@ -37,7 +45,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               } catch (e) {}
             })();
           `,
-        }} />
+          }}
+        />
       </head>
       <body>
         <ThemeProviderWrapper initialValue={theme}>

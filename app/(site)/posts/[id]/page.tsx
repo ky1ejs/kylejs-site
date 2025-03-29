@@ -1,4 +1,4 @@
-import { getAllPosts, readPostWithId } from "@/lib/posts";;
+import { getAllPosts, readPostWithId } from "@/lib/posts";
 import PostFooter from "@/components/PostFooter";
 import PostHeader from "@/components/PostHeader";
 import compileMarkdown from "@/lib/markdown-compile";

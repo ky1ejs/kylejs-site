@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { effectiveThemeForTheme, Theme } from "@/components/Theme/Theme";
 import { useTheme } from "@/components/Theme/ThemeProvider";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ export default function ThemeButton() {
       default:
         return "🖥️";
     }
-  }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,27 +37,29 @@ export default function ThemeButton() {
       <button
         id="theme-button"
         // data-popover-target="popover-user-profile"
-        className="bg-background-secondary hover:bg-background-200 rounded-xl py-1 px-3"
+        className="rounded-xl bg-background-secondary px-3 py-1 hover:bg-background-200"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-lg">{emojiForTheme(theme)}</span>
       </button>
       {isOpen && (
-        <div id="popover-user-profile" className="absolute -left-20 top-10 bg-background-secondary rounded-xl w-32 text-sm transition-all ease-linear shadow-md dark:shadow-none">
-          {
-            Object.values(Theme).map((t) => (
-              <button
-                key={t}
-                className="px-2 py-1 hover:bg-background-primary w-full text-left"
-                onClick={() => {
-                  setTheme(t);
-                  setIsOpen(false);
-                }}
-              >
-                {emojiForTheme(t)} {t} {t === Theme.System && `(${effectiveThemeForTheme(t)})`}
-              </button>
-            ))
-          }
+        <div
+          id="popover-user-profile"
+          className="absolute -left-20 top-10 w-32 rounded-xl bg-background-secondary text-sm shadow-md transition-all ease-linear dark:shadow-none"
+        >
+          {Object.values(Theme).map((t) => (
+            <button
+              key={t}
+              className="w-full px-2 py-1 text-left hover:bg-background-primary"
+              onClick={() => {
+                setTheme(t);
+                setIsOpen(false);
+              }}
+            >
+              {emojiForTheme(t)} {t}{" "}
+              {t === Theme.System && `(${effectiveThemeForTheme(t)})`}
+            </button>
+          ))}
         </div>
       )}
     </div>
