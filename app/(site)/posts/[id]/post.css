@@ -3,43 +3,6 @@
 
 @layer components {
   .post {
-    h1 {
-      @apply text-4xl mt-6;
-    }
-
-    h2 {
-      @apply text-2xl mt-10 mb-3;
-    }
-
-    h3, h4, h5, h6 {
-      @apply mb-1 mt-4;
-    }
-
-    h3 {
-      @apply text-slate-700 text-xl;
-    }
-
-    h4 {
-      @apply text-lg;
-    }
-
-    h5 {
-      @apply text-lg;
-    }
-
-    h6 {
-      @apply text-lg;
-    }
-
-    p + p {
-        @apply pt-4;
-    }
-
-    li {
-      @apply mt-2 ml-6;
-      list-style-type: disc;
-    }
-
     th { 
       @apply text-left pb-2 px-2;
     }

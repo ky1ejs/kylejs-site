@@ -1,0 +1,49 @@
+
+.selector {
+  --selector-corner-radius: 20px;
+
+  width: 100%;
+  margin: auto;
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background: var(--background-100);
+  border-radius: var(--selector-corner-radius) var(--selector-corner-radius)  0 0;
+}
+
+.selector input {
+  display: none;
+}
+
+.selector label {
+  display: inline-block;
+  text-align: center;
+  width: 50%;
+  z-index: 50;
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.indicator {
+  width: 50%;
+  height: 100%;
+  background: var(--background-secondary);
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  transition: left .1s ease-in-out;
+}
+
+.selector input:first-of-type:checked ~ .indicator {
+  border-radius: var(--selector-corner-radius) 0 0 0;
+  left: 0;
+}
+.selector input:nth-of-type(2):checked ~ .indicator {
+  border-radius: 0 var(--selector-corner-radius) 0 0;
+  left: 50%;
+}

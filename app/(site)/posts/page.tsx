@@ -1,32 +1,16 @@
 import { getSortedPostMetadata } from "@/lib/posts";
 import Link from "next/link";
 import PostMetadata from "@/components/PostMetadata";
-import BlogWipNotice from "@/components/BlogWipNotice";
 
 const Intro = () => (
   <div>
-    <h2>On writing</h2>
+    <h2>My blog – what to expect</h2>
     <p>
-      Writing is an incredibly important thing to practice: You can think
-      clearer. Maximise the reward gained from endeavours you make; remembering
-      and revisiting them. Share your experiences and connect over them with
-      others.
-    </p>
-    <p>
-      When you can write well, you&apos;re more likely to communicate well in
-      all forms and succeed in influencing others.
-    </p>
-    <p>
-      The funny paradox about{" "}
-      <span className="italic">living in the moment</span> is that you&apos;re
-      likely not to remember it. There&apos;s some truth to the whole &quot;if
-      there aren&apos;t any photos (or Instagram post), did it really
-      happen&quot;. This is why I try to capture most things I do in some way.
-    </p>
-    <h2>What to expect</h2>
-    <p>
-      On this blog I place my projects, learnings and thinking out in the open
+      On this blog I share my projects, learnings and thinking out in the open
       in an effort to connect with others.
+    </p>
+    <p>
+      You can read more about my thoughts on blogging/writing in <Link href="/posts/why-blog">this post</Link>.
     </p>
     <p>
       Please reach out to me if you see something you like! My socials{" "}
@@ -51,14 +35,13 @@ export default async function Posts() {
 
   return (
     <div className="mt-4">
-      <BlogWipNotice />
       <Intro />
       {posts.map((p) => (
         <div key={p.id}>
           <Link href={`/posts/${p.id}`} className="hover:text-primary">
             <h2 className="p-0 text-xl">{p.metadata.title}</h2>
           </Link>
-          <div className="bg-gray-200 pb-2 transition hover:text-primary sm:bg-transparent">
+          <div className="bg-gray-200 pb-2 hover:text-primary sm:bg-transparent">
             <PostMetadata post={p} showAvatar={false} />
           </div>
         </div>

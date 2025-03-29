@@ -8,6 +8,7 @@ import { getPlaiceholder } from "plaiceholder";
 
 // This file is an adapeted version of the code snippet from:
 // https://kylepfromer.com/blog/nextjs-image-component-blog
+// https://web.archive.org/web/20240518202028/https://kylepfromer.com/blog/nextjs-image-component-blog
 
 const sizeOf = promisify(imageSize);
 
