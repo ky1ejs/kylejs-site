@@ -160,6 +160,10 @@
     margin: 0;
   }
 
+  strong {
+    color: var(--primary)
+  }
+
   a {
     color: var(--accent);
     text-decoration: underline;
