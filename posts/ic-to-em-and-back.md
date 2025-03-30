@@ -11,7 +11,7 @@ In this post I’m going to share my reasoning for moving back to IC. I cover th
 
 My main goal for this post is to capture this decision for my future self to review. I thought it may be interesting for others too and some folks might have some interesting advice, commentary or shared experience to connect with me on; so here goes.
 
-# What prompted my move back to EM?
+# What prompted my move back to IC?
 **_TL;DR_: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs**
 
 I can't share much about the product I've founded, but essentially it aims to solve a great deal of pain that Spotify has been experiencing in disseminating high-level company goals and then carrying out a series of dependency resolution and prioritization discussions.
