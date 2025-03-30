@@ -3,11 +3,6 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProviderWrapper } from "@/components/Theme/ThemeProvider";
-import { cookies } from "next/headers";
-import {
-  effectiveThemeForTheme,
-  themeFromString,
-} from "@/components/Theme/Theme";
 
 export const metadata: Metadata = {
   title: "kylejs",
@@ -19,13 +14,8 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // get theme from cookies
-  const themeString = (await cookies()).get("theme")?.value;
-  console.log("themeString", themeString);
-  const theme = themeFromString(themeString);
-  const effectiveTheme = effectiveThemeForTheme(theme);
   return (
-    <html lang="en" data-theme={effectiveTheme} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -40,18 +30,31 @@ export default async function RootLayout({
                   return;
                 }
                 console.log("not set");
+                // read preference from cookies
+                const cookieTheme = document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("theme="))
+                  ?.split("=")[1];
+
+                console.log("cookie theme", cookieTheme);
+                
+                if (cookieTheme !== null && cookieTheme !== undefined && cookieTheme !== "system") {
+                  document.documentElement.setAttribute("data-theme", cookieTheme);
+                  console.log("cookie theme set");
+                  return;
+                }
+
                 const foundTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                console.log("found theme: ", foundTheme);
                 document.documentElement.setAttribute("data-theme", foundTheme);
-              } catch (e) {}
+              } catch (e) {console.error(e);}
             })();
           `,
           }}
         />
       </head>
       <body>
-        <ThemeProviderWrapper initialValue={theme}>
-          {children}
-        </ThemeProviderWrapper>
+        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
       </body>
       <Analytics />
     </html>
