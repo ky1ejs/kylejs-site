@@ -9,7 +9,7 @@ In 2023, 3.5 years after joining Spotify as an Individual Contributor (IC), I tr
 
 In this post I’m going to share my reasoning for moving back to IC. I cover the benefits of being an EM compared to a Senior Engineer, my thoughts on job security in the current tech job market, and a little bit on how AI may influence the future of the IC role.
 
-My main goal for this post is to capture this decision ƒor my future self to review. I thought it may be interesting for others too and some folks might have some interesting advice, commentary or shared experience to connect with me on; so here goes.
+My main goal for this post is to capture this decision for my future self to review. I thought it may be interesting for others too and some folks might have some interesting advice, commentary or shared experience to connect with me on; so here goes.
 
 # What prompted my move back to EM?
 **_TL;DR_: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs**
@@ -20,7 +20,7 @@ In the new tech era of being ruthlessly efficient and having intense focus on th
 
 The organization that has been chosen as the home for the product I founded already has a sufficient number of managers, so in order for me to stick with the project, I was asked to transition back to an IC role.
 
-Prior to the recent change in the tech climate, Spotify would have very likely moved me in to the new org as an EM without a second thought. However, the current climate has made it clear that this is not a sustainable practice.
+Prior to the recent change in the tech climate, Spotify would have very likely moved me into the new org as an EM without a second thought. However, the current climate has made it clear that this is not a sustainable practice.
 
 After one has founded a product, it might seem like an easy decision to follow it wherever it goes. There were trade-offs involved, and this was not a move without inherent risk.
 Risks of going back to IC from EM
@@ -50,7 +50,7 @@ It's very rare that one gets the opportunity to found and build a significant pr
 
 As mentioned, the product facilitates the dissemination of high-level company goals and allows leaders/work-managers to carry out dependency resolution and prioritization discussions. This means that the project offers high visibility with senior leaders across the company and grows my network as a result.
 
-Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away; I've made a ton of learnings on how to boostrap new products inside a big tech company and in effective practicies for big tech companies plan large scale projects (maybe that should be a furture post...).
+Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away; I've made a ton of learnings on how to bootstrap new products inside a big tech company and in effective practices for big tech companies plan large scale projects (maybe that should be a future post...).
 
 ## Benefit 2. – Greater job security
 I know, I know... this one contradicts Risk number 2 above, but hear me out...
