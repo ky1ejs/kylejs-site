@@ -1,5 +1,5 @@
 ---
-title: Why I'm going from EM to IC
+title: From IC to EM and back again
 date: 2025-03-29
 published: true
 ---
@@ -9,16 +9,18 @@ In 2023, 3.5 years after joining Spotify as an Individual Contributor (IC), I tr
 
 In this post I’m going to share my reasoning for moving back to IC. I cover the benefits of being an EM compared to a Senior Engineer, my thoughts on job security in the current tech job market, and a little bit on how AI may influence the future of the IC role.
 
-I mainly want to capture this decision ƒor my future self to review, but I hope it’s useful for others who are considering a similar move.
+My main goal for this post is to capture this decision ƒor my future self to review. I thought it may be interesting for others too and some folks might have some interesting advice, commentary or shared experience to connect with me on; so here goes.
 
 # What prompted my move back to EM?
-**TL;DR: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs. Unfortunately, I can’t share much about what the product is and what it does.**
+**_TL;DR_: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs**
 
-In the new tech era of being ruthlessly efficient and having intense focus on the bottom line, organizational leaders must be crystal clear on headcount needs and budget allocation. Especially after a recent “reduction in force”, Spotify leaders are increasingly concerned with ensuring optimal staffing for their teams so they both have the skillsets required to meet their goals and prevent further layoffs. 
+I can't share much about the product I've founded, but essentially it aims to solve a great deal of pain that Spotify has been experiencing in disseminating high-level company goals and then carrying out a series of dependency resolution and prioritization discussions.
 
-The organization that has been chosen as the home for the product I founded has a sufficient number of managers, so in order for me to stick with the project, I was asked to transition back to an IC role.
+In the new tech era of being ruthlessly efficient and having intense focus on the bottom line, organizational leaders must be crystal clear on headcount needs and budget allocation. Especially after a recent “reduction in force”, Spotify leaders are increasingly concerned with ensuring optimal staffing for their teams so they both have the skillsets required to meet their goals whilst balancing exposure to further layoffs; each headcount and their seniority/skillset must be justified.
 
-Prior to the recent change in the tech climate, Spotify would have very likely moved me in to the new org as an EM without a second though. However, the current climate has made it clear that this is not a sustainable practice.
+The organization that has been chosen as the home for the product I founded already has a sufficient number of managers, so in order for me to stick with the project, I was asked to transition back to an IC role.
+
+Prior to the recent change in the tech climate, Spotify would have very likely moved me in to the new org as an EM without a second thought. However, the current climate has made it clear that this is not a sustainable practice.
 
 After one has founded a product, it might seem like an easy decision to follow it wherever it goes. There were trade-offs involved, and this was not a move without inherent risk.
 Risks of going back to IC from EM
@@ -28,9 +30,9 @@ At Spotify, one of the cool things about moving from an IC role of Senior Engine
 
 This is excellent for gaining visibility, growing a network outside of your team, and practicing your strategy and influencing skills.
 
-**The risk**: As I move back to an IC role, I open myself up to no longer being invited to higher-level strategic discussions, having these opportunities to make new connections with leaders across the company, and losing visibility to senior leaders who facilitate future growth opportunities (e.g. projects to drive, general involvement, and direct visibility to others of contribution and behavior).
+**The risk**: As I move back to an IC role, I open myself up to no longer being invited to higher-level strategic discussions, having these opportunities to make new connections with leaders across the company, and losing visibility to senior leaders who facilitate future growth opportunities (e.g. by providing projects to drive, giving me general involvement in key initiatives, and their direct visibility of my contribution and behavior).
 
-In the near term, as technical lead of this project, I'll continue to have influence over the project at a high strategic level. But, as long as I have the title of “Senior Engineer”, I could lose this influence at any point, such as if ownership moves to a new org where a Staff Engineer is assigned to this Tech Lead position.
+In the near term, as technical lead of this project, I'll continue to have influence over the project at a high strategic level. But, as long as I have the title of “Senior Engineer”, I could lose this influence at any point, such as if ownership of the product moves to a new org where a Staff Engineer would naturally be assigned to this Tech Lead position.
 
 Some might immediately think that it would be unjust for me to lose the Tech Lead position of a product that I've founded, but I would offer the following perspective:
 * **Equity is not guaranteed**: don’t let yourself believe that the growth and recognition practices of any large corporation are grounded in equality and justice. The powers that be, whether consciously or unconsciously, will sometimes bypass fairness for what they perceive as the best path forward for the success of the business, managing their biases or not.
@@ -39,17 +41,16 @@ Some might immediately think that it would be unjust for me to lose the Tech Lea
 ## Risk 2. – Potential to be made redundant by working on a fledgling product
 The product I've founded has been very well received so far but has not as-yet proven its product-market fit. Should this product ultimately fail and we choose to use another instead, what will happen to me? Will I be made redundant?
 
-Previous to 2023, I wouldn’t have been concerned about this, but, as already mentioned in this post, the current tech climate shows this to be a very real concern at present.
-Redundancy is particularly precarious for me since I live in the US on a visa that depends on my employment specifically at Spotify; my visa cannot be transferred to another employer. If my employment at Spotify were to end, my wife and I would have 3 months to leave the country.
+Previous to 2023, I wouldn’t have been concerned about this. But, as already mentioned in this post, the current tech climate shows this to be a very real concern.
+Redundancy is particularly precarious for me since I live in the US on a visa that depends on my employment specifically at Spotify; my visa cannot be transferred to another employer. If my employment at Spotify were to end, my wife and I would have 3 months to leave the country, losing the friends and life we've built here.
 
 # Rewards & opportunities of going back to IC from EM
 ## Benefit 1. – the obvious one – Visibility and impact in continuing to Tech Lead a new product
 It's very rare that one gets the opportunity to found and build a significant product from scratch at a big tech company. I'm so deeply grateful for this opportunity and for each of the individuals that have been involved in getting it off the ground.
 
-The product I've founded aims to solve immense pain that Spotify experiences in disseminating high-level company goals and in carrying out a series of dependency resolution and prioritization discussions.
-This means that the project offers high visibility with senior leaders across the company and grows my network as a result.
+As mentioned, the product facilitates the dissemination of high-level company goals and allows leaders/work-managers to carry out dependency resolution and prioritization discussions. This means that the project offers high visibility with senior leaders across the company and grows my network as a result.
 
-Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away.
+Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away; I've made a ton of learnings on how to boostrap new products inside a big tech company and in effective practicies for big tech companies plan large scale projects (maybe that should be a furture post...).
 
 ## Benefit 2. – Greater job security
 I know, I know... this one contradicts Risk number 2 above, but hear me out...
@@ -58,9 +59,9 @@ In my opinion, the title of Senior Engineer is one of the safest roles at Spotif
 
 Why? It's the cheapest level at which the company receives an independent, experienced, action oriented individual who requires little input to create outsized impact.
 
-With the advent of AI code writing assistants, a Senior Engineer is experienced enough to navigate the nuances baked into answers that AI tools give. In terms of output, I'd equate a single experienced and high performing Senior Eng + AI to at least 3 engineers of the level below, making them a better return on investment for the company.
+With the advent of AI coding assistants, a Senior Engineer is experienced enough to navigate the nuances baked into answers that AI tools give. In terms of output, I'd equate a single experienced and high performing Senior Eng + AI to at least 3 engineers of the level below, making them a better return on investment for the company.
 
-Jobs for Senior Engineer and Engineer II are among the most common openings in engineering at Spotify, with an experienced Senior often preferred due to their ability to onboard and make impact quickly.
+Jobs for Senior Engineer and Engineer II (the level below Senior at Spotify) are among the most common openings in engineering at Spotify, with an experienced Senior often preferred due to their ability to onboard and make impact quickly.
 
 As with most tech companies, the middle management layer at Spotify is being squashed. As a result, many engineers are taking on more reports and/or more teams than ever before, leading to lower headcount demands for the EM / Senior EM role.
 
@@ -69,14 +70,14 @@ From my perspective, should a high-performing EM and a high-performing Senior fi
 ## Benefit 3. – Getting back to being a builder
 I generally think of the EM role at Spotify as having three main components: people, delivery, and strategy.
 
-I like all three of these areas, but the one that lights me up the most is strategy. It's the closest to the creation process out of the EM facets. Closer still would be designing and writing software, and I hear some whispers of EMs becoming more involved in that these days, but it's rare for EMs to get time to design systems or write code at Spotify.
+I like all three of these areas, but the one that lights me up the most is strategy. It's the closest to the creation process out of the EM facets, and creating things is why I became a software engineer. Ideally I'd be closer still, designing and writing software, which is exactly what this change offers. I hear some whispers of EMs becoming more involved in coding/design these days, but it's pretty rare for EMs to get time to design systems or write code at Spotify.
 
-However, strategy is the area in which EMs of my level are least often involved (depending on the area, chemistry, skillset of the EM, among other factors). EMs are guaranteed to have to handle people and, most of the time, delivery, but strategy is often handled by their managers and skip managers.
+Despite strategy being a component of being an EM, it's the area in which EMs of my level are least often involved (depending on the area, chemistry, skillset of the EM, among other factors). EMs are guaranteed to have to handle people and, most of the time, delivery, but strategy is often handled by their managers and skip managers.
 
-Moving back to an IC role takes me closer to having direct contribution to the creation process which keeps me motivated and engagement with me work. I wouldn't say that I outright prefer IC to EM, but I do prefer to be in a creator role rather than a people/delivery role.
+Moving back to an IC role takes me closer to having direct contribution to the creation process which keeps me more motivated and engaged. I wouldn't say that I outright prefer IC to EM, but I do prefer to be in a creator role rather than a people/delivery role.
 
 # Wrap-up
 I've been thinking for the past couple of years that I've not taken a decent risk in my career for a while. I was fearing that I was becoming to safe and comfortable, so the timing felt right to take this move. 
 
-If you're considering you're next move and risk to take, I encourage you to lay out the pros/cons, take thoughtful risks and do the best you can with the information you have at the time.
+If you're considering you're next move and risk to take, I encourage you to lay out the pros/cons, take thoughtful and intentional risks, and do the best you can with the information you have at the time.
 
