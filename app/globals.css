@@ -183,7 +183,7 @@
   }
 
   h2 {
-    @apply text-2xl mt-4 mb-1;
+    @apply text-2xl mt-2 mb-1;
     font-weight: 500;
   }
 
