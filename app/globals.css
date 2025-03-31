@@ -192,13 +192,13 @@
   }
 
   h3 {
-    @apply text-slate-700 text-xl;
+    @apply text-slate-700 dark:text-slate-200 text-xl;
 
     &:after {
       display: block;
       content: "";
-      margin-bottom: 6px;  
-      border-bottom: 1px dotted orange;
+      margin-bottom: 4px;  
+      border-bottom: 1px dotted var(--primary);
     }
   }
 

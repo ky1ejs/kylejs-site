@@ -42,7 +42,7 @@ export default async function Posts() {
           <Link href={`/posts/${p.id}`} className="hover:text-primary">
             <h2 className="p-0 text-xl">{p.metadata.title}</h2>
           </Link>
-          <div className="bg-gray-200 pb-2 hover:text-primary sm:bg-transparent">
+          <div className="pb-2 hover:text-primary">
             <PostMetadata post={p} showAvatar={false} />
           </div>
         </div>

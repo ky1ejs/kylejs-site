@@ -26,8 +26,9 @@ export default async function Post(props: { params: Promise<PostParams> }) {
   );
 }
 
-
-export const generateMetadata = async (props: { params: Promise<PostParams> }): Promise<Metadata> => {
+export const generateMetadata = async (props: {
+  params: Promise<PostParams>;
+}): Promise<Metadata> => {
   const id = (await props.params).id;
   const post = await readPostWithId(id);
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kylejs.me";

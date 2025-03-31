@@ -1,6 +1,6 @@
 # Personal
 
-## In a few words
+## In a few words...
 
 ### Where I live 
 🗽 NYC since "_Fall_" 2022.

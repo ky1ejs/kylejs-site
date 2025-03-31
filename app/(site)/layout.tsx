@@ -23,7 +23,6 @@ const Header = () => (
         <NavItem title="About" route="/about" />
         <NavItem title="Posts" route="/posts" />
         <ThemeButton />
-        <div></div>
       </div>
     </div>
   </div>
@@ -31,7 +30,7 @@ const Header = () => (
 
 const Footer = () => (
   <div className="content-inset pb-4 pt-12 text-center text-muted">
-    <hr className="border-t-1 mb-3 border-gray-300" />
+    <hr className="border-t-[0.5px] mb-3 border-muted" />
     <div className="flex justify-center gap-4">
       <Link href="/about">About</Link>
       <Link href="/posts">Posts</Link>
@@ -44,8 +43,12 @@ export default function PostsLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Header />
-      <div className="content-inset mx-auto max-w-[800px]">{children}</div>
-      <Footer />
+      <div className="mx-auto max-w-[800px]">
+        <div className="content-inset">
+          {children}
+        </div>
+        <Footer />
+      </div>
     </>
   );
 }
