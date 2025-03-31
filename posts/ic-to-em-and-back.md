@@ -21,7 +21,7 @@ I can't share much about the product I've founded, but essentially it aims to so
 
 In the new tech era of being ruthlessly efficient and having intense focus on the bottom line, organizational leaders must be crystal clear on headcount needs and budget allocation. Especially after a recent “reduction in force”, Spotify leaders are increasingly concerned with ensuring optimal staffing for their teams so they both have the skillsets required to meet their goals whilst balancing exposure to further layoffs; each headcount and their seniority/skillset must be justified.
 
-The organization that has been chosen as the home for the product I founded already has a sufficient number of managers, so in order for me to stick with the project, I was asked to transition back to an IC role.
+The organization that has been chosen as the home for the product I founded already has a sufficient number of managers, so in order for me to stick with the project, I was asked to transition back to an IC role. I could have declined this request but I would have to leave the product I founded as a result. 
 
 Prior to the recent change in the tech climate, Spotify would have very likely moved me into the new org as an EM without a second thought. However, the current climate has made it clear that this is not a sustainable practice.
 
@@ -73,7 +73,7 @@ With the advent of AI coding assistants, a Senior Engineer is experienced enough
 
 Jobs for Senior Engineer and Engineer II (the level below Senior at Spotify) are among the most common openings in engineering at Spotify, with an experienced Senior often preferred due to their ability to onboard and make impact quickly.
 
-As with most tech companies, the middle management layer at Spotify is being squashed. As a result, many engineers are taking on more reports and/or more teams than ever before, leading to lower headcount demands for the EM / Senior EM role.
+As with most tech companies, the middle management layer at Spotify is being squashed. As a result, many engineering managers are taking on more reports and/or more teams than ever before, leading to lower headcount demands for the EM / Senior EM role.
 
 From my perspective, should a high-performing EM and a high-performing Senior find themselves in a team and/or project that gets shut down, the Senior is more likely to find a quick transition into another role at Spotify.
 
@@ -91,7 +91,9 @@ As mentioned in Benefit 2, middle management at Spotify, like at many big tech c
 
 Staff Engineer roles, the role above my current title of Senior Engineer, aren't exactly in abundance but seem to be ever so slightly more common additions to the jobs board than Senior Engineering Manager. 
 
-My tech lead role more neatly aligns with the Staff Engineer role than the SEM role and staying with this impactful project in general probably gives me a slightly better chance of levelling up.
+My performance reviews as an EM were always strong (one example: my reports never rated my below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need to a role of the nex level to become available, and there was no sign of that in my previous org.
+
+In addition to slightly higher likelihood of Staff positions opening up, my tech lead role more neatly aligns with the Staff Engineer role than the SEM role and staying with this impactful project in general probably gives me a slightly better chance of levelling up.
 
 # Would I have made this change if EM **_was_** an option in the new org?
 No. I probably would have stuck with the EM role had this been a posibility in the org I've joined, mainly because I wouldn't have to process a role change with US immigration in regards to my visa or delay my Green Card application process. 
