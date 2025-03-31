@@ -16,7 +16,7 @@ My main goal for this post is to capture this decision for my future self to rev
 <div className="mt-4 mb-4 px-3 py-2 rounded-xl border-2 border-muted">
 **_TL;DR_: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs**
 
-I can't share much about the product I've founded, but essentially it aims to solve a great deal of pain that Spotify has been experiencing in disseminating high-level company goals and then carrying out a series of dependency resolution and prioritization discussions.
+I can't share much about the product I've founded, but essentially it aims to solve a great deal of friction that Spotify has been experiencing in disseminating high-level company goals and then carrying out a series of dependency resolution and prioritization discussions.
 </div>
 
 In the new tech era of being ruthlessly efficient and having intense focus on the bottom line, organizational leaders must be crystal clear on headcount needs and budget allocation. Especially after a recent “reduction in force”, Spotify leaders are increasingly concerned with ensuring optimal staffing for their teams so they both have the skillsets required to meet their goals whilst balancing exposure to further layoffs; each headcount and their seniority/skillset must be justified.
