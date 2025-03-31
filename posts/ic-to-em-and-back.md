@@ -3,6 +3,15 @@ title: From IC to EM and back again
 description: The risks and rewards of moving back to an IC role after being an EM
 date: 2025-03-29
 published: true
+reviewers: 
+  - Samarth Mediratta
+  - Alex Akers
+  - Ruben Lindström
+  - Hugo Cuvillier
+  - Fabio Milano
+  - Olly Boon
+  - Dawid Cieslak
+  - Ryan Registe
 ---
 
 # Summary
