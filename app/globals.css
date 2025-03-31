@@ -218,6 +218,10 @@
     @apply pb-3;
   }
 
+  p:last-child {
+    padding-bottom: 0;
+  }
+
   ol {
     @apply list-decimal;
     padding-left: 2rem;
