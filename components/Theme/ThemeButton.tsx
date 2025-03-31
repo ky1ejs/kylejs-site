@@ -26,10 +26,20 @@ const LoadingIndicator = () => (
   </svg>
 );
 
-export default function ThemeButton() {
+export enum ThemeButtonPosition {
+  Top = "top",
+  Bottom = "bottom",
+}
+
+export default function ThemeButton({
+  position = ThemeButtonPosition.Bottom,
+}: {
+  position?: ThemeButtonPosition;
+}) {
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const isTop = position === ThemeButtonPosition.Top;
 
   const emojiForTheme = (theme: Theme | undefined) => {
     switch (theme) {
@@ -80,7 +90,7 @@ export default function ThemeButton() {
           {isOpen && (
             <div
               id="popover-user-profile"
-              className="absolute -left-20 top-10 w-32 rounded-xl bg-background-secondary text-sm shadow-md transition-all ease-linear dark:shadow-none"
+              className={`absolute -left-20 ${isTop ? "bottom-12" : "top-10"} w-32 rounded-xl bg-background-secondary text-sm shadow-md transition-all ease-linear dark:shadow-none`}
             >
               {Object.values(Theme).map((t) => (
                 <button

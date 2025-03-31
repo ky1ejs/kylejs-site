@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import Copyright from "@/components/Copyright";
 import WaveLabel from "@/components/WaveLabel";
-import ThemeButton from "@/components/Theme/ThemeButton";
+import HomeThemeButton from "@/components/HomeThemeButton";
 
 const SocialLink = ({
   Svg,
@@ -72,9 +72,7 @@ export default async function Home() {
   ];
   return (
     <>
-      <div className="relative z-[1000] mt-6 flex justify-end px-6">
-        <ThemeButton />
-      </div>
+      <HomeThemeButton />
       <div className="mt-16 flex items-center justify-center sm:absolute sm:bottom-0 sm:left-0 sm:right-0 sm:top-0 sm:m-auto sm:mt-0">
         <div className="w-[85%] text-center sm:w-fit">
           <div className="background-and-shadow border-grey-300 rounded-xl border-b-2 bg-background-secondary px-6 pb-10 pt-12 shadow-lg dark:border-none dark:shadow-none">
