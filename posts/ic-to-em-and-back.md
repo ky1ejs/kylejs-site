@@ -47,6 +47,13 @@ The product I've founded has been very well received so far but has not as-yet p
 Previous to 2023, I wouldn’t have been concerned about this. But, as already mentioned in this post, the current tech climate shows this to be a very real concern.
 Redundancy is particularly precarious for me since I live in the US on a visa that depends on my employment specifically at Spotify; my visa cannot be transferred to another employer. If my employment at Spotify were to end, my wife and I would have 3 months to leave the country, losing the friends and life we've built here.
 
+## Risk 3 – Delaying my Green Card application process
+Spotify are currently working with immigration lawyers to obtain a Green Card for me to have permanent residency in the US and continue my work for Spotify USA Inc.
+
+Changing my role changes the basis of the justification for me to have a Green Card, which requires us to redo some of the steps we've already taken. 
+
+This introduces a 6-9 month delay to an already lengthy process. With the current US immigration climate, this could potentially risk my ability to stay in the US long-term, especially if immigration policies change.
+
 # Rewards & opportunities of going back to IC from EM
 ## Benefit 1. – the obvious one – Visibility and impact in continuing to Tech Lead a new product
 It's very rare that one gets the opportunity to found and build a significant product from scratch at a big tech company. I'm so deeply grateful for this opportunity and for each of the individuals that have been involved in getting it off the ground.
@@ -78,6 +85,18 @@ I like all three of these areas, but the one that lights me up the most is strat
 Despite strategy being a component of being an EM, it's the area in which EMs of my level are least often involved (depending on the area, chemistry, skillset of the EM, among other factors). EMs are guaranteed to have to handle people and, most of the time, delivery, but strategy is often handled by their managers and skip managers.
 
 Moving back to an IC role takes me closer to having direct contribution to the creation process which keeps me more motivated and engaged. I wouldn't say that I outright prefer IC to EM, but I do prefer to be in a creator role rather than a people/delivery role.
+
+## Benefit 4. – A better chance of promotion?
+As mentioned in Benefit 2, middle management at Spotify, like at many big tech companies, is being squashed. This makes it very hard to find promotions to the level above my EM title and beyond.
+
+Staff Engineer roles, the role above my current title of Senior Engineer, aren't exactly in abundance but seem to be ever so slightly more common additions to the jobs board than Senior Engineering Manager. 
+
+My tech lead role more neatly aligns with the Staff Engineer role than the SEM role and staying with this impactful project in general probably gives me a slightly better chance of levelling up.
+
+# Would I have made this change if EM **_was_** an option in the new org?
+No. I probably would have stuck with the EM role had this been a posibility in the org I've joined, mainly because I wouldn't have to process a role change with US immigration in regards to my visa or delay my Green Card application process. 
+
+That said, it wouldn't have been an easy decision, since I am really interested in the Staff Engineer role and spending most of my time creating rather than managing.
 
 # Wrap-up
 I've been thinking for the past couple of years that I've not taken a decent risk in my career for a while. I was fearing that I was becoming to safe and comfortable, so the timing felt right to take this move. 
