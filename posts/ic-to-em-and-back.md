@@ -1,11 +1,12 @@
 ---
 title: From IC to EM and back again
+description: The risks and rewards of moving back to an IC role after being an EM
 date: 2025-03-29
 published: true
 ---
 
 # Summary
-In 2023, 3.5 years after joining Spotify as an Individual Contributor (IC), I transitioned to a management role for the second time in my career. After 2 years in that Engineering Manager role, I’m transitioning back to being an IC.
+In 2023, 3.5 years after joining Spotify as an Individual Contributor (<span className="text-muted">_IC – someone who doesn't have reports who typically makes direct contribution to deliverables</span>), I transitioned to a management role for the second time in my career. After 2 years in that Engineering Manager role, I’m transitioning back to being an IC.
 
 In this post I’m going to share my reasoning for moving back to IC. I cover the benefits of being an EM compared to a Senior Engineer, my thoughts on job security in the current tech job market, and a little bit on how AI may influence the future of the IC role.
 
