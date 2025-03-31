@@ -6,6 +6,7 @@ const postsDirectory = path.join(process.cwd(), "posts");
 
 export type PostMetadata = {
   title: string;
+  description: string;
   date: Date;
   published: boolean;
 };
