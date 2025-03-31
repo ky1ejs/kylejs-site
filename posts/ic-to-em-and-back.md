@@ -96,7 +96,7 @@ Despite strategy being a component of being an EM, it's the area in which EMs of
 Moving back to an IC role takes me closer to having direct contribution to the creation process which keeps me more motivated and engaged. I wouldn't say that I outright prefer IC to EM, but I do prefer to be in a creator role rather than a people/delivery role.
 
 ## Benefit 4. – A better chance of promotion?
-As mentioned in Benefit 2, middle management at Spotify, like at many big tech companies, is being squashed. This makes it very hard to find promotions to the level above my EM title and beyond.
+As mentioned in Benefit 2, middle management at Spotify, like at many big tech companies, is being squashed. This makes it very hard to find promotions to the level above the EM title I had and beyond.
 
 Staff Engineer roles, the role above my current title of Senior Engineer, aren't exactly in abundance but seem to be ever so slightly more common additions to the jobs board than Senior Engineering Manager. 
 
