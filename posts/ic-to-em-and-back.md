@@ -47,7 +47,7 @@ The product I've founded has been very well received so far but has not as-yet p
 Previous to 2023, I wouldn’t have been concerned about this. But, as already mentioned in this post, the current tech climate shows this to be a very real concern.
 Redundancy is particularly precarious for me since I live in the US on a visa that depends on my employment specifically at Spotify; my visa cannot be transferred to another employer. If my employment at Spotify were to end, my wife and I would have 3 months to leave the country, losing the friends and life we've built here.
 
-## Risk 3 – Delaying my Green Card application process
+## Risk 3. – Delaying my Green Card application process
 Spotify are currently working with immigration lawyers to obtain a Green Card for me to have permanent residency in the US and continue my work for Spotify USA Inc.
 
 Changing my role changes the basis of the justification for me to have a Green Card, which requires us to redo some of the steps we've already taken. 
