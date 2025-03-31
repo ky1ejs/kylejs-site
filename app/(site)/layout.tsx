@@ -30,7 +30,7 @@ const Header = () => (
 
 const Footer = () => (
   <div className="content-inset pb-4 pt-12 text-center text-muted">
-    <hr className="border-t-[0.5px] mb-3 border-muted" />
+    <hr className="mb-3 border-t-[0.5px] border-muted" />
     <div className="flex justify-center gap-4">
       <Link href="/about">About</Link>
       <Link href="/posts">Posts</Link>
@@ -44,9 +44,7 @@ export default function PostsLayout({ children }: { children: ReactNode }) {
     <>
       <Header />
       <div className="mx-auto max-w-[800px]">
-        <div className="content-inset">
-          {children}
-        </div>
+        <div className="content-inset">{children}</div>
         <Footer />
       </div>
     </>
