@@ -32,7 +32,7 @@ export const generateMetadata = async (props: {
   const id = (await props.params).id;
   const post = await readPostWithId(id);
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kylejs.me";
-  const url = `${baseUrl}/blog/${id}`;
+  const url = `${baseUrl}/posts/${id}`;
   const profileImage = `${baseUrl}/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fme.a6ba7c02.jpg&w=256&q=75`;
 
   return {
