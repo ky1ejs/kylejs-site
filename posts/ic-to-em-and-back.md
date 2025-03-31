@@ -37,7 +37,7 @@ Prior to the recent change in the tech climate, Spotify would have very likely m
 After one has founded a product, it might seem like an easy decision to follow it wherever it goes. There were trade-offs involved, and this was not a move without inherent risk.
 Risks of going back to IC from EM
 
-## Risk 1. – No longer being invited to "the room where it happens"
+## Risk 1. – No longer being invited to "[the room where it happens](https://open.spotify.com/track/2TK2KSrzXD6W01qjXVjNGh?si=c2f9f9c6416e4bae)"
 At Spotify, one of the cool things about moving from an IC role of Senior Engineer or lower to Engineering Manager, which is a lateral move 99% of the time, is that you gain access to channels, meetings and discussions to which only EMs, Staff Engineers and a level or two above are invited.
 
 This is excellent for gaining visibility, growing a network outside of your team, and practicing your strategy and influencing skills.
