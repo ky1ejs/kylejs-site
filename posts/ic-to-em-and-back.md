@@ -36,7 +36,7 @@ Prior to the recent change in the tech climate, Spotify would have very likely m
 
 After one has founded a product, it might seem like an easy decision to follow it wherever it goes. There were trade-offs involved, and this was not a move without inherent risk.
 Risks of going back to IC from EM
-
+# Risks of going back to IC from EM
 ## Risk 1. – No longer being invited to "[the room where it happens](https://en.wikipedia.org/wiki/The_Room_Where_It_Happens)"
 At Spotify, one of the cool things about moving from an IC role of Senior Engineer or lower to Engineering Manager, which is a lateral move 99% of the time, is that you gain access to channels, meetings and discussions to which only EMs, Staff Engineers and a level or two above are invited.
 
@@ -64,7 +64,7 @@ Changing my role changes the basis of the justification for me to have a Green C
 This introduces a 6-9 month delay to an already lengthy process. With the current US immigration climate, this could potentially risk my ability to stay in the US long-term, especially if immigration policies change.
 
 # Rewards & opportunities of going back to IC from EM
-## Benefit 1. – the obvious one – Visibility and impact in continuing to Tech Lead a new product
+## Benefit 1. – _the obvious one_ – Visibility and impact in continuing to Tech Lead a new product
 It's very rare that one gets the opportunity to found and build a significant product from scratch at a big tech company. I'm so deeply grateful for this opportunity and for each of the individuals that have been involved in getting it off the ground.
 
 As mentioned, the product facilitates the dissemination of high-level company goals and allows leaders/work-managers to carry out dependency resolution and prioritization discussions. This means that the project offers high visibility with senior leaders across the company and grows my network as a result.
@@ -100,7 +100,7 @@ As mentioned in Benefit 2, middle management at Spotify, like at many big tech c
 
 Staff Engineer roles, the role above my current title of Senior Engineer, aren't exactly in abundance but seem to be ever so slightly more common additions to the jobs board than Senior Engineering Manager. 
 
-My performance reviews as an EM were always strong (one example: my reports never rated my below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need to a role of the nex level to become available, and there was no sign of that in my previous org.
+My performance reviews as an EM were always strong (one example: my reports never rated my below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need to a role of the next level to become available, and there was no sign of that in my previous org.
 
 In addition to slightly higher likelihood of Staff positions opening up, my tech lead role more neatly aligns with the Staff Engineer role than the SEM role and staying with this impactful project in general probably gives me a slightly better chance of levelling up.
 
