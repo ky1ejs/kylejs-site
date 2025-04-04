@@ -110,7 +110,7 @@ No. I probably would have stuck with the EM role had this been a posibility in t
 That said, it wouldn't have been an easy decision, since I am really interested in the Staff Engineer role and spending most of my time creating rather than managing.
 
 # Wrap-up
-I've been thinking for the past couple of years that I've not taken a decent risk in my career for a while. I was fearing that I was becoming to safe and comfortable, so the timing felt right to take this move. 
+I've been thinking for the past couple of years that I've not taken a decent risk in my career for a while. I was fearing that I was becoming too safe and comfortable, so the timing felt right to take this move. 
 
 If you're considering you're next move and risk to take, I encourage you to lay out the pros/cons, take thoughtful and intentional risks, and do the best you can with the information you have at the time.
 
