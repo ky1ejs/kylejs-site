@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProviderWrapper } from "@/components/Theme/ThemeProvider";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: "kylejs",
@@ -55,6 +56,7 @@ export default async function RootLayout({
       </head>
       <body>
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        <SpeedInsights />
       </body>
       <Analytics />
     </html>
