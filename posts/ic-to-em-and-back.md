@@ -100,7 +100,7 @@ As mentioned in Benefit 2, middle management at Spotify, like at many big tech c
 
 Staff Engineer roles, the role above my current title of Senior Engineer, aren't exactly in abundance but seem to be ever so slightly more common additions to the jobs board than Senior Engineering Manager. 
 
-My performance reviews as an EM were always strong (one example: my reports never rated my below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need to a role of the next level to become available, and there was no sign of that in my previous org.
+My performance reviews as an EM were always strong (one example: my reports never rated my below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need a role of the next level to become available, and there was no sign of that in my previous org.
 
 In addition to slightly higher likelihood of Staff positions opening up, my tech lead role more neatly aligns with the Staff Engineer role than the SEM role and staying with this impactful project in general probably gives me a slightly better chance of levelling up.
 
