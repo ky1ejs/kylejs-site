@@ -12,6 +12,10 @@ export function getRelativeTimeString(date: Date): string {
     return `${ordinalStringForNumber(day)} of ${month}, ${year}`;
   }
 
+  if (diff < 1000 * 60 * 60 * 24) {
+    return "Posted today";
+  }
+
   return `Posted ${daysAgoString(diffDays)}`;
 }
 
