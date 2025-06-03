@@ -9,6 +9,7 @@ export type PostMetadata = {
   description: string;
   date: Date;
   published: boolean;
+  shareImage?: string;
 };
 
 export type Post = {

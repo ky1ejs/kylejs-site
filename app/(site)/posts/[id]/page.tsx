@@ -33,7 +33,9 @@ export const generateMetadata = async (props: {
   const post = await readPostWithId(id);
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kylejs.me";
   const url = `${baseUrl}/posts/${id}`;
-  const profileImage = `${baseUrl}/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fme.a6ba7c02.jpg&w=256&q=75`;
+  const imagePath = post.metadata.shareImage ? post.metadata.shareImage : "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fme.a6ba7c02.jpg&w=256&q=75";
+  const images = [`${baseUrl}${imagePath}`];
+
 
   return {
     title: post.metadata.title,
@@ -42,7 +44,7 @@ export const generateMetadata = async (props: {
       title: post.metadata.title,
       description: post.metadata.description,
       url,
-      images: [profileImage],
+      images,
       type: "article",
       publishedTime: post.metadata.date.toISOString(),
       modifiedTime: post.metadata.date.toISOString(),
@@ -54,7 +56,7 @@ export const generateMetadata = async (props: {
       card: "summary_large_image",
       title: post.metadata.title,
       description: post.metadata.description,
-      images: [profileImage],
+      images,
       creator: "@_kylejs_",
     },
   };
