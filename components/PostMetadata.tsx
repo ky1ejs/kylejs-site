@@ -11,7 +11,7 @@ const PostMetadata = ({
   post: Post;
   showAvatar?: boolean;
 }) => (
-  <div className="flex items-center divide-x-[1px] divide-muted text-sm text-muted">
+  <div className="flex items-center divide-x-[1px] divide-muted text-sm text-muted mb-4">
     <div className="pr-2">
       Written by{" "}
       <Link href="/">
