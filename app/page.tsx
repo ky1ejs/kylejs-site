@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const socials = [
+  const firstRow = [
     {
       name: "GitHub",
       url: "https://github.com/ky1ejs",
@@ -70,13 +70,17 @@ export default async function Home() {
       color: "hover:fill-[#e1306c]",
       svg: InstagramSvg,
     },
+  ];
+
+  const secondRow = [
     {
       name: "Bluesky",
       url: "https://bsky.app/profile/kylejs.me",
       color: "hover:fill-[#0085ff]",
       svg: BlueskyIconSvg,
     },
-  ];
+  ]
+
   return (
     <>
       <HomeThemeButton />
@@ -101,8 +105,18 @@ export default async function Home() {
               IDE, camera or 3D printer.
             </div>
             <div className="fade-in three flex items-center justify-center gap-4 pb-4">
+              {firstRow.map((s) => (
+                <SocialLink
+                  key={s.name}
+                  Svg={s.svg}
+                  link={s.url}
+                  color={s.color}
+                />
+              ))}
+            </div>
+            <div className="fade-in three flex items-center justify-center gap-4 pb-4">
               <ThreadsIcon />
-              {socials.map((s) => (
+              {secondRow.map((s) => (
                 <SocialLink
                   key={s.name}
                   Svg={s.svg}
