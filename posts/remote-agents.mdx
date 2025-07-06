@@ -9,17 +9,54 @@ shareImage: /_next/image?url=%2Fposts%2Fimages%2Fremote-agents.jpg&w=3840&q=75
 <Image src="/posts/images/remote-agents.jpg" className="rounded-lg" alt="Image of Remote Agents"/>
 
 # Intro
-This weekend I used [GitHub Copilot's "coding agents"](https://docs.github.com/en/copilot/concepts/about-copilot-coding-agent), by which they mean agents that run on github.com, not the "agent mode" in VS Code. 
+This weekend I used [GitHub Copilot's "coding agents"](https://docs.github.com/en/copilot/concepts/about-copilot-coding-agent), by which they mean agents that run on github.com, not the "agent mode" in VS Code. They're a ton of fun! I thought I'd share a little bit about them and how they compare to similar offerings from Cursor, Anthropic and GitHub to share with you.
 
-Cursor and Claude also have offerings for these types of agents, both calling them "Background Agents".
+If you want to skip right ahead to Copilot coding agents in action, you can checkout a few GitHub Issues here that I assigned GitHub Copilot to handle:
+1. [CI setup for my ESP32 Micra controller](https://github.com/ky1ejs/linea-micra-controller/issues/1)
+2. [Add automatic reconnection to Wi-Fi and WebSocket](https://github.com/ky1ejs/linea-micra-controller/issues/5)
+3. [Add more requests to an API client](https://github.com/ky1ejs/linea-micra-controller/issues/10)
 
-The terms "Background Agents" and "Coding Agents" could be misinterpreted as something you're running on your local machine (e.g. with Claude Code in the terminal or in the Cursor IDE), so I prefer to call them "Remote Agents", since that makes it clearer that they're not running on your machine. 
+# What are Remote Agents?
+Remote Agents are AI agents that run on a remote server as opposed the usual model of today where your coding agent runs in your terminal (e.g. Claude Code) or IDE (e.g. Cursor). 
 
+Imagine you're talking to ChatGPT and you can ask it to do something for you, like write a script or make a pull request, but instead of just giving you the code, it actually goes away to its own remote container, researches and plans your prompt and then creates a PR for you to review when you're ready.
+
+## An example
+Below are a few screenshots of me creating two different GitHub Issues ([1](https://github.com/ky1ejs/linea-micra-controller/issues/10), [2](https://github.com/ky1ejs/linea-micra-controller/issues/9)) and assigning them to GitHub Copilot Coding Agents to handle, followed up by notifications that Copilot has created the pull requests for me to review 10-20 minutes later.
+
+What I love about how it works is that, like Claude Code, it details a todo list of steps its going to take to get your requet resolved.
+
+Also like Claude Code, you can give the remote agent guidelines for your repo: 
+* How to build and test your code
+* Guide its workflow on each remote session (e.g. I like my remote agent runs to also commit [a build log file](https://github.com/ky1ejs/linea-micra-controller/tree/main/docs/copilot/build_logs) of what it did, so the next agent has more context)
+* Style guides etc. etc.
+
+
+<br/>
+<div className="flex-col sm:flex-row flex gap-4 mb-6 fade-in-fast max-w-full">
+<div>
+  <Image className="rounded-2xl" src="/posts/images/remote-agents-issue-1.jpg" alt="Screenshot of 
+  creating a GitHub Issue for Copilot Coding Agent to handle"/>
+  </div>
+  <div>
+  <Image className="rounded-2xl" src="/posts/images/remote-agents-issue-2.jpg" alt="Screenshot of creating a second GitHub Issue for Copilot Coding Agent to handle"/>
+  </div>
+  <div>
+  <Image className="rounded-2xl" src="/posts/images/remote-agents-prs.jpg" alt="Screenshot of Copilot Coding Agent creating pull requests for the issues I assigned it to handle"/>
+  </div>
+</div>
+
+# Why are Remote Agents awesome?
 I've found remote agents to be an awesome concept for a couple of reasons:
 1. **anywhere, anytime** – prompt and go. Start on mac, check in on iPhone. Or prompt when you have an idea on your iPhone while you're on the go and then open your mac when you get home to see what it did
 2. **isolated & safe** – because the agent is off running in some container, it can go ham on a branch of its own and not break my machine, and it can run tools without me approving each of them basically zero risk.
 
 For more on getting to know Remote Agents I recommend [this section of a @wesbos YouTube video](https://www.youtube.com/watch?v=r9b8Q4G6_tc&t=193s) where he talks about their introduction and utility.
+
+# Are they the same as "Background Agents" or "Coding Agents"? Spoiler: yes!
+Cursor and Claude also have offerings for these types of agents, both calling them "Background Agents".
+
+The terms "Background Agents" and "Coding Agents" could be misinterpreted as something you're running on your local machine (e.g. with Claude Code in the terminal or in the Cursor IDE), so I prefer to call them "Remote Agents", since that makes it clearer that they're not running on your machine. 
 
 # Who offers Remote Agents?
 GitHub Copilot, Cursor and Claude Code all offer Remote Agents, but only Copilot offers them within their subscription (perhaps not for long though... 👀 read on)
