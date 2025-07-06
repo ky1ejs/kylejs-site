@@ -3,6 +3,8 @@ import InstagramSvg from "../public/socials/instagram.svg";
 import GithubSvg from "../public/socials/github.svg";
 import LinkedinSvg from "../public/socials/linkedin.svg";
 import SpotifySvg from "../public/socials/spotify.svg";
+import ThreadsBwSvg from "../public/socials/threads-bw.svg";
+import ThreadsColorSvg from "../public/socials/threads-color.svg";
 import BlueskyIconSvg from "../public/socials/bluesky.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +12,17 @@ import { Metadata } from "next";
 import Copyright from "@/components/Copyright";
 import WaveLabel from "@/components/WaveLabel";
 import HomeThemeButton from "@/components/HomeThemeButton";
+
+const ThreadsIcon = () => {
+  return (
+    <div className="relative h-[36px] w-[36px]">
+      <a href="https://www.threads.net/@_kylejs_">
+        <ThreadsBwSvg className="fill-secondary" />
+        <ThreadsColorSvg className="absolute left-0 top-0 h-full w-full opacity-0 hover:opacity-100" />
+      </a>
+    </div>
+  );
+};
 
 const SocialLink = ({
   Svg,
@@ -88,6 +101,7 @@ export default async function Home() {
               IDE, camera or 3D printer.
             </div>
             <div className="fade-in three flex items-center justify-center gap-4 pb-4">
+              <ThreadsIcon />
               {socials.map((s) => (
                 <SocialLink
                   key={s.name}
