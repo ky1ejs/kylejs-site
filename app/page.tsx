@@ -79,7 +79,7 @@ export default async function Home() {
       color: "hover:fill-[#0085ff]",
       svg: BlueskyIconSvg,
     },
-  ]
+  ];
 
   return (
     <>
