@@ -2,6 +2,7 @@ import { getAllPosts, readPostWithId } from "@/lib/posts";
 import PostFooter from "@/components/PostFooter";
 import PostHeader from "@/components/PostHeader";
 import compileMarkdown from "@/lib/markdown-compile";
+import HeadingLinks from "@/components/HeadingLinks";
 import { Metadata } from "next";
 
 type PostParams = {
@@ -17,6 +18,7 @@ export default async function Post(props: { params: Promise<PostParams> }) {
   const Content = await compileMarkdown(post.content);
   return (
     <>
+      <HeadingLinks />
       <article>
         <PostHeader post={post} />
         <Content />
