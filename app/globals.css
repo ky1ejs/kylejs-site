@@ -232,10 +232,12 @@
   ol {
     @apply list-decimal;
     padding-left: 2rem;
+    @apply mb-3;
   }
   ul {
     @apply list-disc;
     padding-left: 2rem;
+    @apply mb-3;
 
     /* change the bullet icon for children */
     ul {
