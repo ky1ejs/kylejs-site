@@ -17,18 +17,22 @@ const Selector = ({ initialState, onChange }: SelectorProps) => {
 
   // Sync React state with DOM state on mount (handles browser back navigation)
   useEffect(() => {
-    const professionalRadio = document.getElementById("professional") as HTMLInputElement;
-    const personalRadio = document.getElementById("personal") as HTMLInputElement;
-    
+    const professionalRadio = document.getElementById(
+      "professional",
+    ) as HTMLInputElement;
+    const personalRadio = document.getElementById(
+      "personal",
+    ) as HTMLInputElement;
+
     if (professionalRadio && personalRadio) {
       let actualState = initialState;
-      
+
       if (professionalRadio.checked) {
         actualState = BioState.Professional;
       } else if (personalRadio.checked) {
         actualState = BioState.Personal;
       }
-      
+
       if (actualState !== state) {
         setState(actualState);
         onChange(actualState);
