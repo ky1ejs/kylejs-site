@@ -24,7 +24,7 @@ const PostMetadata = ({
             className="mr-2 inline rounded-full transition hover:scale-110"
           />
         )}
-        <span className="hover:text-primary transition">Kyle Satti</span>
+        <span className="transition hover:text-primary">Kyle Satti</span>
       </Link>
     </div>
     <div className="px-2">{calculateReadingTime(post.content)}</div>
