@@ -35,7 +35,7 @@ const SocialLink = ({
   color: string;
 }) => (
   <a href={link}>
-    <Svg className={`h-10 w-10 fill-secondary ${color}`} alt={""} />
+    <Svg className={`fill-secondary h-10 w-10 ${color}`} alt={""} />
   </a>
 );
 
@@ -84,9 +84,9 @@ export default async function Home() {
   return (
     <>
       <HomeThemeButton />
-      <div className="mt-16 flex items-center justify-center sm:absolute sm:bottom-0 sm:left-0 sm:right-0 sm:top-0 sm:m-auto sm:mt-0">
+      <div className="mt-16 flex items-center justify-center sm:absolute sm:top-0 sm:right-0 sm:bottom-0 sm:left-0 sm:m-auto sm:mt-0">
         <div className="w-[85%] text-center sm:w-fit">
-          <div className="background-and-shadow border-grey-300 rounded-xl border-b-2 bg-background-secondary px-6 pb-6 pt-8 shadow-lg dark:border-none dark:shadow-none">
+          <div className="background-and-shadow border-grey-300 bg-background-secondary rounded-xl border-b-2 px-6 pt-8 pb-6 shadow-lg dark:border-none dark:shadow-none">
             <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
               <Image
                 src={meImage}
@@ -97,8 +97,8 @@ export default async function Home() {
               />
             </div>
             <div className="rise-up mb-2">
-              <div className="text-3xl font-bold text-primary">Kyle Satti</div>
-              <div className="text-xl text-secondary">kylejs</div>
+              <div className="text-primary text-3xl font-bold">Kyle Satti</div>
+              <div className="text-secondary text-xl">kylejs</div>
             </div>
             <div className="fade-in two pb-10">
               I like to build teams and create things, <br /> mostly with an
@@ -128,7 +128,7 @@ export default async function Home() {
           </div>
           <div className="my-4 text-center text-gray-500">
             I sometimes blog{" "}
-            <Link className="underline hover:text-primary" href="/posts">
+            <Link className="hover:text-primary underline" href="/posts">
               here
             </Link>{" "}
             ✍️

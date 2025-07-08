@@ -13,7 +13,7 @@ export default function Bio({
   const [state, setState] = useState(BioState.Professional);
 
   return (
-    <div className="mt-4 rounded-[20px] bg-background-secondary pb-8">
+    <div className="bg-background-secondary mt-4 rounded-[20px] pb-8">
       <Selector initialState={state} onChange={setState} />
       <div className="px-4">
         {state === BioState.Professional ? Professional : Personal}
