@@ -1,9 +1,7 @@
 @import "./(site)/posts/[id]/post.css";
 @import "./(site)/layout.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 :root[data-theme="light"] {
   --text-50: #ecf2f9;
   --text-100: #d9e6f2;
