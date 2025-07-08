@@ -1,7 +1,6 @@
 @import "./(site)/posts/[id]/post.css";
 @import "./(site)/layout.css";
 
-@import "tailwindcss";
 :root[data-theme="light"] {
   --text-50: #ecf2f9;
   --text-100: #d9e6f2;
@@ -148,6 +147,7 @@
   --accent: var(--accent-700);
 }
 
+@import "tailwindcss";
 
 @layer base {
   html,
