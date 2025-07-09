@@ -1,0 +1,81 @@
+name: Build and Run
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout 
+      uses: actions/checkout@v4
+
+    - name: git lfs install
+      run: |- 
+        git lfs install
+        git lfs pull
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'pnpm'
+        cache-dependency-path: ./pnpm-lock.yaml
+
+    - name: Install dependencies
+      run: pnpm install
+    
+    - name: Build the site
+      run: pnpm build
+    
+    - name: Start the site
+      run: pnpm start &
+      
+    - name: Wait for site to be ready
+      run: |
+        timeout=30
+        while ! curl -s http://localhost:3000 > /dev/null; do
+          sleep 1
+          timeout=$((timeout - 1))
+          if [ $timeout -eq 0 ]; then
+            echo "Site failed to start within 30 seconds"
+            exit 1
+          fi
+        done
+        echo "Site is ready!"
+    
+    - name: Test homepage
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/)
+        if [ "$response" -eq 200 ]; then
+          echo "✓ Homepage (/) is accessible"
+        else
+          echo "✗ Homepage (/) returned HTTP $response"
+          exit 1
+        fi
+    
+    - name: Test about page
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/about)
+        if [ "$response" -eq 200 ]; then
+          echo "✓ About page (/about) is accessible"
+        else
+          echo "✗ About page (/about) returned HTTP $response"
+          exit 1
+        fi
+    
+    - name: Test posts page
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/posts)
+        if [ "$response" -eq 200 ]; then
+          echo "✓ Posts page (/posts) is accessible"
+        else
+          echo "✗ Posts page (/posts) returned HTTP $response"
+          exit 1
+        fi
