@@ -12,7 +12,7 @@ const NavItem = ({ title, route }: { title: string; route: string }) => (
 );
 
 const Header = () => (
-  <div className="sticky top-0 z-[1000] bg-background-primary pb-4 pt-4">
+  <div className="bg-background-primary sticky top-0 z-[1000] pt-4 pb-4">
     <div className="content-inset flex items-center justify-between">
       <div>
         <Link href="/">
@@ -29,8 +29,8 @@ const Header = () => (
 );
 
 const Footer = () => (
-  <div className="content-inset pb-4 pt-12 text-center text-muted">
-    <hr className="mb-3 border-t-[0.5px] border-muted" />
+  <div className="content-inset text-muted pt-12 pb-4 text-center">
+    <hr className="border-muted mb-3 border-t-[0.5px]" />
     <div className="flex justify-center gap-4">
       <Link href="/about">About</Link>
       <Link href="/posts">Posts</Link>
