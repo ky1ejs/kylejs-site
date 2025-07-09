@@ -2,15 +2,12 @@ import imageSize from "image-size";
 import path from "path";
 import { Node } from "unist";
 import { visit } from "unist-util-visit";
-import { promisify } from "util";
 import fs from "fs";
 import { getPlaiceholder } from "plaiceholder";
 
 // This file is an adapeted version of the code snippet from:
 // https://kylepfromer.com/blog/nextjs-image-component-blog
 // https://web.archive.org/web/20240518202028/https://kylepfromer.com/blog/nextjs-image-component-blog
-
-const sizeOf = promisify(imageSize);
 
 interface Attribute {
   name: string;
@@ -46,11 +43,13 @@ async function addMetadata(node: ImageNode): Promise<void> {
   if (!src) throw Error(`Invalid image with src "${src}"`);
 
   const imagePath = path.join(process.cwd(), "public", src.toString());
-  const res = await sizeOf(imagePath);
+
+  // Read the image file as binary data for both image-size and plaiceholder
+  const image = fs.readFileSync(imagePath);
+  const res = imageSize(image);
 
   // approach for creating a blurred version of the image taken from:
   // https://stackoverflow.com/a/69066202/3053366
-  const image = fs.readFileSync(imagePath);
   const { base64: imageBase64 } = await getPlaiceholder(image);
 
   if (!res) throw Error(`Invalid image with src "${src}"`);
