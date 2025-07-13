@@ -83,3 +83,11 @@ A Next.js personal website/blog built with TypeScript, Tailwind CSS, and MDX for
 - Blog posts use MDX format with frontmatter
 - Images should be optimized and placed in `/public/posts/images`
 - About page content is modular in `/content/about`
+
+# Workflow
+When making changes:
+1. Ensure code is linted with `pnpm lint`
+2. Test locally with `pnpm dev`
+3. Build for production with `pnpm build`
+4. Checkout your own branch for changes and commit to it
+5. Push changes and create a pull request for review
