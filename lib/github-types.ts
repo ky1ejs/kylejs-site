@@ -20,6 +20,7 @@ export interface GitHubRepository {
 export interface GitHubActivitySummary {
   totalCommits: number;
   totalRepositories: number;
+  externalPRs: number;
   mostActiveMonth: string;
   contributionDays: number;
   streakDays: number;
@@ -82,5 +83,19 @@ export interface ContributionsCollection {
 export interface GitHubGraphQLResponse {
   user: {
     contributionsCollection: ContributionsCollection;
+  };
+}
+
+export interface GitHubSearchResponse {
+  search: {
+    edges: Array<{
+      node: {
+        repository: {
+          owner: {
+            login: string;
+          };
+        };
+      };
+    }>;
   };
 }

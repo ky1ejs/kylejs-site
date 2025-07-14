@@ -9,6 +9,7 @@ import {
   OctokitRepository,
   ContributionsCollection,
   GitHubGraphQLResponse,
+  GitHubSearchResponse,
 } from "./github-types";
 
 // Language colors from GitHub's linguist
@@ -58,9 +59,10 @@ class GitHubAPI {
 
   async fetchGitHubStats(): Promise<GitHubStats> {
     try {
-      const [repositories, contributionData] = await Promise.all([
+      const [repositories, contributionData, externalPRs] = await Promise.all([
         this.fetchRepositories(),
         this.fetchContributionData(),
+        this.fetchExternalPRs(),
       ]);
 
       const languages = this.calculateLanguageStats(
@@ -72,6 +74,7 @@ class GitHubAPI {
       const activitySummary = this.calculateActivitySummary(
         contributionData,
         repositories as OctokitRepository[],
+        externalPRs,
       );
       const projectTypes = this.categorizeProjects(
         repositories as OctokitRepository[],
@@ -168,14 +171,16 @@ class GitHubAPI {
   ): GitHubLanguageStats[] {
     const languageTotals: Record<string, number> = {};
 
-    repositories.forEach((repo) => {
-      if (repo.languages) {
-        Object.entries(repo.languages).forEach(([language, bytes]) => {
-          languageTotals[language] =
-            (languageTotals[language] || 0) + (bytes as number);
-        });
-      }
-    });
+    repositories
+      .filter((repo) => !repo.fork) // Exclude forks from language stats
+      .forEach((repo) => {
+        if (repo.languages) {
+          Object.entries(repo.languages).forEach(([language, bytes]) => {
+            languageTotals[language] =
+              (languageTotals[language] || 0) + (bytes as number);
+          });
+        }
+      });
 
     const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0);
 
@@ -216,6 +221,7 @@ class GitHubAPI {
   private calculateActivitySummary(
     contributionData: ContributionsCollection,
     repositories: OctokitRepository[],
+    externalPRs: number,
   ): GitHubActivitySummary {
     const totalCommits = contributionData.totalCommitContributions || 0;
     const totalRepositories = repositories.filter((repo) => !repo.fork).length;
@@ -255,6 +261,7 @@ class GitHubAPI {
     return {
       totalCommits,
       totalRepositories,
+      externalPRs,
       mostActiveMonth: new Date(mostActiveMonth + "-01").toLocaleDateString(
         "en-US",
         {
@@ -265,6 +272,42 @@ class GitHubAPI {
       contributionDays,
       streakDays: maxStreak,
     };
+  }
+
+  private async fetchExternalPRs(): Promise<number> {
+    try {
+      const query = `
+        query($username: String!) {
+          search(query: "author:$username type:pr", type: ISSUE, first: 100) {
+            issueCount
+            edges {
+              node {
+                ... on PullRequest {
+                  repository {
+                    owner {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const response = (await this.graphqlClient(query, {
+        username: this.username,
+      })) as GitHubSearchResponse;
+
+      const externalPRs = response.search.edges.filter(
+        (edge) => edge.node.repository.owner.login !== this.username,
+      );
+
+      return externalPRs.length;
+    } catch (error) {
+      console.error("Error fetching external PRs:", error);
+      return 0;
+    }
   }
 
   private categorizeProjects(

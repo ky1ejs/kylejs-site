@@ -19,6 +19,11 @@ export default function ActivitySummary({ activity }: ActivitySummaryProps) {
       icon: "📚",
     },
     {
+      label: "External PRs",
+      value: activity.externalPRs.toString(),
+      icon: "🔀",
+    },
+    {
       label: "Contribution Days",
       value: activity.contributionDays.toString(),
       icon: "📅",
