@@ -1,4 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+const colorSteps = [50,100,200,300,400,500,600,700,800,900,950];
+
+function makeColorScale(prefix) {
+  return Object.fromEntries(
+    colorSteps.map(step => [step, `var(--${prefix}-${step})`])
+  );
+}
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,64 +21,23 @@ module.exports = {
     },
     extend: {
       colors: {
-        'muted': 'var(--muted)',
-        'text': {
-          50: 'var(--text-50)',
-          100: 'var(--text-100)',
-          200: 'var(--text-200)',
-          300: 'var(--text-300)',
-          400: 'var(--text-400)',
-          500: 'var(--text-500)',
-          600: 'var(--text-600)',
-          700: 'var(--text-700)',
-          800: 'var(--text-800)',
-          900: 'var(--text-900)',
-          950: 'var(--text-950)',
+        muted: 'var(--muted)',
+        text: makeColorScale('text'),
+        background: {
+          primary: 'var(--background-primary)',
+          secondary: 'var(--background-secondary)',
+          ...makeColorScale('background'),
         },
-        'background': {
-          'primary': 'var(--background-primary)',
-          'secondary': 'var(--background-secondary)',
-          50: 'var(--background-50)',
-          100: 'var(--background-100)',
-          200: 'var(--background-200)',
-          300: 'var(--background-300)',
-          400: 'var(--background-400)',
-          500: 'var(--background-500)',
-          600: 'var(--background-600)',
-          700: 'var(--background-700)',
-          800: 'var(--background-800)',
-          900: 'var(--background-900)',
-          950: 'var(--background-950)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          ...makeColorScale('primary'),
         },
-        secondary: "var(--secondary)",
-        primary: "var(--primary)",
-        "primary-50": 'var(--primary-50)',
-        "primary-100": 'var(--primary-100)',
-        "primary-200": 'var(--primary-200)',
-        "primary-300": 'var(--primary-300)',
-        "primary-400": 'var(--primary-400)',
-        "primary-500": 'var(--primary-500)',
-        "primary-600": 'var(--primary-600)',
-        "primary-700": 'var(--primary-700)',
-        "primary-800": 'var(--primary-800)',
-        "primary-900": 'var(--primary-900)',
-        "primary-950": 'var(--primary-950)',
-
-        'accent': {
-          50: 'var(--accent-50)',
-          100: 'var(--accent-100)',
-          200: 'var(--accent-200)',
-          300: 'var(--accent-300)',
-          400: 'var(--accent-400)',
-          500: 'var(--accent-500)',
-          600: 'var(--accent-600)',
-          700: 'var(--accent-700)',
-          800: 'var(--accent-800)',
-          900: 'var(--accent-900)',
-          950: 'var(--accent-950)',
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          ...makeColorScale('secondary'),
         },
-       },
-       
+        accent: makeColorScale('accent'),
+      },
     },
   },
   plugins: [],
