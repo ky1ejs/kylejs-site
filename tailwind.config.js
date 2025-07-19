@@ -42,6 +42,7 @@ module.exports = {
           900: 'var(--background-900)',
           950: 'var(--background-950)',
         },
+        secondary: "var(--secondary)",
         primary: "var(--primary)",
         "primary-50": 'var(--primary-50)',
         "primary-100": 'var(--primary-100)',
