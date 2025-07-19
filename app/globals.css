@@ -1,9 +1,8 @@
-@import "./(site)/posts/[id]/post.css";
+@config "../tailwind.config.js";
+@import "tailwindcss";
 @import "./(site)/layout.css";
+@import "./(site)/posts/[id]/post.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 :root[data-theme="light"] {
   --text-50: #ecf2f9;
   --text-100: #d9e6f2;
@@ -149,7 +148,6 @@
 
   --accent: var(--accent-700);
 }
-
 
 @layer base {
   html,
@@ -326,8 +324,11 @@
   }
 
   @keyframes background-and-shadow{
-    0%{background-color: transparent; box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); border: 0}
-    /* 80%{box-shadow: 0 0 0 0 rgba(0, 0, 0, 0)} */
+    0%{
+      background-color: transparent;
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      border-color: transparent;
+    }
     100%{}
   }
 

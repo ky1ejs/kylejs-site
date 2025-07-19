@@ -11,7 +11,7 @@ const PostMetadata = ({
   post: Post;
   showAvatar?: boolean;
 }) => (
-  <div className="mb-4 flex items-center divide-x-[1px] divide-muted text-sm text-muted">
+  <div className="divide-muted text-muted mb-4 flex items-center divide-x-[1px] text-sm">
     <div className="pr-2">
       Written by{" "}
       <Link href="/">
@@ -24,7 +24,7 @@ const PostMetadata = ({
             className="mr-2 inline rounded-full transition hover:scale-110"
           />
         )}
-        <span className="transition hover:text-primary">Kyle Satti</span>
+        <span className="hover:text-primary transition">Kyle Satti</span>
       </Link>
     </div>
     <div className="px-2">{calculateReadingTime(post.content)}</div>

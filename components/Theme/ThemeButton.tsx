@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const LoadingIndicator = () => (
   <svg
-    className="size-5 animate-spin text-muted"
+    className="text-muted size-5 animate-spin"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
@@ -72,7 +72,7 @@ export default function ThemeButton({
   }, []);
 
   return (
-    <div className="relative flex h-10 w-12 items-center justify-center rounded-xl bg-background-secondary hover:bg-background-200">
+    <div className="bg-background-secondary hover:bg-background-200 relative flex h-10 w-12 items-center justify-center rounded-xl">
       <div
         className={`${isMounted ? "opacity-0" : "opacity-100"} absolute z-10 transition-opacity duration-300`}
       >
@@ -90,12 +90,12 @@ export default function ThemeButton({
           {isOpen && (
             <div
               id="popover-user-profile"
-              className={`absolute -left-20 ${isTop ? "bottom-12" : "top-10"} w-32 rounded-xl bg-background-secondary text-sm shadow-md transition-all ease-linear dark:shadow-none`}
+              className={`absolute -left-20 ${isTop ? "bottom-12" : "top-10"} bg-background-secondary w-32 rounded-xl text-sm shadow-md transition-all ease-linear dark:shadow-none`}
             >
               {Object.values(Theme).map((t) => (
                 <button
                   key={t}
-                  className="w-full px-2 py-1 text-left hover:bg-background-primary"
+                  className="hover:bg-background-primary w-full px-2 py-1 text-left"
                   onClick={() => {
                     setTheme(t);
                     setIsOpen(false);

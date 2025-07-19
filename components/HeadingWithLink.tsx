@@ -64,7 +64,7 @@ const HeadingWithLink = ({
       {id && (
         <button
           onClick={copyToClipboard}
-          className={`absolute -left-8 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:text-primary ${
+          className={`hover:text-primary absolute top-1/2 -left-8 -translate-y-1/2 transition-opacity duration-200 ${
             isHovered ? "opacity-100" : "opacity-0"
           }`}
           aria-label={`Copy link to ${children}`}
