@@ -86,7 +86,7 @@ export default async function Home() {
       <HomeThemeButton />
       <div className="mt-16 flex items-center justify-center sm:absolute sm:top-0 sm:right-0 sm:bottom-0 sm:left-0 sm:m-auto sm:mt-0">
         <div className="w-[85%] text-center sm:w-fit">
-          <div className="background-and-shadow border-grey-300 bg-background-secondary rounded-xl border-b-2 px-6 pt-8 pb-6 shadow-lg dark:border-none dark:shadow-none">
+          <div className="background-and-shadow border-gray-300 bg-background-secondary rounded-xl border-b-2 px-6 pt-8 pb-6 shadow-lg dark:border-none dark:shadow-none">
             <div className="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
               <Image
                 src={meImage}
