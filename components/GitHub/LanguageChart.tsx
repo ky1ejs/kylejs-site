@@ -28,7 +28,7 @@ interface LegendProps {
 export default function LanguageChart({ languages }: LanguageChartProps) {
   if (!languages || languages.length === 0) {
     return (
-      <div className="rounded-lg bg-background-secondary p-4">
+      <div className="bg-background-secondary rounded-lg p-4">
         <h3 className="mb-3 text-lg font-semibold">Programming Languages</h3>
         <p className="text-gray-500">No language data available</p>
       </div>
@@ -74,7 +74,7 @@ export default function LanguageChart({ languages }: LanguageChartProps) {
   };
 
   return (
-    <div className="rounded-lg bg-background-secondary p-4">
+    <div className="bg-background-secondary rounded-lg p-4">
       <h3 className="mb-3 text-lg font-semibold">Programming Languages</h3>
 
       <div className="h-48">

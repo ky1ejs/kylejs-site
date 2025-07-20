@@ -9,7 +9,7 @@ interface ProjectTypesProps {
 export default function ProjectTypes({ projectTypes }: ProjectTypesProps) {
   if (!projectTypes || projectTypes.length === 0) {
     return (
-      <div className="rounded-lg bg-background-secondary p-4">
+      <div className="bg-background-secondary rounded-lg p-4">
         <h3 className="mb-3 text-lg font-semibold">Project Categories</h3>
         <p className="text-gray-500">No project data available</p>
       </div>
@@ -26,7 +26,7 @@ export default function ProjectTypes({ projectTypes }: ProjectTypesProps) {
   };
 
   return (
-    <div className="rounded-lg bg-background-secondary p-4">
+    <div className="bg-background-secondary rounded-lg p-4">
       <h3 className="mb-3 text-lg font-semibold">Project Categories</h3>
 
       <div className="space-y-3">
@@ -48,7 +48,7 @@ export default function ProjectTypes({ projectTypes }: ProjectTypesProps) {
 
                 <div className="mt-1 h-2 w-full rounded-full bg-gray-200">
                   <div
-                    className="h-2 rounded-full bg-primary transition-all duration-300"
+                    className="bg-primary h-2 rounded-full transition-all duration-300"
                     style={{ width: `${type.percentage}%` }}
                   />
                 </div>
