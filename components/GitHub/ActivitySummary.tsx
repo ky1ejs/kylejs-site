@@ -41,7 +41,7 @@ export default function ActivitySummary({ activity }: ActivitySummaryProps) {
   ];
 
   return (
-    <div className="rounded-lg bg-background-secondary p-4">
+    <div className="bg-background-secondary rounded-lg p-4">
       <h3 className="mb-3 text-lg font-semibold">Activity Summary</h3>
 
       <div className="space-y-3">
@@ -51,7 +51,7 @@ export default function ActivitySummary({ activity }: ActivitySummaryProps) {
               <span className="text-lg">{stat.icon}</span>
               <span className="text-sm text-gray-600">{stat.label}</span>
             </div>
-            <span className="font-semibold text-primary">{stat.value}</span>
+            <span className="text-primary font-semibold">{stat.value}</span>
           </div>
         ))}
       </div>

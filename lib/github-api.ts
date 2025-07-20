@@ -71,6 +71,9 @@ class GitHubAPI {
       const topRepositories = this.getTopRepositories(
         repositories as OctokitRepository[],
       );
+      const archivedRepositories = this.getArchivedRepositories(
+        repositories as OctokitRepository[],
+      );
       const activitySummary = this.calculateActivitySummary(
         contributionData,
         repositories as OctokitRepository[],
@@ -83,6 +86,7 @@ class GitHubAPI {
       return {
         languages,
         topRepositories,
+        archivedRepositories,
         activitySummary,
         projectTypes,
         lastUpdated: new Date().toISOString(),
@@ -172,7 +176,7 @@ class GitHubAPI {
     const languageTotals: Record<string, number> = {};
 
     repositories
-      .filter((repo) => !repo.fork) // Exclude forks from language stats
+      .filter((repo) => !repo.fork && !repo.archived) // Exclude forks and archived repos from language stats
       .forEach((repo) => {
         if (repo.languages) {
           Object.entries(repo.languages).forEach(([language, bytes]) => {
@@ -203,9 +207,27 @@ class GitHubAPI {
     repositories: OctokitRepository[],
   ): GitHubRepository[] {
     return repositories
-      .filter((repo) => !repo.fork) // Exclude forks
+      .filter((repo) => !repo.fork && !repo.archived) // Exclude forks and archived repos
       .sort((a, b) => b.stargazers_count - a.stargazers_count)
       .slice(0, 5)
+      .map((repo) => ({
+        name: repo.name,
+        fullName: repo.full_name,
+        description: repo.description,
+        language: repo.language || null,
+        stars: repo.stargazers_count,
+        forks: repo.forks_count,
+        url: repo.html_url,
+        lastUpdated: repo.updated_at,
+      }));
+  }
+
+  private getArchivedRepositories(
+    repositories: OctokitRepository[],
+  ): GitHubRepository[] {
+    return repositories
+      .filter((repo) => repo.archived && !repo.fork) // Only archived, non-fork repos
+      .sort((a, b) => b.stargazers_count - a.stargazers_count)
       .map((repo) => ({
         name: repo.name,
         fullName: repo.full_name,
@@ -224,7 +246,9 @@ class GitHubAPI {
     externalPRs: number,
   ): GitHubActivitySummary {
     const totalCommits = contributionData.totalCommitContributions || 0;
-    const totalRepositories = repositories.filter((repo) => !repo.fork).length;
+    const totalRepositories = repositories.filter(
+      (repo) => !repo.fork && !repo.archived,
+    ).length;
 
     // Calculate contribution days and streak
     const weeks = contributionData.contributionCalendar?.weeks || [];
@@ -323,7 +347,7 @@ class GitHubAPI {
     };
 
     repositories
-      .filter((repo) => !repo.fork)
+      .filter((repo) => !repo.fork && !repo.archived)
       .forEach((repo) => {
         const name = repo.name.toLowerCase();
         const description = (repo.description || "").toLowerCase();
@@ -372,7 +396,9 @@ class GitHubAPI {
         }
       });
 
-    const totalProjects = repositories.filter((repo) => !repo.fork).length;
+    const totalProjects = repositories.filter(
+      (repo) => !repo.fork && !repo.archived,
+    ).length;
 
     return Object.entries(categories)
       .filter(([, repos]) => repos.length > 0)

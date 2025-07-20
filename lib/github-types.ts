@@ -36,6 +36,7 @@ export interface GitHubProjectType {
 export interface GitHubStats {
   languages: GitHubLanguageStats[];
   topRepositories: GitHubRepository[];
+  archivedRepositories: GitHubRepository[];
   activitySummary: GitHubActivitySummary;
   projectTypes: GitHubProjectType[];
   lastUpdated: string;
@@ -58,6 +59,7 @@ export interface OctokitRepository {
   html_url: string;
   updated_at: string;
   fork: boolean;
+  archived: boolean;
   languages?: Record<string, number>;
 }
 
