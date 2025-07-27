@@ -1,15 +1,16 @@
 "use client";
 
 import Selector, { BioState } from "@/components/Selector";
-import GitHubStats from "@/components/GitHub/GitHubStats";
 import { JSX, useState } from "react";
 
 export default function Bio({
   Professional,
   Personal,
+  GitHubStats,
 }: {
   Professional: JSX.Element;
   Personal: JSX.Element;
+  GitHubStats?: JSX.Element;
 }) {
   const [state, setState] = useState(BioState.Professional);
 
@@ -20,7 +21,7 @@ export default function Bio({
         {state === BioState.Professional ? (
           <div>
             {Professional}
-            <GitHubStats />
+            {GitHubStats}
           </div>
         ) : (
           Personal

@@ -301,8 +301,8 @@ class GitHubAPI {
   private async fetchExternalPRs(): Promise<number> {
     try {
       const query = `
-        query($username: String!) {
-          search(query: "author:$username type:pr", type: ISSUE, first: 100) {
+        query($username: String!, $searchQuery: String!) {
+          search(query: $searchQuery, type: ISSUE, first: 100) {
             issueCount
             edges {
               node {
@@ -321,6 +321,7 @@ class GitHubAPI {
 
       const response = (await this.graphqlClient(query, {
         username: this.username,
+        searchQuery: `author:${this.username} type:pr`,
       })) as GitHubSearchResponse;
 
       const externalPRs = response.search.edges.filter(
