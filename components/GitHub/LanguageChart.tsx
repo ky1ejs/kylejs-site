@@ -28,10 +28,10 @@ export default function LanguageChart({ languages }: LanguageChartProps) {
     data,
     series: [
       {
-        type: 'donut',
-        calloutLabelKey: 'language',
-        angleKey: 'percentage',
-      }
+        type: "donut",
+        calloutLabelKey: "language",
+        angleKey: "percentage",
+      },
     ],
     legend: {
       enabled: false,
@@ -45,6 +45,6 @@ export default function LanguageChart({ languages }: LanguageChartProps) {
       <div className="h-48 w-full">
         <AgCharts options={options} />
       </div>
-    </div >
+    </div>
   );
 }
