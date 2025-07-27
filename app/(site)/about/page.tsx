@@ -1,4 +1,5 @@
 import Bio from "@/app/(site)/about/Bio";
+import GitHubStatsServer from "@/components/GitHub/GitHubStatsServer";
 import compileMarkdown from "@/lib/markdown-compile";
 import { readFileSync } from "fs";
 import path from "path";
@@ -12,7 +13,11 @@ export default async function About() {
   return (
     <div>
       <Intro />
-      <Bio Professional={<Professional />} Personal={<Personal />} />
+      <Bio
+        Professional={<Professional />}
+        Personal={<Personal />}
+        GitHubStats={<GitHubStatsServer />}
+      />
     </div>
   );
 }
