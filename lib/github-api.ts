@@ -131,22 +131,11 @@ class GitHubAPI {
     return repositoriesWithLanguages;
   }
 
-  private async fetchContributionData() {
+  private async fetchUserCreationDate(): Promise<Date> {
     const query = `
       query($username: String!) {
         user(login: $username) {
-          contributionsCollection {
-            totalCommitContributions
-            contributionCalendar {
-              totalContributions
-              weeks {
-                contributionDays {
-                  contributionCount
-                  date
-                }
-              }
-            }
-          }
+          createdAt
         }
       }
     `;
@@ -154,9 +143,97 @@ class GitHubAPI {
     try {
       const response = (await this.graphqlClient(query, {
         username: this.username,
-      })) as GitHubGraphQLResponse;
+      })) as { user: { createdAt: string } };
 
-      return response.user.contributionsCollection;
+      return new Date(response.user.createdAt);
+    } catch (error) {
+      console.error("Error fetching user creation date:", error);
+      // Default to 10 years ago if we can't get the creation date
+      const fallbackDate = new Date();
+      fallbackDate.setFullYear(fallbackDate.getFullYear() - 10);
+      return fallbackDate;
+    }
+  }
+
+  private async fetchContributionData() {
+    try {
+      const createdAt = await this.fetchUserCreationDate();
+      const currentYear = new Date().getFullYear();
+      const startYear = createdAt.getFullYear();
+
+      const allContributions: ContributionsCollection = {
+        totalCommitContributions: 0,
+        contributionCalendar: {
+          totalContributions: 0,
+          weeks: [],
+        },
+      };
+
+      // Fetch contributions for each year from signup to current year
+      for (let year = startYear; year <= currentYear; year++) {
+        const fromDate = new Date(`${year}-01-01`);
+        const toDate = new Date(`${year}-12-31`);
+
+        // For the signup year, start from the actual creation date
+        if (year === startYear) {
+          fromDate.setTime(createdAt.getTime());
+        }
+
+        // For the current year, end at today
+        if (year === currentYear) {
+          toDate.setTime(new Date().getTime());
+        }
+
+        const query = `
+          query($username: String!, $from: DateTime!, $to: DateTime!) {
+            user(login: $username) {
+              contributionsCollection(from: $from, to: $to) {
+                totalCommitContributions
+                contributionCalendar {
+                  totalContributions
+                  weeks {
+                    contributionDays {
+                      contributionCount
+                      date
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `;
+
+        try {
+          const response = (await this.graphqlClient(query, {
+            username: this.username,
+            from: fromDate.toISOString(),
+            to: toDate.toISOString(),
+          })) as GitHubGraphQLResponse;
+
+          const yearData = response.user.contributionsCollection;
+
+          // Accumulate totals
+          allContributions.totalCommitContributions +=
+            yearData.totalCommitContributions || 0;
+          allContributions.contributionCalendar.totalContributions +=
+            yearData.contributionCalendar?.totalContributions || 0;
+
+          // Merge weeks data
+          if (yearData.contributionCalendar?.weeks) {
+            allContributions.contributionCalendar.weeks.push(
+              ...yearData.contributionCalendar.weeks,
+            );
+          }
+        } catch (error) {
+          console.warn(
+            `Failed to fetch contributions for year ${year}:`,
+            error,
+          );
+          // Continue with other years even if one fails
+        }
+      }
+
+      return allContributions;
     } catch (error) {
       console.error("Error fetching contribution data:", error);
       // Return minimal data structure if GraphQL fails
@@ -257,7 +334,10 @@ class GitHubAPI {
     let maxStreak = 0;
 
     const allDays = weeks.flatMap((week) => week.contributionDays);
-    allDays.reverse(); // Start from most recent
+    // Sort by date to ensure chronological order across multiple years
+    allDays.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
 
     for (const day of allDays) {
       if (day.contributionCount > 0) {
