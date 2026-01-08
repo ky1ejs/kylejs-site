@@ -1,31 +1,38 @@
 import { Node } from "unist";
 import { visit } from "unist-util-visit";
 
-interface HeadingNode extends Node {
-  type: "element";
-  tagName: string;
-  properties: {
-    id?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any;
-  };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  children: Array<{ type: string; value?: string; children?: any[] }>;
+interface TextNode {
+  type: "text";
+  value: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isHeadingNode(node: any): node is HeadingNode {
+interface ElementNode extends Node {
+  type: "element";
+  tagName: string;
+  properties: Record<string, unknown>;
+  children: ChildNode[];
+}
+
+type ChildNode = TextNode | ElementNode | Node;
+
+interface HeadingNode extends ElementNode {
+  tagName: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+}
+
+function isHeadingNode(node: Node): node is HeadingNode {
   return (
-    node.type === "element" && /^h[1-6]$/.test(node.tagName) && node.children
+    node.type === "element" &&
+    "tagName" in node &&
+    /^h[1-6]$/.test(node.tagName as string) &&
+    "children" in node
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function extractTextFromNode(node: any): string {
-  if (node.type === "text") {
-    return node.value || "";
+function extractTextFromNode(node: ChildNode): string {
+  if (node.type === "text" && "value" in node) {
+    return (node.value as string) || "";
   }
-  if (node.children) {
+  if ("children" in node && Array.isArray(node.children)) {
     return node.children.map(extractTextFromNode).join("");
   }
   return "";
@@ -46,8 +53,7 @@ export default function headingIds() {
   return function transformer(tree: Node): Node {
     const usedIds = new Set<string>();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    visit(tree, "element", (node: any) => {
+    visit(tree, "element", (node: Node) => {
       if (isHeadingNode(node)) {
         // Extract text content from the heading
         const textContent = node.children.map(extractTextFromNode).join("");

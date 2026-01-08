@@ -67,8 +67,8 @@ function updateDocTheme(theme: EffectiveTheme) {
 // Create react context for theme and allow theme to be updated
 export const ThemeContext = React.createContext({
   theme: readCurrentSetTheme(),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setTheme: (theme: Theme) => {},
+
+  setTheme: (_theme: Theme) => {},
 });
 
 export const useTheme = () => {

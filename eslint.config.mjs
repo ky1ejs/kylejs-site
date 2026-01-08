@@ -1,35 +1,29 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
-import prettier from "eslint-plugin-prettier";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextTypescript from "eslint-config-next/typescript";
+import prettierConfig from "eslint-config-prettier/flat";
+import prettierPlugin from "eslint-plugin-prettier";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default defineConfig([{
-    extends: [
-        ...nextCoreWebVitals,
-        ...compat.extends("plugin:@typescript-eslint/recommended"),
-        ...compat.extends("eslint:recommended"),
-        ...compat.extends("prettier")
-    ],
-
+const config = defineConfig([
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  prettierConfig,
+  {
     plugins: {
-        prettier,
+      prettier: prettierPlugin,
     },
-
     rules: {
-        "prefer-const": "error",
-        "prettier/prettier": "error",
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": "error",
+      "prefer-const": "error",
+      "prettier/prettier": "error",
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+      "no-unused-vars": "off",
     },
-}]);
+  },
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+]);
+
+export default config;

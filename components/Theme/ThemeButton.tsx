@@ -1,6 +1,7 @@
 "use client";
 import { effectiveThemeForTheme, Theme } from "@/components/Theme/Theme";
 import { useTheme } from "@/components/Theme/ThemeProvider";
+import { useIsMounted } from "@/lib/use-is-mounted";
 import { useEffect, useState } from "react";
 
 const LoadingIndicator = () => (
@@ -38,7 +39,7 @@ export default function ThemeButton({
 }) {
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useIsMounted();
   const isTop = position === ThemeButtonPosition.Top;
 
   const emojiForTheme = (theme: Theme | undefined) => {
@@ -51,11 +52,6 @@ export default function ThemeButton({
         return "🖥️";
     }
   };
-
-  useEffect(() => {
-    // workaround for Next.js hydration issue with reading theme from cookies
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
