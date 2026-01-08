@@ -171,7 +171,7 @@ export const ElectronicsIcon: React.FC<IconProps> = ({ className }) => (
   </svg>
 );
 
-// 3D Printer - print head moves on hover
+// 3D Printer - simple box frame with nozzle
 export const PrinterIcon: React.FC<IconProps> = ({ className }) => (
   <svg
     viewBox="0 0 48 48"
@@ -182,35 +182,23 @@ export const PrinterIcon: React.FC<IconProps> = ({ className }) => (
     strokeLinejoin="round"
     className={className}
   >
-    {/* Frame - vertical posts */}
-    <path d="M6 6v36" strokeWidth="2" />
-    <path d="M42 6v36" strokeWidth="2" />
-    {/* Frame - top bar with rails */}
-    <path d="M6 6h36" strokeWidth="2" />
-    <path d="M8 10h32" />
-    {/* X-axis gantry */}
-    <path d="M8 18h32" />
-    {/* Print head carriage */}
+    {/* Simple cube frame */}
+    <path d="M8 8h32v32H8z" />
+    <path d="M8 8l6-4h20l6 4" />
+    <path d="M40 8l4 4v24l-4 4" />
+    {/* Print head - moves on hover */}
     <g className="line-art-printhead">
-      <rect x="18" y="14" width="12" height="8" rx="1" />
-      {/* Nozzle */}
-      <path d="M24 22v4" strokeWidth="2" />
-      {/* Hotend */}
-      <path d="M22 26h4" />
+      <rect x="18" y="12" width="12" height="6" rx="1" />
+      <path d="M24 18v8" strokeWidth="2" />
     </g>
-    {/* Heated bed */}
-    <rect x="8" y="38" width="32" height="4" rx="1" />
-    {/* Printed object - layer by layer */}
-    <path d="M16 38v-4h16v4" />
-    <path d="M18 34v-3h12v3" />
-    <path d="M20 31v-2h8v2" />
-    {/* Filament spool (side) */}
-    <ellipse cx="42" cy="14" rx="2" ry="4" />
-    <path d="M42 18c0 2-2 4-2 8" />
+    {/* Bed */}
+    <path d="M12 36h24" strokeWidth="2" />
+    {/* Printed object */}
+    <path d="M18 36v-6h12v6" />
   </svg>
 );
 
-// Airplane - flies/tilts on hover
+// Airplane - simple side view silhouette
 export const AirplaneIcon: React.FC<IconProps> = ({ className }) => (
   <svg
     viewBox="0 0 48 48"
@@ -223,26 +211,20 @@ export const AirplaneIcon: React.FC<IconProps> = ({ className }) => (
   >
     <g className="line-art-fly">
       {/* Fuselage */}
-      <path d="M2 24c0 0 4-4 14-4h20c4 0 8 2 10 4s-6 4-10 4H16c-10 0-14-4-14-4z" />
-      {/* Cockpit windows */}
-      <path d="M38 22c2 0 4 1 4 2s-2 2-4 2" />
-      {/* Wings */}
-      <path d="M18 20l-6-10h4l8 10" />
-      <path d="M18 28l-6 10h4l8-10" />
-      {/* Tail fin */}
-      <path d="M6 24v-8l6 4" />
-      {/* Tail wings */}
-      <path d="M8 20l-4-4h3" />
-      <path d="M8 28l-4 4h3" />
-      {/* Engine */}
-      <ellipse cx="28" cy="24" rx="3" ry="2" />
-      {/* Window line */}
-      <path d="M20 23h12" strokeDasharray="2 2" />
+      <path d="M4 24h36c3 0 6-2 6-4s-3-2-6-2H14" />
+      <path d="M4 24c0 2 2 4 6 4h30c3 0 4-2 4-4" />
+      {/* Wing */}
+      <path d="M16 24l-4-14h6l6 14" />
+      {/* Tail */}
+      <path d="M6 24l-2-8h4" />
+      <path d="M6 20h6" />
+      {/* Windows */}
+      <circle cx="38" cy="22" r="1.5" />
     </g>
   </svg>
 );
 
-// Motorcycle - wheels spin on hover
+// Motorcycle - simple profile with spinning wheels
 export const MotorcycleIcon: React.FC<IconProps> = ({ className }) => (
   <svg
     viewBox="0 0 48 48"
@@ -253,37 +235,27 @@ export const MotorcycleIcon: React.FC<IconProps> = ({ className }) => (
     strokeLinejoin="round"
     className={className}
   >
-    {/* Wheels with spokes */}
+    {/* Back wheel */}
     <g className="line-art-wheel-back">
-      <circle cx="10" cy="34" r="7" />
-      <circle cx="10" cy="34" r="3" />
-      <path d="M10 27v3M10 38v3M3 34h3M14 34h3" />
+      <circle cx="10" cy="32" r="8" />
+      <circle cx="10" cy="32" r="3" />
     </g>
+    {/* Front wheel */}
     <g className="line-art-wheel-front">
-      <circle cx="40" cy="34" r="6" />
-      <circle cx="40" cy="34" r="2.5" />
-      <path d="M40 28v2.5M40 37.5v2.5M34 34h2.5M43.5 34h2.5" />
+      <circle cx="38" cy="32" r="7" />
+      <circle cx="38" cy="32" r="2.5" />
     </g>
-    {/* Engine block */}
-    <path d="M16 30l4-2h8l2 4h-12z" />
-    <path d="M18 32h8" />
-    {/* Frame - main tube */}
-    <path d="M10 34l6-10" strokeWidth="2" />
-    <path d="M16 24l8-4" strokeWidth="2" />
-    {/* Gas tank */}
-    <ellipse cx="22" cy="18" rx="6" ry="3" />
+    {/* Body frame */}
+    <path d="M10 32l8-14h8l12 14" strokeWidth="2" />
+    {/* Tank */}
+    <ellipse cx="22" cy="16" rx="5" ry="2.5" />
     {/* Seat */}
-    <path d="M26 16c4 0 8 2 10 6" strokeWidth="2" />
+    <path d="M26 14c3 0 6 2 8 6" strokeWidth="2" />
     {/* Handlebars */}
-    <path d="M24 20l8-8" />
-    <path d="M30 12h6" strokeWidth="2" />
-    <path d="M32 10v4" />
-    {/* Front fork */}
-    <path d="M36 18l4 16" strokeWidth="2" />
-    {/* Exhaust pipes */}
-    <path d="M20 32c-2 4-4 6-6 6" />
-    <path d="M22 32c-2 4-4 6-6 6" />
-    {/* Headlight */}
-    <circle cx="42" cy="24" r="2" />
+    <path d="M32 12l6-4" strokeWidth="2" />
+    {/* Fork */}
+    <path d="M34 18l4 14" strokeWidth="1.5" />
+    {/* Exhaust */}
+    <path d="M18 28l-6 8" />
   </svg>
 );

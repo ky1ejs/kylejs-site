@@ -282,6 +282,11 @@
     color: var(--primary);
     opacity: 0.12;
     transition: opacity 0.3s ease;
+    pointer-events: auto;
+  }
+
+  .line-art-icon * {
+    pointer-events: auto;
   }
 
   .line-art-icon-wrapper:hover .line-art-icon {
@@ -412,12 +417,12 @@
   }
 
   .line-art-icon-wrapper:hover .line-art-wheel-back {
-    transform-origin: 10px 34px;
+    transform-origin: 10px 32px;
     animation: wheel-spin 0.8s linear infinite;
   }
 
   .line-art-icon-wrapper:hover .line-art-wheel-front {
-    transform-origin: 40px 34px;
+    transform-origin: 38px 32px;
     animation: wheel-spin 0.6s linear infinite;
   }
 }
