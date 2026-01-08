@@ -1,3 +1,4 @@
+import React from "react";
 import meImage from "../public/me.jpg";
 import InstagramSvg from "../public/socials/instagram.svg";
 import GithubSvg from "../public/socials/github.svg";
@@ -29,13 +30,12 @@ const SocialLink = ({
   link,
   color,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Svg: any;
+  Svg: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   link: string;
   color: string;
 }) => (
   <a href={link}>
-    <Svg className={`fill-secondary h-10 w-10 ${color}`} alt={""} />
+    <Svg className={`fill-secondary h-10 w-10 ${color}`} />
   </a>
 );
 

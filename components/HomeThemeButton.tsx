@@ -3,17 +3,21 @@
 import ThemeButton, {
   ThemeButtonPosition,
 } from "@/components/Theme/ThemeButton";
-import { useEffect, useState } from "react";
+import { useIsMounted } from "@/lib/use-is-mounted";
+import { useSyncExternalStore } from "react";
+
+const subscribeToResize = (callback: () => void) => {
+  window.addEventListener("resize", callback);
+  return () => window.removeEventListener("resize", callback);
+};
 
 export default function HomeThemeButton() {
-  const [isMounted, setIsMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    console.log(window.innerWidth);
-    setIsMobile(window.innerWidth < 500);
-  }, []);
+  const isMounted = useIsMounted();
+  const isMobile = useSyncExternalStore(
+    subscribeToResize,
+    () => window.innerWidth < 500,
+    () => false,
+  );
 
   return (
     <div

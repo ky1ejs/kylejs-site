@@ -27,8 +27,7 @@ const components: MDXComponents = {
 };
 
 export default async function compileMarkdown(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  markdown: any,
+  markdown: string,
 ): Promise<() => JSX.Element> {
   const compiled = await compile(markdown, {
     outputFormat: "function-body",
