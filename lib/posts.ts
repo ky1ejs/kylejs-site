@@ -54,16 +54,18 @@ export function getAllPosts(): Post[] {
 }
 
 export function readPostWithId(id: string): Post {
-  for (const ext of [".md", ".mdx"]) {
-    const fileName = `${id}${ext}`;
-    const filePath = path.join(publishedDirectory, fileName);
-    if (fs.existsSync(filePath)) {
-      return readPostFromDirectory(fileName, publishedDirectory);
+  const fileNames = getMarkdownFiles(publishedDirectory);
+  for (const fileName of fileNames) {
+    const post = readPostFromDirectory(fileName, publishedDirectory);
+    if (post.id === id) {
+      return post;
     }
   }
 
   throw new Error(`Post not found: ${id}`);
 }
+
+const DATE_PREFIX_REGEX = /^\d{4}-\d{2}-\d{2}-/;
 
 function readPostFromDirectory(fileName: string, directory: string): Post {
   const filePath = path.join(directory, fileName);
@@ -71,7 +73,8 @@ function readPostFromDirectory(fileName: string, directory: string): Post {
   const { content, data: metadata } = matter(fileContents);
 
   const fileExtension = fileName.split(".").pop();
-  const id = fileName.replace(`.${fileExtension}`, "");
+  const fileNameWithoutExt = fileName.replace(`.${fileExtension}`, "");
+  const id = fileNameWithoutExt.replace(DATE_PREFIX_REGEX, "");
 
   return {
     path: filePath,
