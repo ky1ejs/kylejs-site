@@ -4,13 +4,11 @@ import matter from "gray-matter";
 
 const postsBaseDirectory = path.join(process.cwd(), "posts");
 const publishedDirectory = path.join(postsBaseDirectory, "published");
-const draftsDirectory = path.join(postsBaseDirectory, "drafts");
 
 export type PostMetadata = {
   title: string;
   description: string;
   date: Date;
-  published?: boolean;
   shareImage?: string;
 };
 
@@ -56,21 +54,11 @@ export function getAllPosts(): Post[] {
 }
 
 export function readPostWithId(id: string): Post {
-  // Try published directory first
   for (const ext of [".md", ".mdx"]) {
     const fileName = `${id}${ext}`;
-    const publishedPath = path.join(publishedDirectory, fileName);
-    if (fs.existsSync(publishedPath)) {
+    const filePath = path.join(publishedDirectory, fileName);
+    if (fs.existsSync(filePath)) {
       return readPostFromDirectory(fileName, publishedDirectory);
-    }
-  }
-
-  // Then try drafts directory
-  for (const ext of [".md", ".mdx"]) {
-    const fileName = `${id}${ext}`;
-    const draftsPath = path.join(draftsDirectory, fileName);
-    if (fs.existsSync(draftsPath)) {
-      return readPostFromDirectory(fileName, draftsDirectory);
     }
   }
 
