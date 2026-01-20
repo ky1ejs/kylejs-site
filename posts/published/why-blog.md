@@ -1,7 +1,6 @@
 ---
 title: Why blog?
 date: 2025-03-24
-published: true
 ---
 
 ## Summary

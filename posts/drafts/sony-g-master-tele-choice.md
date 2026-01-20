@@ -1,7 +1,6 @@
 ---
 title: Which Sony FE Tele Lens?
 date: 2023-07-22
-published: false
 ---
 
 ## 70-200 GM MK 1

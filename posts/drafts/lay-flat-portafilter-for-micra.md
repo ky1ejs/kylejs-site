@@ -1,7 +1,6 @@
 ---
 title: Lay-flat Portafilter for LM Linea Micra
 date: 2025-06-09
-published: false
 ---
 
 # Intro
