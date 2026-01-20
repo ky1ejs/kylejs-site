@@ -1,7 +1,6 @@
 ---
 title: Automated Dolly & Movement Research
 date: 2023-07-22
-published: false
 ---
 
 ## Moza Slypod Pro

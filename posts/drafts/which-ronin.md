@@ -1,7 +1,6 @@
 ---
-title: Which Ronin Shall I Buy? 
+title: Which Ronin Shall I Buy?
 date: 2023-07-22
-published: false
 ---
 
 # DJI RS3 vs RS3 Pro - which one should a prosumer get?

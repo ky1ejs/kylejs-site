@@ -2,13 +2,15 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-const postsDirectory = path.join(process.cwd(), "posts");
+const postsBaseDirectory = path.join(process.cwd(), "posts");
+const publishedDirectory = path.join(postsBaseDirectory, "published");
+const draftsDirectory = path.join(postsBaseDirectory, "drafts");
 
 export type PostMetadata = {
   title: string;
   description: string;
   date: Date;
-  published: boolean;
+  published?: boolean;
   shareImage?: string;
 };
 
@@ -19,16 +21,23 @@ export type Post = {
   metadata: PostMetadata;
 };
 
+function getMarkdownFiles(directory: string): string[] {
+  if (!fs.existsSync(directory)) {
+    return [];
+  }
+  return fs
+    .readdirSync(directory)
+    .filter(
+      (filename) => filename.endsWith(".md") || filename.endsWith(".mdx"),
+    );
+}
+
 export function getSortedPostMetadata() {
-  const fileNames = fs.readdirSync(postsDirectory);
+  const fileNames = getMarkdownFiles(publishedDirectory);
 
-  const mdFiles = fileNames.filter(
-    (filename) => filename.endsWith(".md") || filename.endsWith(".mdx"),
+  const posts = fileNames.map((fileName) =>
+    readPostFromDirectory(fileName, publishedDirectory),
   );
-
-  const posts = mdFiles
-    .map(readPostWithFileName)
-    .filter((post) => post.metadata.published);
 
   return posts.sort((a, b) => {
     if (a.metadata.date < b.metadata.date) {
@@ -40,31 +49,44 @@ export function getSortedPostMetadata() {
 }
 
 export function getAllPosts(): Post[] {
-  const posts = fs
-    .readdirSync(postsDirectory)
-    .map(readPostWithFileName)
-    .filter((post) => post.metadata.published);
-  return posts;
+  const fileNames = getMarkdownFiles(publishedDirectory);
+  return fileNames.map((fileName) =>
+    readPostFromDirectory(fileName, publishedDirectory),
+  );
 }
 
 export function readPostWithId(id: string): Post {
-  try {
-    return readPostWithFileName(`${id}.md`);
-  } catch {
-    return readPostWithFileName(`${id}.mdx`);
+  // Try published directory first
+  for (const ext of [".md", ".mdx"]) {
+    const fileName = `${id}${ext}`;
+    const publishedPath = path.join(publishedDirectory, fileName);
+    if (fs.existsSync(publishedPath)) {
+      return readPostFromDirectory(fileName, publishedDirectory);
+    }
   }
+
+  // Then try drafts directory
+  for (const ext of [".md", ".mdx"]) {
+    const fileName = `${id}${ext}`;
+    const draftsPath = path.join(draftsDirectory, fileName);
+    if (fs.existsSync(draftsPath)) {
+      return readPostFromDirectory(fileName, draftsDirectory);
+    }
+  }
+
+  throw new Error(`Post not found: ${id}`);
 }
 
-function readPostWithFileName(fileName: string): Post {
-  const path = `${postsDirectory}/${fileName}`;
-  const fileContents = fs.readFileSync(path, "utf8");
+function readPostFromDirectory(fileName: string, directory: string): Post {
+  const filePath = path.join(directory, fileName);
+  const fileContents = fs.readFileSync(filePath, "utf8");
   const { content, data: metadata } = matter(fileContents);
 
-  const fileExtension = path.split(".").pop();
+  const fileExtension = fileName.split(".").pop();
   const id = fileName.replace(`.${fileExtension}`, "");
 
   return {
-    path,
+    path: filePath,
     id,
     content,
     metadata: metadata as PostMetadata,
