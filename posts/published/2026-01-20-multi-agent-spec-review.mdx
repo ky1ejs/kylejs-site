@@ -14,7 +14,7 @@ shareImage: /_next/image?url=%2Fposts%2Fimages%2Fmulti-agent-spec-review.jpg&w=1
   description="The skills described in this post are available in this repo"
 />
 
-I recently had a good time with using sub-agents to prevent context-rot and introduce diverse perspectives when coding with agents.
+I recently had a good time using sub-agents to prevent context-rot and introduce diverse perspectives when coding with agents.
 
 **This post shares an approach to boost your results when following spec-driven development with AI agents by introducing multi-agent spec review.**
 
@@ -26,25 +26,25 @@ Over the past few weeks, I've become obsessed with spec-driven development.
 Essentially, spec-driven development is Claude Code plan mode taken up a notch. Today (January 20, 2026), Claude will actually write a spec of sorts whenever you plan. Typically, spec-driven development with Claude gives the opportunity to be a lot more detailed and consistent across all of your plans and specs, which is great for reaching a deterministic workflow.
 
 > [!NOTE] Why are people obsessed with being deterministic with AI?
->  Well AI is very exciting, but every time you open a context window, it's like speaking to a new person that works at the same company; the ideas/outcomes you'll arrive at will vary widely depending on how that person (agent) happens to interpret things on that day.
+>  Well, AI is very exciting, but every time you open a context window, it's like speaking to a new who works at the same company; the ideas/outcomes you'll arrive at will vary widely depending on how that person (agent) happens to interpret things on that day.
 >
 >  While we often want an agent to be creative, we also often want a session of work to arrive at some level of consistency in approach, criticality and thoroughness. Without that bar being guaranteed, it becomes less appealing to use AI for serious work, since it feels like a dice roll every time you start a new session.
 
 # The Problem
 After enjoying collaboratively writing specs with Claude, I started to get bored of the slowness of co-authoring every section of the spec. I thought to myself, I wish I could just trust Claude to write the whole thing and then I review specifics... how can I get to that point?
 
-The value I saw in me reviewing Claude's work, aside from me knowing what is going on in the codebase (which is critical), is that I bring a fresh set of eyes and diversity of thought... I can also sense check when the session is being too kind and appeasing the approach I want to see rather than challenging me on good grounds.
+The value I saw in me reviewing Claude's work, aside from me knowing what is going on in the codebase (which is critical), is that I bring a fresh set of eyes and diversity of thought... I can also sense-check when the session is being too kind and appeasing the approach I want to see rather than challenging me on good grounds.
 
-That's when I realized, what if I created multiple sub-agents with separate personas who only received the written spec with no steer from the conversation I've had with Claude prior to writing the spec, so it could review it purely on the grounds of the written spec and its own persona...
+That's when I realized, what if I created multiple sub-agents with separate personas who only received the written spec with no steer from the conversation I've had with Claude prior to writing the spec, so they could review it purely on the grounds of the written spec and its own persona...
 
 # The Solution – spec-orchestration with sub-agents
-To realize this future of multi-persona, fresh eyed spec review and iteration, I created a `spec-orchestrator` agent that would manage the process of spec writing and review.
+To realize this future of multi-persona, fresh-eyed spec review and iteration, I created a `spec-orchestrator` agent that would manage the process of spec writing and review.
 
 `spec-orchestrator` has seven sub-agents at its disposal:
 1. `spec-writer` – writes the initial spec based on the problem statement
-2. 6 `spec-reviewer` agents, each with a different persona, values and interests
+2. Six `spec-reviewer` agents, each with a different persona, values and interests
 
-The input to `spec-orchestrator` is a well understood problem and approach to solving it OR a draft spec. Once you give it this, `spec-orchestrator` will follow this loop:
+The input to `spec-orchestrator` is a well-understood problem and approach to solving it OR a draft spec. Once you give it this, `spec-orchestrator` will follow this loop:
 
 ```mermaid
 flowchart TD
@@ -101,10 +101,10 @@ The skill specifies that each feedback point from each sub-agent must be capture
 # The Personas
 Like I said, I still want to finesse the personas. The personas below were created based on a few prompts and have a bit of overlap between them. 
 
-1. **Pragmatic Architect** – senior architect who values long-term maintainability and coherent system design
-2. **Paranoid Engineer** – senior engineer obsessed with reliability and defensive design
-3. **Operator** – SRE/DevOps engineer who will be responsible for running this in production
-4. **Simplifier** – senior engineer who values simplicity and pragmatism above all
+1. **Pragmatic Architect** – senior architect who values long-term maintainability and coherent system design.
+2. **Paranoid Engineer** – senior engineer obsessed with reliability and defensive design.
+3. **Operator** – SRE/DevOps engineer who will be responsible for running this in production.
+4. **Simplifier** – senior engineer who values simplicity and pragmatism above all.
 5. **Product Strategist** – product-minded leader who cares about delivering customer value efficiently.
 6. **User Advocate** – champions the developer experience and end-user experience.
 
@@ -122,8 +122,8 @@ Assuming you're using Opus to explore and create these specs, you'd barely be ab
 
 Not to mention that the sub-agents: 
 1. Are not biased by the prior conversation I've had with Claude (especially on how I think my idea is so great 😅)
-2. Can be contextulized with a different set of values and priorities that I want to see represented in the spec review
-3. Can use a different model to the author for even more diversity of thought and optimal use of token budget
+2. Can be contextualized with a different set of values and priorities that I want to see represented in the spec review
+3. Can use a different model than the author for even more diversity of thought and optimal use of token budget
 
 # Example Spec Review Feedback
 
