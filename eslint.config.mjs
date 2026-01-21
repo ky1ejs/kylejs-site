@@ -23,7 +23,13 @@ const config = defineConfig([
       "no-unused-vars": "off",
     },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    "worktrees/**",
+  ]),
 ]);
 
 export default config;
