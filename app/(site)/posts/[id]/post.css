@@ -59,6 +59,13 @@
     .mermaid-diagram svg {
       @apply max-w-full;
     }
+
+    /* Inline code styling */
+    :not(pre) > code {
+      @apply px-1.5 py-0.5 rounded text-sm;
+      background-color: var(--primary-100);
+      color: var(--primary-700);
+    }
   }
 
   /* Dark mode callout styles */
@@ -81,6 +88,12 @@
 
     .callout-caution {
       @apply bg-red-950/30;
+    }
+
+    /* Inline code dark mode */
+    :not(pre) > code {
+      background-color: var(--primary-200);
+      color: var(--primary-800);
     }
   }
 }
