@@ -12,10 +12,12 @@ import { MDXComponents } from "mdx/types";
 import React, { JSX } from "react";
 import Image from "next/image";
 import { Pill, PillCollection } from "@/components/Pill";
+import { GitHubRepoCard } from "@/components/GitHubRepoCard";
 import Link from "next/link";
 
 const components: MDXComponents = {
   DownloadFile,
+  GitHubRepoCard,
   // eslint-disable-next-line jsx-a11y/alt-text
   Image: (props) => <Image placeholder="blur" {...props} />,
   Pill,
