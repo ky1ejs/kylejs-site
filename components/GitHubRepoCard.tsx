@@ -14,9 +14,9 @@ export function GitHubRepoCard({ repo, description }: GitHubRepoCardProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group my-6 flex items-center gap-4 rounded-xl border border-primary-300 bg-gradient-to-r from-primary-50 to-secondary-50 p-4 no-underline shadow-sm transition-all hover:border-primary hover:shadow-md dark:border-primary-700 dark:from-primary-200/10 dark:to-secondary-200/10 dark:hover:border-primary"
+      className="group border-primary-300 from-primary-50 to-secondary-50 hover:border-primary dark:border-primary-700 dark:from-primary-200/10 dark:to-secondary-200/10 dark:hover:border-primary my-6 flex items-center gap-4 rounded-xl border bg-gradient-to-r p-4 no-underline shadow-sm transition-all hover:shadow-md"
     >
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-background-secondary">
+      <div className="bg-background-secondary flex h-12 w-12 shrink-0 items-center justify-center rounded-lg">
         <svg
           viewBox="0 0 24 24"
           width="28"
@@ -29,11 +29,11 @@ export function GitHubRepoCard({ repo, description }: GitHubRepoCardProps) {
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="truncate font-semibold text-text-950 group-hover:text-primary">
+          <span className="text-text-950 group-hover:text-primary truncate font-semibold">
             {repoName}
           </span>
           <svg
-            className="h-4 w-4 shrink-0 text-muted transition-transform group-hover:translate-x-1"
+            className="text-muted h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -47,9 +47,9 @@ export function GitHubRepoCard({ repo, description }: GitHubRepoCardProps) {
           </svg>
         </div>
         {description && (
-          <p className="mt-1 truncate text-sm text-muted">{description}</p>
+          <p className="text-muted mt-1 text-sm">{description}</p>
         )}
-        <p className="mt-1 text-xs text-muted/70">{repo}</p>
+        <p className="text-muted/70 mt-1 text-xs">{repo}</p>
       </div>
     </Link>
   );
