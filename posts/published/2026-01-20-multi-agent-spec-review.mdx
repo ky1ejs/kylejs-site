@@ -23,7 +23,9 @@ My goal with this post is to help others play with sub-agents, spec-driven devel
 # Where it started...
 Over the past few weeks, I've become obsessed with spec-driven development.
 
-Essentially, spec-driven development is Claude Code plan mode taken up a notch. Today (January 20, 2026), Claude will actually write a spec of sorts whenever you plan. Typically, spec-driven development with Claude gives the opportunity to be a lot more detailed and consistent across all of your plans and specs, which is great for reaching a deterministic workflow.
+Essentially, spec-driven development is Claude Code plan mode taken up a notch. 
+
+Today (January 20, 2026), Claude will actually write a spec of sorts whenever you plan. Typically, spec-driven development with Claude gives the opportunity to be a lot more detailed and consistent across all of your plans and specs, which is great for reaching a deterministic workflow.
 
 > [!NOTE] Why are people obsessed with being deterministic with AI?
 >  Well, AI is very exciting, but every time you open a context window, it's like speaking to a new who works at the same company; the ideas/outcomes you'll arrive at will vary widely depending on how that person (agent) happens to interpret things on that day.
@@ -93,10 +95,11 @@ flowchart TD
 
 # Key Points
 ## Sub-Agent Review is Optional
-`spec-orchestrator` has the option to skip sub-agent review, have a subset of the sub-agents review the spec, or have all of them review it
-  - This decision depends on the blast radius of the spec and a few other criteria that I've specified in the skill
+`spec-orchestrator` has the option to skip sub-agent review, have a subset of the sub-agents review the spec, or have all of them review it.
 
-## Escalation path on conflict or severe risk
+This decision depends on the blast radius of the spec and a few other criteria that I've specified in the skill
+
+## Escalation path for conflict or severe risk
 If there is conflict between the review sub-agents or a severe flaw/risk in the spec, spec-orchestrator will escalate to the human for review
 
 ## Capturing Sub-Agent Feedback
@@ -104,6 +107,8 @@ The skill specifies that each feedback point from each sub-agent must be capture
 
 # The Personas
 Like I said, I still want to finesse the personas. The personas below were created based on a few prompts and have a bit of overlap between them. 
+
+<br/>
 
 1. **Pragmatic Architect** – senior architect who values long-term maintainability and coherent system design.
 2. **Paranoid Engineer** – senior engineer obsessed with reliability and defensive design.
@@ -149,13 +154,12 @@ After the spec-writer addressed the feedback, the spec was sent back to a subset
 <br/>
 **This is exactly the kind of thorough review that's hard to maintain when you're deep in a context window and excited about your idea!**
 
+# Wrap-up
+I would love to hear your thoughts and, even better, your experience using this approach!
+
 You can contact me through the socials on my [home page](https://kylejs.dev) and you can find these skills in my `claude-plugins` repo:
 
 <GitHubRepoCard
   repo="ky1ejs/claude-plugins"
   description="The skills described in this post are available in this repo"
 />
-
-
-# Wrap-up
-I would love to hear your thoughts and, even better, your experience using this approach!
