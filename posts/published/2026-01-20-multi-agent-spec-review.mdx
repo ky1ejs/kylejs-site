@@ -44,21 +44,25 @@ To realize this future of multi-persona, fresh-eyed spec review and iteration, I
 1. `spec-writer` – writes the initial spec based on the problem statement
 2. Six `spec-reviewer` agents, each with a different persona, values and interests
 
+## High Level Flow
+
 The input to `spec-orchestrator` is a well-understood problem and approach to solving it OR a draft spec. Once you give it this, `spec-orchestrator` will follow this loop:
 
 ```mermaid
 flowchart TD
   A["A: Write spec"]
-  B["B: Assess whether spec needs review by agents and how many"]
+  B{"B: Assess whether spec needs review by agents and how many"}
   C["C: (optionally) Send spec to sub-agent reviewers"]
   
   D["D: Final human review of spec"]
 
   A --> B
   B --> C
-  C --> A
-  B --> D
+  C -->|Yes| A
+  B -->|No| D
 ```
+
+## Detailed Flow
 
 Here's a more detailed version of the workflow and the decision points involved:
 
