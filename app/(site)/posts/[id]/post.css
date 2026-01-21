@@ -32,23 +32,25 @@
     }
 
     .callout-note {
-      @apply border-blue-500 bg-blue-50;
+      border-color: var(--primary);
+      background-color: var(--primary-50);
     }
 
     .callout-tip {
-      @apply border-green-500 bg-green-50;
+      @apply border-green-500 bg-green-100;
     }
 
     .callout-important {
-      @apply border-purple-500 bg-purple-50;
+      border-color: var(--primary-500);
+      background-color: var(--primary-100);
     }
 
     .callout-warning {
-      @apply border-yellow-500 bg-yellow-50;
+      @apply border-yellow-500 bg-yellow-100;
     }
 
     .callout-caution {
-      @apply border-red-500 bg-red-50;
+      @apply border-red-500 bg-red-100;
     }
 
     /* Mermaid diagrams */
@@ -71,23 +73,23 @@
   /* Dark mode callout styles */
   [data-theme="dark"] .post {
     .callout-note {
-      @apply bg-blue-950/30;
+      background-color: var(--primary-100);
     }
 
     .callout-tip {
-      @apply bg-green-950/30;
+      @apply bg-green-950/50;
     }
 
     .callout-important {
-      @apply bg-purple-950/30;
+      background-color: var(--primary-200);
     }
 
     .callout-warning {
-      @apply bg-yellow-950/30;
+      @apply bg-yellow-950/50;
     }
 
     .callout-caution {
-      @apply bg-red-950/30;
+      @apply bg-red-950/50;
     }
 
     /* Inline code dark mode */
