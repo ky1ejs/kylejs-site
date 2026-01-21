@@ -2,7 +2,7 @@
 
 @layer components {
   .post {
-    th { 
+    th {
       @apply text-left pb-2 px-2;
     }
 
@@ -10,8 +10,77 @@
       @apply border-t-[1px] border-gray-400 py-1 px-2;
     }
 
-    table { 
+    table {
       @apply my-2;
+    }
+
+    /* Callouts */
+    .callout {
+      @apply my-6 p-4 rounded-lg border-l-4;
+    }
+
+    .callout-title {
+      @apply font-semibold flex items-center gap-2 mb-2;
+    }
+
+    .callout-icon {
+      @apply text-lg;
+    }
+
+    .callout-content p {
+      @apply my-0;
+    }
+
+    .callout-note {
+      @apply border-blue-500 bg-blue-50;
+    }
+
+    .callout-tip {
+      @apply border-green-500 bg-green-50;
+    }
+
+    .callout-important {
+      @apply border-purple-500 bg-purple-50;
+    }
+
+    .callout-warning {
+      @apply border-yellow-500 bg-yellow-50;
+    }
+
+    .callout-caution {
+      @apply border-red-500 bg-red-50;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-diagram {
+      @apply my-6 flex justify-center;
+    }
+
+    .mermaid-diagram svg {
+      @apply max-w-full;
+    }
+  }
+
+  /* Dark mode callout styles */
+  [data-theme="dark"] .post {
+    .callout-note {
+      @apply bg-blue-950/30;
+    }
+
+    .callout-tip {
+      @apply bg-green-950/30;
+    }
+
+    .callout-important {
+      @apply bg-purple-950/30;
+    }
+
+    .callout-warning {
+      @apply bg-yellow-950/30;
+    }
+
+    .callout-caution {
+      @apply bg-red-950/30;
     }
   }
 }
