@@ -3,8 +3,11 @@ import { compile, run } from "@mdx-js/mdx";
 import remarkGfm from "remark-gfm";
 import imageMetadata from "@/lib/rehype-image-size";
 import headingIds from "@/lib/rehype-heading-ids";
+import rehypeCallouts from "@/lib/rehype-callouts";
+import rehypeMermaidBlocks from "@/lib/rehype-mermaid-blocks";
 import { DownloadFile } from "@/components/DownloadFile";
 import { H1, H2, H3, H4, H5, H6 } from "@/components/HeadingWithLink";
+import { Mermaid } from "@/components/Mermaid";
 import { MDXComponents } from "mdx/types";
 import React, { JSX } from "react";
 import Image from "next/image";
@@ -18,6 +21,7 @@ const components: MDXComponents = {
   Pill,
   PillCollection,
   Link,
+  Mermaid,
   h1: H1,
   h2: H2,
   h3: H3,
@@ -33,7 +37,12 @@ export default async function compileMarkdown(
     outputFormat: "function-body",
     development: process.env.NODE_ENV === "development",
     remarkPlugins: [remarkGfm],
-    rehypePlugins: [headingIds, imageMetadata],
+    rehypePlugins: [
+      headingIds,
+      imageMetadata,
+      rehypeCallouts,
+      rehypeMermaidBlocks,
+    ],
   });
   const result = await run(compiled, { ...runtime, baseUrl: import.meta.url });
   // eslint-disable-next-line react/display-name
