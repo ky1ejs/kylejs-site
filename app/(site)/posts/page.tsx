@@ -40,8 +40,10 @@ export default async function Posts() {
       {posts.map((p) => (
         <div key={p.id} className="mb-4">
           <Link href={`/posts/${p.id}`} className="no-underline">
-            <h2 className="p-0 text-xl underline hover:text-primary">{p.metadata.title}</h2>
-            <p className="my-1 text-text-950">{p.metadata.description}</p>
+            <h2 className="hover:text-primary p-0 text-xl underline">
+              {p.metadata.title}
+            </h2>
+            <p className="text-text-950 my-1">{p.metadata.description}</p>
           </Link>
           <div>
             <PostMetadata post={p} showAvatar={false} />
