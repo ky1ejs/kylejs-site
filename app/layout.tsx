@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProviderWrapper } from "@/components/Theme/ThemeProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { LineArtBackground } from "@/components/LineArtBackground";
 
 export const metadata: Metadata = {
   title: "kylejs",
@@ -55,6 +56,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <LineArtBackground />
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
         <SpeedInsights />
       </body>
