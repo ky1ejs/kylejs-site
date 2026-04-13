@@ -1,0 +1,35 @@
+---
+import RelativeDateLabel from "./RelativeDateLabel.astro";
+import calculateReadingTime from "../lib/reading-time";
+
+interface Props {
+  title: string;
+  content: string;
+  date: Date;
+  showAvatar?: boolean;
+}
+
+const { title, content, date, showAvatar = true } = Astro.props;
+---
+
+<div class="divide-muted text-muted mb-4 flex items-center divide-x-[1px] text-sm">
+  <div class="pr-2">
+    Written by{" "}
+    <a href="/">
+      {showAvatar && (
+        <img
+          src="/me.jpg"
+          width="30"
+          height="30"
+          alt="Profile picture of Kyle Satti"
+          class="mr-2 inline h-[30px] w-[30px] rounded-full transition hover:scale-110"
+        />
+      )}
+      <span class="hover:text-primary transition">Kyle Satti</span>
+    </a>
+  </div>
+  <div class="px-2">{calculateReadingTime(content)}</div>
+  <div class="pl-2">
+    <RelativeDateLabel date={date} />
+  </div>
+</div>

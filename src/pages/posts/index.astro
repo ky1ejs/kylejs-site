@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import Site from "../../layouts/Site.astro";
+import PostMetadata from "../../components/PostMetadata.astro";
+
+function slugFromId(id: string): string {
+  return id.replace(/\.(mdx?|md)$/, "");
+}
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<Site>
+  <div class="mt-4">
+    <div>
+      <h2>My blog – what to expect</h2>
+      <p>
+        On this blog I share my projects, learnings and thinking out in the open
+        in an effort to connect with others.
+      </p>
+      <p>
+        You can read more about my thoughts on blogging/writing in{" "}
+        <a href="/posts/why-blog">this post</a>.
+      </p>
+      <p>
+        Please reach out to me if you see something you like! My socials{" "}
+        <a href="/">are on the home page.</a>
+      </p>
+      <h2>Posts</h2>
+    </div>
+    {posts.map((p) => (
+      <div class="mb-4">
+        <a href={`/posts/${slugFromId(p.id)}`} class="no-underline">
+          <h2 class="hover:text-primary p-0 text-xl underline">
+            {p.data.title}
+          </h2>
+          <p class="text-text-950 my-1">{p.data.description}</p>
+        </a>
+        <div>
+          <PostMetadata
+            title={p.data.title}
+            content={p.body || ""}
+            date={p.data.date}
+            showAvatar={false}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</Site>

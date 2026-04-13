@@ -1,0 +1,88 @@
+---
+import Site from "../layouts/Site.astro";
+import { compile, run } from "@mdx-js/mdx";
+import * as runtime from "react/jsx-runtime";
+import remarkGfm from "remark-gfm";
+import { readFileSync } from "fs";
+import path from "path";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import { Pill, PillCollection } from "../components/Pill";
+import { H1, H2, H3, H4, H5, H6 } from "../components/HeadingWithLink";
+
+async function renderAboutContent(filename: string): Promise<string> {
+  const contentDir = path.join(process.cwd(), "content", "about");
+  const markdown = readFileSync(path.join(contentDir, filename), "utf8");
+
+  const compiled = await compile(markdown, {
+    outputFormat: "function-body",
+    remarkPlugins: [remarkGfm],
+  });
+
+  const result = await run(compiled, { ...runtime, baseUrl: import.meta.url });
+
+  const components = {
+    h1: H1, h2: H2, h3: H3, h4: H4, h5: H5, h6: H6,
+    Pill, PillCollection,
+    Link: ({ href, children, ...props }: any) =>
+      React.createElement("a", { href, ...props }, children),
+  };
+
+  return ReactDOMServer.renderToStaticMarkup(
+    React.createElement(result.default, { components })
+  );
+}
+
+const introHtml = await renderAboutContent("intro.md");
+const professionalHtml = await renderAboutContent("professional.mdx");
+const personalHtml = await renderAboutContent("personal.md");
+---
+
+<Site>
+  <div>
+    <div set:html={introHtml} />
+    <div class="bg-background-secondary mt-4 rounded-[20px] pb-8">
+      {/* Selector */}
+      <div class="selector">
+        <input type="radio" name="bio" id="professional" checked />
+        <label class="font-bold" for="professional">Profesional</label>
+        <input type="radio" name="bio" id="personal" />
+        <label class="font-bold" for="personal">Personal</label>
+        <div class="indicator"></div>
+      </div>
+      {/* Content sections */}
+      <div class="px-4">
+        <div id="bio-professional" set:html={professionalHtml} />
+        <div id="bio-personal" class="hidden" set:html={personalHtml} />
+      </div>
+    </div>
+  </div>
+</Site>
+
+<script>
+  function initBioSelector() {
+    const proRadio = document.getElementById("professional") as HTMLInputElement;
+    const perRadio = document.getElementById("personal") as HTMLInputElement;
+    const proContent = document.getElementById("bio-professional");
+    const perContent = document.getElementById("bio-personal");
+
+    if (!proRadio || !perRadio || !proContent || !perContent) return;
+
+    function update() {
+      if (proRadio.checked) {
+        proContent!.classList.remove("hidden");
+        perContent!.classList.add("hidden");
+      } else {
+        proContent!.classList.add("hidden");
+        perContent!.classList.remove("hidden");
+      }
+    }
+
+    proRadio.addEventListener("change", update);
+    perRadio.addEventListener("change", update);
+    update();
+  }
+
+  initBioSelector();
+  document.addEventListener("astro:after-swap", initBioSelector);
+</script>
