@@ -167,32 +167,55 @@ Tailwind CSS v4 works identically in Astro. The `globals.css` with CSS variables
 
 ## 4. Analytics Migration: Vercel → Cloudflare
 
-### What you currently get from Vercel
-- `@vercel/analytics` — page views, unique visitors, top pages, referrers, countries, browsers/OS
-- `@vercel/speed-insights` — Core Web Vitals (LCP, FID, CLS) with real user monitoring
+### What Vercel currently provides
+
+| Vercel Product | Metrics |
+|---|---|
+| `@vercel/analytics` | Page views, unique visitors, top pages, referrers, countries, browsers/OS |
+| `@vercel/speed-insights` | Core Web Vitals (LCP, FID/INP, CLS, TTFB) per route, real user monitoring |
 
 ### What Cloudflare Web Analytics provides
-- Page views, visits, top pages, referrers, countries, browsers/OS — same core metrics
+
+[Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) covers both traffic analytics and performance monitoring:
+
+**Traffic analytics:**
+- Page views, visits, top pages, referrers, countries, browsers/OS — same core metrics as Vercel Analytics
+
+**Core Web Vitals ([Vitals Explorer](https://blog.cloudflare.com/web-analytics-vitals-explorer/)):**
+- LCP, FID, CLS — each rated Good / Needs Improvement / Poor per Google's methodology
+- Filterable by URL, browser, OS, and country
+- Debug view showing top 5 elements negatively impacting each metric
+- Equivalent to `@vercel/speed-insights` real user monitoring
+
+**Additional properties:**
 - **Privacy-first**: no cookies, no localStorage, no fingerprinting
 - **Free** on all plans, unlimited sites
-- Can be enabled via DNS toggle (server-side, zero JS) or lightweight JS beacon
-- Cloudflare has committed to comprehensive performance monitoring platform by mid-2026
+- Can be enabled via DNS toggle (server-side, zero JS) or a lightweight JS beacon
+- No code changes or dependencies needed — entirely configured in the Cloudflare dashboard
 
-### What you'd lose
-- Vercel's "Experience Score" composite UX metric
-- Per-deployment analytics (analytics scoped to preview deploys)
-- Vercel's simpler dashboard UX for basic metrics
+### Gaps
 
-### What you'd gain
-- No client-side JS required when using DNS-based analytics
-- Broader traffic visibility (all requests, not just JS-enabled browsers)
-- Security analytics (threat insights, bot traffic) as a bonus
-- **No vendor lock-in** — if you leave Cloudflare, standard analytics tools work anywhere
+| Gap | Impact for this site | Workaround |
+|---|---|---|
+| **Data sampling** — Cloudflare samples ~10% of requests on high-traffic sites | Low — personal blog traffic is likely under the sampling threshold | None needed |
+| **6-month data retention** — historical data deleted after 6 months | Medium if long-term trends are desired | Export periodically, or use Plausible/Fathom for longer retention |
+| **No custom events** — Vercel tracks custom events, Cloudflare doesn't | Low — no custom events are currently tracked | Add [Plausible](https://plausible.io) ($9/mo) if needed later |
+| **No per-deployment analytics** — Vercel scopes metrics to each deploy | Low — mainly useful for A/B testing deploys | Not available on Cloudflare |
+
+### Setup steps (when moving to Cloudflare)
+
+No code changes are required. When DNS/hosting moves to Cloudflare:
+
+1. **Enable Web Analytics** in the Cloudflare dashboard for the zone (one toggle)
+2. **Enable Browser Insights** for Core Web Vitals monitoring (also a dashboard toggle)
+3. Optionally add the JS beacon snippet if you want client-side metrics before proxying through Cloudflare DNS
+
+The `@vercel/analytics` and `@vercel/speed-insights` dependencies have already been removed from the codebase — nothing needs to be added back.
 
 ### Alternatives if Cloudflare Web Analytics isn't enough
-- [Plausible](https://plausible.io) — privacy-friendly, richer dashboard ($9/mo)
-- [Fathom](https://usefathom.com) — privacy-friendly, simple ($14/mo)
-- Both work on any hosting provider
+- [Plausible](https://plausible.io) — privacy-friendly, richer dashboard, custom events, longer retention ($9/mo)
+- [Fathom](https://usefathom.com) — privacy-friendly, simple, longer retention ($14/mo)
+- Both work on any hosting provider and require only a small JS snippet
 
 ---
 
