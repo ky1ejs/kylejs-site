@@ -1,0 +1,46 @@
+---
+import Base from "./Base.astro";
+import ThemeButton from "../components/ThemeButton.astro";
+import Copyright from "../components/Copyright.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  ogUrl?: string;
+  publishedTime?: string;
+}
+
+const props = Astro.props;
+---
+
+<Base {...props}>
+  <div class="bg-background-primary sticky top-0 z-[1000] pt-4 pb-4">
+    <div class="content-inset flex items-center justify-between">
+      <div>
+        <a href="/" class="no-underline">
+          <span class="text-text-950 text-3xl">kylejs</span>
+        </a>
+      </div>
+      <div class="flex items-center gap-4">
+        <a class="text-lg" href="/about">About</a>
+        <a class="text-lg" href="/posts">Posts</a>
+        <ThemeButton />
+      </div>
+    </div>
+  </div>
+  <div class="mx-auto max-w-[800px]">
+    <div class="content-inset">
+      <slot />
+    </div>
+    <div class="content-inset text-muted pt-12 pb-4 text-center">
+      <hr class="border-muted mb-3 border-t-[0.5px]" />
+      <div class="flex justify-center gap-4">
+        <a href="/about">About</a>
+        <a href="/posts">Posts</a>
+      </div>
+      <Copyright />
+    </div>
+  </div>
+</Base>

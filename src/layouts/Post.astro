@@ -1,0 +1,19 @@
+---
+import Site from "./Site.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogUrl?: string;
+  publishedTime?: string;
+}
+
+const props = Astro.props;
+---
+
+<Site {...props} ogType="article">
+  <div class="post">
+    <slot />
+  </div>
+</Site>

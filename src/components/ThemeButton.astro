@@ -1,0 +1,112 @@
+---
+interface Props {
+  position?: "top" | "bottom";
+}
+
+const { position = "bottom" } = Astro.props;
+---
+
+<div class="bg-background-secondary hover:bg-background-200 relative flex h-10 w-12 items-center justify-center rounded-xl">
+  <button
+    id="theme-button"
+    class="z-20 h-full w-full"
+    aria-label="Toggle theme"
+  >
+    <span class="theme-emoji text-lg"></span>
+  </button>
+  <div
+    id="theme-popover"
+    class={`absolute -left-20 ${position === "top" ? "bottom-12" : "top-10"} bg-background-secondary hidden w-32 rounded-xl text-sm shadow-md dark:shadow-none`}
+  >
+    <button class="theme-option hover:bg-background-primary w-full px-2 py-1 text-left" data-theme-value="light">
+      ☀️ light
+    </button>
+    <button class="theme-option hover:bg-background-primary w-full px-2 py-1 text-left" data-theme-value="dark">
+      🌙 dark
+    </button>
+    <button class="theme-option hover:bg-background-primary w-full px-2 py-1 text-left" data-theme-value="system">
+      🖥️ system
+    </button>
+  </div>
+</div>
+
+<script>
+  function initThemeButton() {
+    const button = document.getElementById("theme-button");
+    const popover = document.getElementById("theme-popover");
+    if (!button || !popover) return;
+
+    const MEDIA_QUERY = "(prefers-color-scheme: dark)";
+
+    function getStoredTheme(): string {
+      return document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("theme="))
+        ?.split("=")[1] || "system";
+    }
+
+    function getEffectiveTheme(theme: string): string {
+      if (theme === "light" || theme === "dark") return theme;
+      return window.matchMedia(MEDIA_QUERY).matches ? "dark" : "light";
+    }
+
+    function applyTheme(theme: string) {
+      document.cookie = `theme=${theme};path=/;max-age=31536000`;
+      const effective = getEffectiveTheme(theme);
+      document.documentElement.setAttribute("data-theme", effective);
+      updateEmoji(theme);
+    }
+
+    function updateEmoji(theme: string) {
+      const emoji = button!.querySelector(".theme-emoji");
+      if (!emoji) return;
+      const systemSuffix = theme === "system" ? ` (${getEffectiveTheme(theme)})` : "";
+      const icon = theme === "light" ? "☀️" : theme === "dark" ? "🌙" : "🖥️";
+      emoji.textContent = icon;
+
+      // Update system option label
+      const systemOption = popover!.querySelector('[data-theme-value="system"]');
+      if (systemOption) {
+        systemOption.textContent = `🖥️ system (${getEffectiveTheme("system")})`;
+      }
+    }
+
+    // Initial state
+    updateEmoji(getStoredTheme());
+
+    // Toggle popover
+    button.addEventListener("click", () => {
+      popover.classList.toggle("hidden");
+    });
+
+    // Theme option clicks
+    popover.querySelectorAll(".theme-option").forEach((opt) => {
+      opt.addEventListener("click", () => {
+        const value = (opt as HTMLElement).dataset.themeValue!;
+        applyTheme(value);
+        popover.classList.add("hidden");
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (!button.contains(target) && !popover.contains(target)) {
+        popover.classList.add("hidden");
+      }
+    });
+
+    // Listen for system preference changes
+    window.matchMedia(MEDIA_QUERY).addEventListener("change", () => {
+      if (getStoredTheme() === "system") {
+        const effective = getEffectiveTheme("system");
+        document.documentElement.setAttribute("data-theme", effective);
+        updateEmoji("system");
+      }
+    });
+  }
+
+  // Run on initial load and after view transitions
+  initThemeButton();
+  document.addEventListener("astro:after-swap", initThemeButton);
+</script>
