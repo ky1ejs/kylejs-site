@@ -60,7 +60,6 @@ const { position = "bottom" } = Astro.props;
     function updateEmoji(theme: string) {
       const emoji = button!.querySelector(".theme-emoji");
       if (!emoji) return;
-      const systemSuffix = theme === "system" ? ` (${getEffectiveTheme(theme)})` : "";
       const icon = theme === "light" ? "☀️" : theme === "dark" ? "🌙" : "🖥️";
       emoji.textContent = icon;
 

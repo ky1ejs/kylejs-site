@@ -58,15 +58,15 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <script is:inline>
       function applyTheme() {
         try {
-          var cookieTheme = document.cookie
+          const cookieTheme = document.cookie
             .split("; ")
-            .find(function(row) { return row.startsWith("theme="); });
-          var theme = cookieTheme ? cookieTheme.split("=")[1] : null;
+            .find((row) => row.startsWith("theme="));
+          const theme = cookieTheme ? cookieTheme.split("=")[1] : null;
 
           if (theme && theme !== "system") {
             document.documentElement.setAttribute("data-theme", theme);
           } else {
-            var effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            const effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
             document.documentElement.setAttribute("data-theme", effective);
           }
         } catch (e) {
@@ -75,8 +75,8 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
       }
       applyTheme();
 
-      document.addEventListener("astro:before-swap", function(e) {
-        var currentTheme = document.documentElement.getAttribute("data-theme");
+      document.addEventListener("astro:before-swap", (e) => {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
         if (currentTheme) {
           e.newDocument.documentElement.setAttribute("data-theme", currentTheme);
         }

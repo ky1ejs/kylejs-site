@@ -3,13 +3,12 @@ import RelativeDateLabel from "./RelativeDateLabel.astro";
 import calculateReadingTime from "../lib/reading-time";
 
 interface Props {
-  title: string;
   content: string;
   date: Date;
   showAvatar?: boolean;
 }
 
-const { title, content, date, showAvatar = true } = Astro.props;
+const { content, date, showAvatar = true } = Astro.props;
 ---
 
 <div class="divide-muted text-muted mb-4 flex items-center divide-x-[1px] text-sm">
