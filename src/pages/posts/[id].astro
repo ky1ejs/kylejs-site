@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Post from "../../layouts/Post.astro";
 import PostHeader from "../../components/PostHeader.astro";
 import PostFooter from "../../components/PostFooter.astro";
@@ -13,16 +13,16 @@ import { MdxImage } from "../../components/MdxImage";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { id: post.id.replace(/\.(mdx?|md)$/, "") },
+    params: { id: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 const baseUrl = "https://kylejs.me";
-const slug = post.id.replace(/\.(mdx?|md)$/, "");
+const slug = post.id;
 const imagePath = post.data.shareImage || "/me.jpg";
 ---
 
