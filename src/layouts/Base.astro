@@ -56,27 +56,31 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
 
     {/* Theme detection - runs before paint to prevent flash */}
     <script is:inline>
-      (function () {
+      function applyTheme() {
         try {
-          const theme = document.documentElement.getAttribute("data-theme");
-          if (theme !== null && theme !== undefined) return;
-
-          const cookieTheme = document.cookie
+          var cookieTheme = document.cookie
             .split("; ")
-            .find((row) => row.startsWith("theme="))
-            ?.split("=")[1];
+            .find(function(row) { return row.startsWith("theme="); });
+          var theme = cookieTheme ? cookieTheme.split("=")[1] : null;
 
-          if (cookieTheme && cookieTheme !== "system") {
-            document.documentElement.setAttribute("data-theme", cookieTheme);
-            return;
+          if (theme && theme !== "system") {
+            document.documentElement.setAttribute("data-theme", theme);
+          } else {
+            var effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            document.documentElement.setAttribute("data-theme", effective);
           }
-
-          const foundTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-          document.documentElement.setAttribute("data-theme", foundTheme);
         } catch (e) {
           console.error(e);
         }
-      })();
+      }
+      applyTheme();
+
+      document.addEventListener("astro:before-swap", function(e) {
+        var currentTheme = document.documentElement.getAttribute("data-theme");
+        if (currentTheme) {
+          e.newDocument.documentElement.setAttribute("data-theme", currentTheme);
+        }
+      });
     </script>
   </head>
   <body>
