@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
 interface Props {
@@ -52,7 +52,7 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta name="twitter:creator" content="@_kylejs_" />
     {imageUrl && <meta name="twitter:image" content={imageUrl} />}
 
-    <ViewTransitions />
+    <ClientRouter />
 
     {/* Theme detection - runs before paint to prevent flash */}
     <script is:inline>

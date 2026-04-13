@@ -4,7 +4,7 @@
 An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for content management. The site features a modern design with dark/light theme support and is optimized for performance with zero JavaScript shipped by default (React islands used only where interactivity is needed).
 
 ## Technology Stack
-- **Framework**: Astro 5 (static output)
+- **Framework**: Astro 6 (static output)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 (CSS-first config via @tailwindcss/vite)
 - **Package Manager**: pnpm
