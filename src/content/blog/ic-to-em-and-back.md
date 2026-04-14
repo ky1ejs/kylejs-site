@@ -22,6 +22,7 @@ My main goal for this post is to capture this decision for my future self to rev
 
 # What prompted my move back to IC?
 <div class="mt-4 mb-4 px-3 py-2 rounded-xl border-2 border-muted">
+
 **_TL;DR_: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs**
 
 I can't share much about the product I've founded, but essentially it aims to solve a great deal of friction that Spotify has been experiencing in disseminating high-level company goals and then carrying out a series of dependency resolution and prioritization discussions.
