@@ -10,6 +10,7 @@ import rehypeMermaidBlocks from "./src/lib/rehype-mermaid-blocks.ts";
 export default defineConfig({
   site: "https://kylejs.me",
   output: "static",
+  trailingSlash: "always",
   prefetch: {
     prefetchAll: true,
   },

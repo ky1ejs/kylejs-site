@@ -18,7 +18,7 @@ const posts = (await getCollection("blog")).sort(
       </p>
       <p>
         You can read more about my thoughts on blogging/writing in{" "}
-        <a href="/posts/why-blog">this post</a>.
+        <a href="/posts/why-blog/">this post</a>.
       </p>
       <p>
         Please reach out to me if you see something you like! My socials{" "}
@@ -28,7 +28,7 @@ const posts = (await getCollection("blog")).sort(
     </div>
     {posts.map((p) => (
       <div class="mb-4">
-        <a href={`/posts/${p.id}`} class="no-underline">
+        <a href={`/posts/${p.id}/`} class="no-underline">
           <h2 class="hover:text-primary p-0 text-xl underline">
             {p.data.title}
           </h2>
