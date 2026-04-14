@@ -33,12 +33,12 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `Post.astro` - Post layout wrapping Site with `.post` class
 
 ### Content (`/src/content`)
-- `config.ts` - Collection schema (Zod validation)
-- `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?)
+- `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?)
+- `drafts/` - Draft blog posts
 
 ### Components (`/src/components`)
 - `.astro` components - ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel
-- `.tsx` React components - Mermaid (client:idle), HeadingWithLink (MDX override), Pill, GitHubRepoCard, DownloadFile, MdxImage
+- `.tsx` React components - Mermaid (client:idle), HeadingWithLink (MDX override), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
@@ -75,11 +75,11 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ## Configuration Files
 - `astro.config.mjs` - Astro config with MDX, React, Tailwind, rehype plugins
 - `tsconfig.json` - Extends astro/tsconfigs/strict
-- `src/content/config.ts` - Content collection schemas
+- `src/content.config.ts` - Content collection schemas
 
 ## Content Guidelines
 - Blog posts go in `src/content/blog/` as `.md` or `.mdx` files
-- Frontmatter must include `title` and `date`; `description` and `shareImage` are optional
+- Frontmatter must include `title` and `date`; `description`, `shareImage`, and `reviewers` are optional
 - Images in `/public/posts/images/`
 - About page content in `/content/about/`
 
