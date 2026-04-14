@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
 interface Props {
@@ -53,14 +52,6 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta name="twitter:creator" content="@_kylejs_" />
     {imageUrl && <meta name="twitter:image" content={imageUrl} />}
 
-    <script is:inline>
-      // Disable native View Transitions API to prevent iOS Safari from
-      // clipping the bottom of the screen during navigation animations.
-      // Astro's ClientRouter falls back to a direct DOM swap instead.
-      document.startViewTransition = undefined;
-    </script>
-    <ClientRouter />
-
     {/* Theme detection - runs before paint to prevent flash */}
     <script is:inline>
       function applyTheme() {
@@ -81,13 +72,6 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
         }
       }
       applyTheme();
-
-      document.addEventListener("astro:before-swap", (e) => {
-        const currentTheme = document.documentElement.getAttribute("data-theme");
-        if (currentTheme) {
-          e.newDocument.documentElement.setAttribute("data-theme", currentTheme);
-        }
-      });
     </script>
   </head>
   <body>
