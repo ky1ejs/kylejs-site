@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mkdir -p .claude
+ln -sf "$ORCA_REPO_ROOT/.claude/settings.local.json" .claude/settings.local.json
