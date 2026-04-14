@@ -25,3 +25,4 @@ npm-debug.log*
 
 worktrees/
 .orca/.bootstrapped
+settings.local.json
