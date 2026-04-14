@@ -53,6 +53,14 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta name="twitter:creator" content="@_kylejs_" />
     {imageUrl && <meta name="twitter:image" content={imageUrl} />}
 
+    {/*
+      Disable native View Transitions API to prevent iOS Safari from clipping
+      the bottom of the screen during navigation animations. The ClientRouter
+      falls back to a direct DOM swap instead of snapshot-based transitions.
+    */}
+    <script is:inline>
+      document.startViewTransition = undefined;
+    </script>
     <ClientRouter />
 
     {/* Theme detection - runs before paint to prevent flash */}
