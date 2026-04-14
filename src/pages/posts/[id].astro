@@ -8,7 +8,7 @@ import { Mermaid } from "../../components/Mermaid";
 import { Pill, PillCollection } from "../../components/Pill";
 import { GitHubRepoCard } from "../../components/GitHubRepoCard";
 import { DownloadFile } from "../../components/DownloadFile";
-import { MdxImage } from "../../components/MdxImage";
+import MdxImage from "../../components/MdxImage.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");

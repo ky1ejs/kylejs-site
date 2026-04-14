@@ -334,6 +334,19 @@
 
 /* ===== Post styles ===== */
 .post {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  img.img-loading {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+  }
+
+  img.img-loaded {
+    opacity: 1;
+  }
   th {
     text-align: left;
     padding-bottom: 0.5rem;
