@@ -240,6 +240,7 @@
     padding: 0;
     margin: 0;
     scroll-padding-top: 90px;
+    min-height: 100dvh;
   }
 
   strong {
@@ -330,6 +331,11 @@
       }
     }
   }
+}
+
+/* ===== View Transition fixes (iOS Safari dynamic address bar) ===== */
+::view-transition-group(root) {
+  min-block-size: 100dvh;
 }
 
 /* ===== Post styles ===== */
