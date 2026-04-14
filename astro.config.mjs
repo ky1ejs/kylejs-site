@@ -10,6 +10,10 @@ import rehypeMermaidBlocks from "./src/lib/rehype-mermaid-blocks.ts";
 export default defineConfig({
   site: "https://kylejs.me",
   output: "static",
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport",
+  },
   markdown: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [rehypeHeadingIds, rehypeCallouts, rehypeMermaidBlocks],
