@@ -72,6 +72,14 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
         }
       }
       applyTheme();
+
+      // Debug: check if cross-document view transitions are working
+      window.addEventListener("pagereveal", (e) => {
+        console.log("[VT] pagereveal: viewTransition =", !!e.viewTransition);
+      });
+      window.addEventListener("pageswap", (e) => {
+        console.log("[VT] pageswap: viewTransition =", !!e.viewTransition);
+      });
     </script>
   </head>
   <body>
