@@ -1,0 +1,61 @@
+---
+import { getCollection, render } from "astro:content";
+import Post from "../../layouts/Post.astro";
+import PostHeader from "../../components/PostHeader.astro";
+import PostFooter from "../../components/PostFooter.astro";
+import { H1, H2, H3, H4, H5, H6 } from "../../components/HeadingWithLink";
+import { Mermaid } from "../../components/Mermaid";
+import { Pill, PillCollection } from "../../components/Pill";
+import { GitHubRepoCard } from "../../components/GitHubRepoCard";
+import { DownloadFile } from "../../components/DownloadFile";
+import { MdxImage } from "../../components/MdxImage";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const baseUrl = "https://kylejs.me";
+const slug = post.id;
+const imagePath = post.data.shareImage || "/me.jpg";
+---
+
+<Post
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={imagePath}
+  ogUrl={`${baseUrl}/posts/${slug}`}
+  publishedTime={post.data.date.toISOString()}
+>
+  <article>
+    <PostHeader
+      title={post.data.title}
+      content={post.body || ""}
+      date={post.data.date}
+    />
+    <Content
+      components={{
+        h1: H1,
+        h2: H2,
+        h3: H3,
+        h4: H4,
+        h5: H5,
+        h6: H6,
+        Mermaid,
+        Pill,
+        PillCollection,
+        GitHubRepoCard,
+        DownloadFile,
+        Image: MdxImage,
+        Link: "a",
+      }}
+    />
+  </article>
+  <PostFooter />
+</Post>
