@@ -105,5 +105,7 @@ const { position = "bottom" } = Astro.props;
     });
   }
 
+  // Run on initial load and after view transitions
   initThemeButton();
+  document.addEventListener("astro:after-swap", initThemeButton);
 </script>

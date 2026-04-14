@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
 interface Props {
@@ -25,7 +26,7 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,6 +53,16 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta name="twitter:creator" content="@_kylejs_" />
     {imageUrl && <meta name="twitter:image" content={imageUrl} />}
 
+    {/*
+      Disable native View Transitions API to prevent iOS Safari from clipping
+      the bottom of the screen during navigation animations. The ClientRouter
+      falls back to a direct DOM swap instead of snapshot-based transitions.
+    */}
+    <script is:inline>
+      document.startViewTransition = undefined;
+    </script>
+    <ClientRouter />
+
     {/* Theme detection - runs before paint to prevent flash */}
     <script is:inline>
       function applyTheme() {
@@ -73,13 +84,10 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
       }
       applyTheme();
 
-      // Debug: check if cross-document view transitions are working
-      window.addEventListener("pagereveal", (e) => {
-        const vt = e.viewTransition;
-        console.log("[VT] pagereveal: viewTransition =", vt);
-        if (vt) {
-          vt.ready.catch((err) => console.error("[VT] ready rejected:", err));
-          vt.finished.catch((err) => console.error("[VT] finished rejected:", err));
+      document.addEventListener("astro:before-swap", (e) => {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        if (currentTheme) {
+          e.newDocument.documentElement.setAttribute("data-theme", currentTheme);
         }
       });
     </script>

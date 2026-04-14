@@ -84,4 +84,5 @@ const personalHtml = await renderAboutContent("personal.md");
   }
 
   initBioSelector();
+  document.addEventListener("astro:after-swap", initBioSelector);
 </script>
