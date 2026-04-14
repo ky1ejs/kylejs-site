@@ -334,6 +334,10 @@
 
 /* ===== Post styles ===== */
 .post {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
   th {
     text-align: left;
     padding-bottom: 0.5rem;
