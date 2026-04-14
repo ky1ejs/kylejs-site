@@ -75,10 +75,12 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
 
       // Debug: check if cross-document view transitions are working
       window.addEventListener("pagereveal", (e) => {
-        console.log("[VT] pagereveal: viewTransition =", !!e.viewTransition);
-      });
-      window.addEventListener("pageswap", (e) => {
-        console.log("[VT] pageswap: viewTransition =", !!e.viewTransition);
+        const vt = e.viewTransition;
+        console.log("[VT] pagereveal: viewTransition =", vt);
+        if (vt) {
+          vt.ready.catch((err) => console.error("[VT] ready rejected:", err));
+          vt.finished.catch((err) => console.error("[VT] finished rejected:", err));
+        }
       });
     </script>
   </head>
