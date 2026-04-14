@@ -84,6 +84,16 @@ import meImage from "../../public/me.jpg";
     function updatePosition() {
       const isMobile = window.innerWidth < 500;
       btn!.className = `fixed right-4 z-[1000] flex justify-end ${isMobile ? "bottom-4" : "top-4"}`;
+
+      const popover = document.getElementById("theme-popover");
+      if (!popover) return;
+      if (isMobile) {
+        popover.classList.remove("top-10");
+        popover.classList.add("bottom-12");
+      } else {
+        popover.classList.remove("bottom-12");
+        popover.classList.add("top-10");
+      }
     }
 
     updatePosition();
