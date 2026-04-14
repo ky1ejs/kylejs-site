@@ -1,34 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# kylejs.me
+
+Personal website and blog built with [Astro](https://astro.build).
+
+## Tech Stack
+
+- **Framework**: [Astro 6](https://astro.build) (static output)
+- **Language**: TypeScript
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config)
+- **Content**: MDX / Markdown via Astro Content Collections
+- **UI Islands**: React (interactive components only — zero JS shipped by default)
+- **Image Processing**: Sharp
+- **Deployment**: Cloudflare Pages
 
 ## Getting Started
 
-First, run the development server:
+**Prerequisites**: Node.js 22 and [pnpm](https://pnpm.io)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The dev server runs at `http://localhost:4321`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start development server |
+| `pnpm build` | Build for production (output: `dist/`) |
+| `pnpm preview` | Preview production build locally |
+| `pnpm lint` | Run ESLint |
+| `pnpm lint:fix` | Run ESLint with auto-fix |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── pages/              # File-based routing
+│   ├── index.astro     # Home page
+│   ├── about.astro     # About page
+│   └── posts/          # Blog listing & dynamic post routes
+├── content/
+│   ├── config.ts       # Content collection schema (Zod)
+│   └── blog/           # Blog posts (MD/MDX)
+├── components/         # Astro & React components
+├── layouts/            # Base, Site, and Post layouts
+├── lib/                # Utilities & custom rehype plugins
+└── styles/             # Global CSS with theme variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+content/about/          # About page content (MD/MDX)
+public/                 # Static assets (images, icons)
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Blog Posts
 
-## Deploy on Vercel
+Blog posts live in `src/content/blog/` as `.md` or `.mdx` files.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Frontmatter schema:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Field | Type | Required |
+|---|---|---|
+| `title` | string | yes |
+| `date` | date | yes |
+| `description` | string | no |
+| `shareImage` | string | no |
+
+## Deployment
+
+The site is deployed to Cloudflare Pages. A GitHub Actions workflow runs on push/PR to `main`, which installs dependencies and runs `pnpm build`.
