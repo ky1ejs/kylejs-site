@@ -14,14 +14,15 @@ reviewers:
 ---
 
 # Summary
-In 2023, 3.5 years after joining Spotify as an Individual Contributor (<span className="text-muted">_IC – someone who doesn't have reports and typically makes direct contribution to deliverables_</span>), I transitioned to a management role for the second time in my career. After 2 years in that Engineering Manager role, I’m transitioning back to being an IC.
+In 2023, 3.5 years after joining Spotify as an Individual Contributor (<span class="text-muted">_IC – someone who doesn't have reports and typically makes direct contribution to deliverables_</span>), I transitioned to a management role for the second time in my career. After 2 years in that Engineering Manager role, I’m transitioning back to being an IC.
 
 In this post I’m going to share my reasoning for moving back to IC. I cover the benefits of being an EM compared to a Senior Engineer, my thoughts on job security in the current tech job market, and a little bit on how AI may influence the future of the IC role.
 
 My main goal for this post is to capture this decision for my future self to review. I thought it may be interesting for others too and some folks might have some interesting advice, commentary or shared experience to connect with me on; so here goes.
 
 # What prompted my move back to IC?
-<div className="mt-4 mb-4 px-3 py-2 rounded-xl border-2 border-muted">
+<div class="mt-4 mb-4 px-3 py-2 rounded-xl border-2 border-muted">
+
 **_TL;DR_: I founded an internal product that ended up being owned by an org that couldn’t justify having more EMs**
 
 I can't share much about the product I've founded, but essentially it aims to solve a great deal of friction that Spotify has been experiencing in disseminating high-level company goals and then carrying out a series of dependency resolution and prioritization discussions.
