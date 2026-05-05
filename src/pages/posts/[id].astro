@@ -1,5 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import Post from "../../layouts/Post.astro";
 import PostHeader from "../../components/PostHeader.astro";
 import PostFooter from "../../components/PostFooter.astro";
@@ -23,7 +25,25 @@ const { Content } = await render(post);
 
 const baseUrl = "https://kylejs.me";
 const slug = post.id;
-const imagePath = post.data.shareImage || "/me.jpg";
+
+const shareImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/posts/images/*.{jpeg,jpg,png,webp}",
+);
+
+let imagePath = "/me.jpg";
+if (post.data.shareImage) {
+  const filename = post.data.shareImage.split("/").pop();
+  const matchKey = Object.keys(shareImages).find((k) => k.endsWith(`/${filename}`));
+  if (matchKey) {
+    const imported = (await shareImages[matchKey]()).default;
+    const optimized = await getImage({ src: imported, format: "jpg", width: 1200 });
+    imagePath = optimized.src;
+  } else {
+    console.warn(
+      `[posts/${slug}] shareImage "${post.data.shareImage}" not found in src/assets/posts/images/, falling back to /me.jpg`,
+    );
+  }
+}
 ---
 
 <Post
