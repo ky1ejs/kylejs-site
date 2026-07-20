@@ -14,7 +14,7 @@
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/react": "^5.0.7",
     "@mdx-js/mdx": "^3.1.1",
-    "@tailwindcss/vite": "^4.3.2",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "astro": "^6.4.8",
@@ -23,7 +23,7 @@
     "react-dom": "19.2.7",
     "remark-gfm": "^4.0.1",
     "sharp": "^0.35.3",
-    "tailwindcss": "4.3.2",
+    "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
     "unist-util-visit": "^5.1.0"
   },
@@ -34,8 +34,8 @@
     "eslint-plugin-astro": "^1.7.0",
     "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.8.0",
-    "typescript-eslint": "^8.63.0"
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "typescript-eslint": "^8.64.0"
   },
   "pnpm": {
     "overrides": {
