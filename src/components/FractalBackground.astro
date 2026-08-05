@@ -17,20 +17,20 @@ const { fill = 0.98 } = Astro.props;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 2s ease-in;
     /* Soften the edges so the pattern dissolves rather than stopping at the viewport. */
     -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 15%, transparent 100%);
     mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 15%, transparent 100%);
   }
 
-  .fractal-bg.is-ready {
-    opacity: 1;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
+  /*
+   * On a phone the card fills the middle of the screen, so the only part of the
+   * tree anyone can see is the part a centred vignette would fade out. Keep the
+   * falloff, but push it right out to the corners.
+   */
+  @media (max-width: 640px) {
     .fractal-bg {
-      transition: none;
+      -webkit-mask-image: radial-gradient(ellipse 110% 110% at 50% 50%, #000 55%, transparent 100%);
+      mask-image: radial-gradient(ellipse 110% 110% at 50% 50%, #000 55%, transparent 100%);
     }
   }
 </style>
@@ -42,6 +42,21 @@ const { fill = 0.98 } = Astro.props;
    * stops looking like a fractal and starts looking like grey noise.
    */
   const MAX_DEPTH = 8;
+
+  // One pass of the pen, in seconds. Levels are drawn strictly one after
+  // another, so a bar never appears before the bar it hangs off has reached it.
+  const DRAW_LEVEL = 1.05;
+  const ERASE_LEVEL = 0.55;
+  /** Spread within a level, so each one sweeps across rather than blinking on. */
+  const SWEEP = 0.45;
+  const HOLD = 20;
+  const REST = 0.8;
+  const DRAW_TIME = (MAX_DEPTH + 1) * DRAW_LEVEL + SWEEP;
+  const ERASE_TIME = (MAX_DEPTH + 1) * ERASE_LEVEL + SWEEP;
+  const CYCLE = DRAW_TIME + HOLD + ERASE_TIME + REST;
+
+  /** Length of the brighter nib left at each growing end. */
+  const NIB = 14;
 
   type Seg = { x: number; y: number; len: number; horizontal: boolean };
   type Rgb = [number, number, number];
@@ -71,6 +86,12 @@ const { fill = 0.98 } = Astro.props;
     return null;
   }
 
+  /** Ease in and out, so the pen accelerates away and settles rather than jerking. */
+  function ease(p: number) {
+    const t = p < 0 ? 0 : p > 1 ? 1 : p;
+    return t * t * (3 - 2 * t);
+  }
+
   function initFractalBackground() {
     teardown?.();
     teardown = null;
@@ -83,16 +104,19 @@ const { fill = 0.98 } = Astro.props;
     const root = document.documentElement;
     const fill = Number(canvas.dataset.fill) || 0.98;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Restart the cycle on every init, so arriving on the page — including
+    // navigating back to it — always catches the tree drawing itself.
+    const startedAt = performance.now();
 
     let width = 0;
     let height = 0;
     let rootLen = 0;
     let baseVRatio = 1;
+    let weightBoost = 1;
     let palette = readPalette();
     let rafId = 0;
     let lastFrame = 0;
     let running = false;
-    let revealed = false;
 
     function readPalette(): Palette {
       const styles = getComputedStyle(root);
@@ -100,7 +124,7 @@ const { fill = 0.98 } = Astro.props;
       return {
         from: parseColor(styles.getPropertyValue("--primary")) ?? [131, 25, 230],
         to: parseColor(styles.getPropertyValue("--accent")) ?? [97, 66, 189],
-        alpha: isDark ? 0.5 : 0.36,
+        alpha: isDark ? 0.58 : 0.44,
       };
     }
 
@@ -111,6 +135,7 @@ const { fill = 0.98 } = Astro.props;
       canvas!.width = Math.round(width * dpr);
       canvas!.height = Math.round(height * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx!.lineCap = "round";
 
       // The tree's vertical extent works out to vRatio times its horizontal
       // one, so matching vRatio to the viewport's aspect is what fits it to the
@@ -122,22 +147,41 @@ const { fill = 0.98 } = Astro.props;
       // axis needs more and let the other overflow — cropping the pattern reads
       // better than leaving a margin around it.
       rootLen = Math.max(width / 2, height / 2 / baseVRatio) * fill;
+      // A phone only ever shows the thin margin around the card, so the little
+      // that is visible has to carry more weight.
+      weightBoost = width <= 640 ? 1.45 : 1;
     }
 
-    function depthStyle(depth: number) {
+    function style(depth: number, boost: number) {
       const k = depth / MAX_DEPTH;
       const [r1, g1, b1] = palette.from;
       const [r2, g2, b2] = palette.to;
       // Every level doubles the bar count while only shrinking each bar by ~30%,
       // so the ink per level still grows. Fading as we descend keeps the trunk
       // legible and leaves the deepest levels as fine texture.
-      const weight = Math.pow(0.82, depth);
+      const alpha = Math.min(0.95, palette.alpha * Math.pow(0.82, depth) * weightBoost * boost);
       return `rgba(${Math.round(r1 + (r2 - r1) * k)}, ${Math.round(g1 + (g2 - g1) * k)}, ${Math.round(
         b1 + (b2 - b1) * k,
-      )}, ${(palette.alpha * weight).toFixed(4)})`;
+      )}, ${alpha.toFixed(4)})`;
     }
 
-    function draw(seconds: number) {
+    /**
+     * How much of a bar at this depth has been drawn, 0 to 1. Levels run
+     * outward on the way in and back inward on the way out, so the tree always
+     * stays connected to its trunk.
+     */
+    function reachAt(depth: number, offset: number, cycleTime: number) {
+      if (cycleTime < DRAW_TIME) {
+        return ease((cycleTime - depth * DRAW_LEVEL - offset * SWEEP) / DRAW_LEVEL);
+      }
+      const held = cycleTime - DRAW_TIME;
+      if (held < HOLD) return 1;
+      const erasing = held - HOLD;
+      if (erasing >= ERASE_TIME) return 0;
+      return 1 - ease((erasing - (MAX_DEPTH - depth) * ERASE_LEVEL - offset * SWEEP) / ERASE_LEVEL);
+    }
+
+    function draw(seconds: number, complete: boolean) {
       ctx!.clearRect(0, 0, width, height);
 
       // An H-tree: every bar sprouts a perpendicular bar centred on each of its
@@ -145,33 +189,63 @@ const { fill = 0.98 } = Astro.props;
       // shrink ratios — at 0.5 the tree exactly tiles the plane, below it the
       // branches pull apart into separate clusters, above it they overlap into a
       // denser weave. `stretch` then trades one axis against the other, so the
-      // cells breathe between wide and tall. Incommensurate periods, so the
-      // figure never repeats a pose.
+      // cells breathe between wide and tall. Both run far slower than a draw
+      // cycle, so each pass of the pen lays down a slightly different figure.
       const contract = 0.5 + 0.055 * Math.sin(seconds * 0.061 + 1.3);
       const stretch = 1 + 0.16 * Math.sin(seconds * 0.041);
       // Ratio applied going horizontal -> vertical, and its partner coming back.
       const vRatio = baseVRatio * stretch;
       const hRatio = contract / vRatio;
 
-      let level: Seg[] = [
-        { x: width / 2, y: height / 2, len: rootLen * (1 + 0.06 * Math.sin(seconds * 0.029)), horizontal: true },
-      ];
+      const cycleTime = seconds % CYCLE;
+      let level: Seg[] = [{ x: width / 2, y: height / 2, len: rootLen, horizontal: true }];
 
       for (let depth = 0; depth <= MAX_DEPTH; depth++) {
+        const nibs: number[] = [];
         ctx!.beginPath();
-        for (const seg of level) {
-          const half = seg.len / 2;
+
+        for (let i = 0; i < level.length; i++) {
+          const seg = level[i];
+          const reach = (seg.len / 2) * (complete ? 1 : reachAt(depth, i / level.length, cycleTime));
+          if (reach <= 0) continue;
+
           if (seg.horizontal) {
-            ctx!.moveTo(seg.x - half, seg.y);
-            ctx!.lineTo(seg.x + half, seg.y);
+            ctx!.moveTo(seg.x - reach, seg.y);
+            ctx!.lineTo(seg.x + reach, seg.y);
           } else {
-            ctx!.moveTo(seg.x, seg.y - half);
-            ctx!.lineTo(seg.x, seg.y + half);
+            ctx!.moveTo(seg.x, seg.y - reach);
+            ctx!.lineTo(seg.x, seg.y + reach);
+          }
+
+          // Both ends of a bar grow outward from its middle, so a bar that is
+          // still moving has two live nibs.
+          if (!complete && reach < seg.len / 2 - 0.5) {
+            const nib = Math.min(NIB, reach);
+            if (seg.horizontal) {
+              nibs.push(seg.x + reach - nib, seg.y, seg.x + reach, seg.y);
+              nibs.push(seg.x - reach + nib, seg.y, seg.x - reach, seg.y);
+            } else {
+              nibs.push(seg.x, seg.y + reach - nib, seg.x, seg.y + reach);
+              nibs.push(seg.x, seg.y - reach + nib, seg.x, seg.y - reach);
+            }
           }
         }
-        ctx!.lineWidth = Math.max(0.5, 2 * Math.pow(0.86, depth));
-        ctx!.strokeStyle = depthStyle(depth);
+
+        const lineWidth = Math.max(0.6, 2 * Math.pow(0.86, depth));
+        ctx!.lineWidth = lineWidth;
+        ctx!.strokeStyle = style(depth, 1);
         ctx!.stroke();
+
+        if (nibs.length) {
+          ctx!.beginPath();
+          for (let n = 0; n < nibs.length; n += 4) {
+            ctx!.moveTo(nibs[n], nibs[n + 1]);
+            ctx!.lineTo(nibs[n + 2], nibs[n + 3]);
+          }
+          ctx!.lineWidth = lineWidth * 1.5;
+          ctx!.strokeStyle = style(depth, 3.2);
+          ctx!.stroke();
+        }
 
         if (depth === MAX_DEPTH) break;
 
@@ -191,11 +265,6 @@ const { fill = 0.98 } = Astro.props;
         if (!next.length) break;
         level = next;
       }
-
-      if (!revealed) {
-        revealed = true;
-        canvas!.classList.add("is-ready");
-      }
     }
 
     function loop(now: number) {
@@ -203,7 +272,7 @@ const { fill = 0.98 } = Astro.props;
       // ~30fps is plenty for motion this slow, and halves the battery cost.
       if (now - lastFrame < 33) return;
       lastFrame = now;
-      draw(now / 1000);
+      draw((now - startedAt) / 1000, false);
     }
 
     function start() {
@@ -221,7 +290,8 @@ const { fill = 0.98 } = Astro.props;
     function render() {
       if (reduceMotion.matches) {
         halt();
-        draw(9);
+        // No pen, just the finished drawing.
+        draw(9, true);
       } else {
         start();
       }
@@ -229,7 +299,7 @@ const { fill = 0.98 } = Astro.props;
 
     function onResize() {
       resize();
-      if (reduceMotion.matches) draw(9);
+      if (reduceMotion.matches) draw(9, true);
     }
 
     function onVisibility() {
@@ -239,7 +309,7 @@ const { fill = 0.98 } = Astro.props;
 
     function onTheme() {
       palette = readPalette();
-      if (reduceMotion.matches) draw(9);
+      if (reduceMotion.matches) draw(9, true);
     }
 
     const themeObserver = new MutationObserver(onTheme);
