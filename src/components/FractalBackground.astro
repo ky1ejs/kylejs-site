@@ -1,13 +1,13 @@
 ---
 interface Props {
-  /** Radius of the fractal's root ring, as a fraction of the viewport diagonal. */
-  radius?: number;
+  /** How much of the viewport the tree spans, 1 meaning edge to edge. */
+  fill?: number;
 }
 
-const { radius = 0.28 } = Astro.props;
+const { fill = 0.98 } = Astro.props;
 ---
 
-<canvas id="fractal-bg" class="fractal-bg" aria-hidden="true" data-radius={radius}></canvas>
+<canvas id="fractal-bg" class="fractal-bg" aria-hidden="true" data-fill={fill}></canvas>
 
 <style>
   .fractal-bg {
@@ -20,8 +20,8 @@ const { radius = 0.28 } = Astro.props;
     opacity: 0;
     transition: opacity 2s ease-in;
     /* Soften the edges so the pattern dissolves rather than stopping at the viewport. */
-    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 40%, transparent 88%);
-    mask-image: radial-gradient(circle at 50% 50%, #000 40%, transparent 88%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 15%, transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 15%, transparent 100%);
   }
 
   .fractal-bg.is-ready {
@@ -36,11 +36,14 @@ const { radius = 0.28 } = Astro.props;
 </style>
 
 <script>
-  const TAU = Math.PI * 2;
-  /** Children spawned per node. Also the rotational symmetry of the whole figure. */
-  const ARMS = 6;
+  /**
+   * Levels of recursion. Each one doubles the bar count while shrinking each bar
+   * by only ~30%, and past here they get too small to read as H's — the tree
+   * stops looking like a fractal and starts looking like grey noise.
+   */
+  const MAX_DEPTH = 8;
 
-  type Node = { x: number; y: number; r: number; a: number };
+  type Seg = { x: number; y: number; len: number; horizontal: boolean };
   type Rgb = [number, number, number];
   type Palette = { from: Rgb; to: Rgb; alpha: number };
 
@@ -78,13 +81,13 @@ const { radius = 0.28 } = Astro.props;
     if (!ctx) return;
 
     const root = document.documentElement;
-    const radiusRatio = Number(canvas.dataset.radius) || 0.28;
+    const fill = Number(canvas.dataset.fill) || 0.98;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     let width = 0;
     let height = 0;
-    let maxDepth = 4;
-    let rootRadius = 0;
+    let rootLen = 0;
+    let baseVRatio = 1;
     let palette = readPalette();
     let rafId = 0;
     let lastFrame = 0;
@@ -97,7 +100,7 @@ const { radius = 0.28 } = Astro.props;
       return {
         from: parseColor(styles.getPropertyValue("--primary")) ?? [131, 25, 230],
         to: parseColor(styles.getPropertyValue("--accent")) ?? [97, 66, 189],
-        alpha: isDark ? 0.55 : 0.4,
+        alpha: isDark ? 0.5 : 0.36,
       };
     }
 
@@ -109,22 +112,26 @@ const { radius = 0.28 } = Astro.props;
       canvas!.height = Math.round(height * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const narrow = Math.min(width, height) < 560;
-      // Branching is 6^depth, so shrink the tree on small screens.
-      maxDepth = narrow ? 3 : 4;
-      // On a phone the card covers most of the viewport, so the figure has to
-      // run off the edges to leave anything worth looking at around it.
-      rootRadius = Math.hypot(width, height) * radiusRatio * (narrow ? 1.5 : 1);
+      // The tree's vertical extent works out to vRatio times its horizontal
+      // one, so matching vRatio to the viewport's aspect is what fits it to the
+      // screen. Clamped, because a phone's aspect would otherwise stretch the
+      // cells into thin vertical slots with no H left to see.
+      const aspect = Math.min(Math.max(height / width, 0.6), 1.6);
+      baseVRatio = aspect ** 0.8;
+      // The trunk's half-extent converges on its own length. Take whichever
+      // axis needs more and let the other overflow — cropping the pattern reads
+      // better than leaving a margin around it.
+      rootLen = Math.max(width / 2, height / 2 / baseVRatio) * fill;
     }
 
     function depthStyle(depth: number) {
-      const k = maxDepth === 0 ? 0 : depth / maxDepth;
+      const k = depth / MAX_DEPTH;
       const [r1, g1, b1] = palette.from;
       const [r2, g2, b2] = palette.to;
-      // Each level has 6x more rings than the last, so it has to fade
-      // proportionally or the leaves swamp everything above them. The root is
-      // held back separately — on its own it reads as a hard hoop around the page.
-      const weight = depth === 0 ? 0.72 : Math.pow(0.62, depth);
+      // Every level doubles the bar count while only shrinking each bar by ~30%,
+      // so the ink per level still grows. Fading as we descend keeps the trunk
+      // legible and leaves the deepest levels as fine texture.
+      const weight = Math.pow(0.82, depth);
       return `rgba(${Math.round(r1 + (r2 - r1) * k)}, ${Math.round(g1 + (g2 - g1) * k)}, ${Math.round(
         b1 + (b2 - b1) * k,
       )}, ${(palette.alpha * weight).toFixed(4)})`;
@@ -133,44 +140,55 @@ const { radius = 0.28 } = Astro.props;
     function draw(seconds: number) {
       ctx!.clearRect(0, 0, width, height);
 
-      // Incommensurate periods, so the figure keeps morphing without ever
-      // returning to a pose you've already seen. `spread` does most of the
-      // visible work, sliding each ring of children in and out along their
-      // parent's radius so the rosette breathes between tight and open. Keeping
-      // spread + childScale near 1 is what holds the figure together: let the
-      // children clear their parent's rim and the levels splay apart into a
-      // sparse scatter of unrelated circles.
-      const childScale = 0.36 + 0.05 * Math.sin(seconds * 0.083);
-      const spread = 0.6 + 0.1 * Math.sin(seconds * 0.061 + 1.3);
-      const twist = 0.3 * Math.sin(seconds * 0.047 + 0.6);
-      const spin = seconds * 0.017;
+      // An H-tree: every bar sprouts a perpendicular bar centred on each of its
+      // ends, half the area each time. `contract` is the product of the two
+      // shrink ratios — at 0.5 the tree exactly tiles the plane, below it the
+      // branches pull apart into separate clusters, above it they overlap into a
+      // denser weave. `stretch` then trades one axis against the other, so the
+      // cells breathe between wide and tall. Incommensurate periods, so the
+      // figure never repeats a pose.
+      const contract = 0.5 + 0.055 * Math.sin(seconds * 0.061 + 1.3);
+      const stretch = 1 + 0.16 * Math.sin(seconds * 0.041);
+      // Ratio applied going horizontal -> vertical, and its partner coming back.
+      const vRatio = baseVRatio * stretch;
+      const hRatio = contract / vRatio;
 
-      let level: Node[] = [{ x: width / 2, y: height / 2, r: rootRadius, a: spin }];
+      let level: Seg[] = [
+        { x: width / 2, y: height / 2, len: rootLen * (1 + 0.06 * Math.sin(seconds * 0.029)), horizontal: true },
+      ];
 
-      for (let depth = 0; depth <= maxDepth; depth++) {
+      for (let depth = 0; depth <= MAX_DEPTH; depth++) {
         ctx!.beginPath();
-        for (const node of level) {
-          ctx!.moveTo(node.x + node.r, node.y);
-          ctx!.arc(node.x, node.y, node.r, 0, TAU);
+        for (const seg of level) {
+          const half = seg.len / 2;
+          if (seg.horizontal) {
+            ctx!.moveTo(seg.x - half, seg.y);
+            ctx!.lineTo(seg.x + half, seg.y);
+          } else {
+            ctx!.moveTo(seg.x, seg.y - half);
+            ctx!.lineTo(seg.x, seg.y + half);
+          }
         }
-        ctx!.lineWidth = Math.max(0.5, 1.4 * Math.pow(0.78, depth));
+        ctx!.lineWidth = Math.max(0.5, 2 * Math.pow(0.86, depth));
         ctx!.strokeStyle = depthStyle(depth);
         ctx!.stroke();
 
-        if (depth === maxDepth || level[0].r * childScale < 1.2) break;
+        if (depth === MAX_DEPTH) break;
 
-        const next: Node[] = [];
-        for (const node of level) {
-          for (let i = 0; i < ARMS; i++) {
-            const a = node.a + (i * TAU) / ARMS;
-            next.push({
-              x: node.x + Math.cos(a) * node.r * spread,
-              y: node.y + Math.sin(a) * node.r * spread,
-              r: node.r * childScale,
-              a: a + twist,
-            });
+        const next: Seg[] = [];
+        for (const seg of level) {
+          const half = seg.len / 2;
+          const len = seg.len * (seg.horizontal ? vRatio : hRatio);
+          if (len < 1) continue;
+          if (seg.horizontal) {
+            next.push({ x: seg.x - half, y: seg.y, len, horizontal: false });
+            next.push({ x: seg.x + half, y: seg.y, len, horizontal: false });
+          } else {
+            next.push({ x: seg.x, y: seg.y - half, len, horizontal: true });
+            next.push({ x: seg.x, y: seg.y + half, len, horizontal: true });
           }
         }
+        if (!next.length) break;
         level = next;
       }
 
