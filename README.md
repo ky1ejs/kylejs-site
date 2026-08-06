@@ -68,4 +68,33 @@ Blog posts live in `src/content/blog/` as `.md` or `.mdx` files.
 
 ## Deployment
 
-The site is deployed to Cloudflare Pages. A GitHub Actions workflow runs on push/PR to `main`, which installs dependencies and runs `pnpm build`.
+The site is deployed to **Cloudflare Workers** as a static assets Worker —
+`wrangler.jsonc` points the Worker at the `dist/` build output.
+
+Deploys run through [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/),
+Cloudflare's Git integration, which is connected to this repository. Cloudflare
+builds every push itself; there is no deploy step in GitHub Actions. The Actions
+workflows only lint (`lint.yaml`) and build (`build.yaml`) on push/PR to `main`
+as a check.
+
+### PR previews
+
+Every pull request gets a live preview automatically — nothing to configure.
+Cloudflare builds the branch and the `cloudflare-workers-and-pages` bot posts a
+comment on the PR with two links:
+
+| Link | Points at | Use it for |
+|---|---|---|
+| **Commit Preview URL** | One specific commit, immutable | Comparing two builds of the same PR |
+| **Branch Preview URL** | Latest commit on the branch | Sharing a link that stays current as you push |
+
+The URLs look like this:
+
+```
+https://<commit-hash>-kylejs-site.k-830.workers.dev     # commit preview
+https://<branch-name>-kylejs-site.k-830.workers.dev     # branch preview
+```
+
+Previews are versions uploaded without production traffic routed to them, so
+opening one never affects the live site. The build logs are linked from the same
+comment, which is the place to look when a preview doesn't come up.
