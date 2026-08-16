@@ -1,0 +1,19 @@
+---
+import AreaMark from "./AreaMark.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  area: CollectionEntry<"areas">;
+}
+
+const { area } = Astro.props;
+const { title, mark, why } = area.data;
+---
+
+<div id={area.id} class="bg-background-secondary flex scroll-mt-24 gap-3 rounded-xl p-4">
+  <AreaMark name={mark} class="text-primary h-7 w-7 shrink-0" />
+  <div class="min-w-0">
+    <h2 class="m-0 text-base font-bold tracking-tight">{title}</h2>
+    <p class="text-muted mt-0.5 mb-0 text-sm leading-snug">{why}</p>
+  </div>
+</div>
