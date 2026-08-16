@@ -11,7 +11,7 @@ I spent my childhood in [Devizes, Wiltshire, UK](https://en.wikipedia.org/wiki/D
 ### Things I love
 * **Photography** – I usally go for street and landscape style
 * **3D Printing** – my hobby since COVID lockdown. I print several things a year and love designing my own models.
-* **Coffee** – I'm a bit of a coffee snob, thanks to living with a Neapoliton for a few years in London.
+* **Coffee** – I'm a bit of a coffee snob, thanks to living with a Neapolitan for a few years in London.
 * **Thoughtfully designed things** (e.g. watches or anything from Peak Design and Weber Workshops)
 * **Anyone passionate about something**, (usually) no matter what that something is. Biographies are one of my favorite genres of content for this reason.
 * **Coding** – I love making projects on the side but never finish them, like most engineers.
