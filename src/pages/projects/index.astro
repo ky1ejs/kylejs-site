@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from "astro:content";
+import Site from "../../layouts/Site.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { projectGroups } from "../../lib/project-groups";
+
+const projects = await getCollection("projects");
+
+const rendered = await Promise.all(
+  projects.map(async (project) => ({
+    project,
+    // Body is optional — only render a note when there's something to say.
+    Content: project.body?.trim() ? (await render(project)).Content : undefined,
+  }))
+);
+
+const grouped = projectGroups
+  .map((group) => ({
+    group,
+    items: rendered
+      .filter(({ project }) => project.data.group === group.id)
+      .sort((a, b) => a.project.data.order - b.project.data.order),
+  }))
+  .filter(({ items }) => items.length > 0);
+---
+
+<Site
+  title="Projects | kylejs"
+  description="Side projects, tools and experiments by Kyle Satti — espresso hardware, iOS apps, developer tooling and a home lab."
+>
+  <div class="mt-4">
+    <h1>Projects</h1>
+    <p>
+      Most of these started as a rabbit hole I fell down and didn't climb back
+      out of. Almost everything here is on{" "}
+      <a href="https://github.com/ky1ejs" target="_blank" rel="noopener noreferrer">GitHub</a>.
+    </p>
+
+    {
+      grouped.map(({ group, items }) => (
+        <section class="mt-10">
+          <h2 id={group.id}>{group.title}</h2>
+          <p class="text-muted">{group.blurb}</p>
+          <div class="mt-3">
+            {items.map(({ project, Content }) => (
+              <ProjectCard
+                title={project.data.title}
+                description={project.data.description}
+                repo={project.data.repo}
+                url={project.data.url}
+                status={project.data.status}
+                year={project.data.year}
+              >
+                {Content && (
+                  <div class="text-muted mt-1 text-sm">
+                    <Content />
+                  </div>
+                )}
+              </ProjectCard>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Site>

@@ -12,4 +12,24 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const projects = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    group: z.enum(["espresso", "apps", "tools", "keyboards", "workshop"]),
+    /** GitHub repo as "owner/name". Omit for projects with no public repo. */
+    repo: z.string().optional(),
+    /** Live site, if there is one. */
+    url: z.string().url().optional(),
+    /** Year last worked on. Omitted where it isn't known rather than guessed. */
+    year: z.number().int().optional(),
+    status: z.enum(["active", "shipped", "experiment", "archived"]).default("shipped"),
+    /** Featured projects surface on the home page. */
+    featured: z.boolean().default(false),
+    /** Lower sorts first within a group. */
+    order: z.number().default(50),
+  }),
+});
+
+export const collections = { blog, projects };

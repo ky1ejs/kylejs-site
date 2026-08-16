@@ -2,8 +2,13 @@
 import Base from "../layouts/Base.astro";
 import Copyright from "../components/Copyright.astro";
 import ThemeButton from "../components/ThemeButton.astro";
+import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import meImage from "../../public/me.jpg";
+
+const featured = (await getCollection("projects"))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Base>
@@ -12,8 +17,8 @@ import meImage from "../../public/me.jpg";
     <ThemeButton position="bottom" />
   </div>
 
-  <div class="mt-16 flex items-center justify-center sm:absolute sm:top-0 sm:right-0 sm:bottom-0 sm:left-0 sm:m-auto sm:mt-0">
-    <div class="w-[85%] text-center sm:w-fit">
+  <div class="mt-16 flex items-center justify-center sm:mt-24 sm:mb-16">
+    <div class="w-[85%] text-center sm:w-[26rem]">
       <div class="background-and-shadow bg-background-secondary rounded-xl border-b-2 border-gray-300 px-6 pt-8 pb-6 shadow-lg dark:border-none dark:shadow-none">
         <div class="fade-in three mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full">
           <Image
@@ -54,6 +59,31 @@ import meImage from "../../public/me.jpg";
           </div>
         </div>
       </div>
+      {featured.length > 0 && (
+        <div class="bg-background-secondary mt-4 rounded-xl px-5 py-4 text-left">
+          <div class="mb-2 flex items-baseline justify-between">
+            <span class="text-muted text-xs tracking-widest uppercase">
+              Things I've built
+            </span>
+            <a class="text-sm no-underline hover:underline" href="/projects">
+              All projects &rarr;
+            </a>
+          </div>
+          <ul class="m-0 list-none p-0">
+            {featured.map((p) => (
+              <li class="border-muted/25 border-b py-2 last:border-b-0">
+                <a class="font-semibold no-underline hover:underline" href="/projects">
+                  {p.data.title}
+                </a>
+                <div class="text-muted text-sm leading-snug">
+                  {p.data.description}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div class="my-4 text-center text-gray-500">
         I sometimes blog{" "}
         <a class="hover:text-primary underline" href="/posts">here</a>{" "}
