@@ -1,0 +1,100 @@
+---
+import AreaMark from "./AreaMark.astro";
+import AreaMedia from "./AreaMedia.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  area: CollectionEntry<"areas">;
+  /** Alternating bands get the secondary background, for scroll rhythm. */
+  alt: boolean;
+}
+
+const { area, alt } = Astro.props;
+const { title, mark, meta, why, chain, media, items } = area.data;
+
+// "side" puts the images beside the items; every other layout stacks them above.
+const isSide = media.layout === "side" && media.images.length > 0;
+---
+
+<section
+  id={area.id}
+  class:list={[
+    "scroll-mt-24 px-6 py-7 sm:px-8",
+    alt ? "bg-background-secondary" : "",
+  ]}
+>
+  <div class="mx-auto flex max-w-[800px] gap-4 sm:gap-6">
+    <AreaMark name={mark} class="text-primary h-11 w-11 shrink-0 sm:h-14 sm:w-14" />
+
+    <div class="min-w-0 flex-1">
+      <div class="flex items-baseline justify-between gap-3">
+        <h2 class="m-0 text-2xl font-extrabold tracking-tight">{title}</h2>
+        {meta && <span class="text-muted text-xs tracking-widest uppercase">{meta}</span>}
+      </div>
+
+      <p class="text-muted mt-1 mb-3 max-w-[52ch] text-sm leading-relaxed">{why}</p>
+
+      {
+        chain.length > 0 && (
+          <div class="mb-3 flex flex-wrap items-center gap-1.5">
+            {chain.map((step, i) => (
+              <>
+                {i > 0 && <span class="text-muted text-xs">&rarr;</span>}
+                <span
+                  class:list={[
+                    "rounded border px-2 py-0.5 text-[10px] tracking-wider",
+                    step.code
+                      ? "border-primary text-primary"
+                      : "border-muted/40 text-muted",
+                  ]}
+                >
+                  {step.label}
+                </span>
+              </>
+            ))}
+          </div>
+        )
+      }
+
+      <div class:list={[isSide && "grid items-start gap-4 sm:grid-cols-2"]}>
+        <AreaMedia layout={media.layout} images={media.images} />
+
+        {
+          items.length > 0 && (
+            <ul class="m-0 list-none p-0">
+              {items.map((item) => (
+                <li class="border-muted/25 border-b py-2 last:border-b-0">
+                  <span class="flex flex-wrap items-baseline gap-x-2">
+                    <span
+                      class:list={[
+                        "inline-flex items-center gap-1 rounded-full border px-2 py-[1px] text-[9px] tracking-widest uppercase",
+                        item.writing
+                          ? "border-primary text-primary"
+                          : "border-muted/50 text-muted",
+                      ]}
+                    >
+                      {item.writing && <AreaMark name="pen" class="h-2.5 w-2.5" />}
+                      {item.kind}
+                    </span>
+                    {item.href ? (
+                      <a class="font-semibold no-underline hover:underline" href={item.href}>
+                        {item.title}
+                      </a>
+                    ) : (
+                      <span class="font-semibold">{item.title}</span>
+                    )}
+                  </span>
+                  {item.desc && (
+                    <span class="text-muted mt-0.5 block text-sm leading-snug">
+                      {item.desc}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

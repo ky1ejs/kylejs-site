@@ -1,0 +1,22 @@
+---
+import { markPaths, type MarkName } from "../lib/area-marks";
+
+interface Props {
+  name: MarkName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 64 64"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={markPaths[name]}
+/>

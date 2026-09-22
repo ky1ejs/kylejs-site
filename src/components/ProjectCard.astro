@@ -1,0 +1,82 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  repo?: string;
+  url?: string;
+  status: "active" | "shipped" | "experiment" | "archived";
+  year?: number;
+}
+
+const { title, description, repo, url, status, year } = Astro.props;
+
+const repoUrl = repo ? `https://github.com/${repo}` : undefined;
+const primaryUrl = url ?? repoUrl;
+
+const statusLabel: Record<Props["status"], string> = {
+  active: "Active",
+  shipped: "Shipped",
+  experiment: "Experiment",
+  archived: "Archived",
+};
+
+const statusClass: Record<Props["status"], string> = {
+  active: "border-primary text-primary",
+  shipped: "border-muted text-muted",
+  experiment: "border-accent text-accent",
+  archived: "border-muted text-muted opacity-70",
+};
+---
+
+<div class="border-muted/30 border-b py-4 last:border-b-0">
+  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+    {
+      primaryUrl ? (
+        <a
+          class="hover:text-primary text-lg font-semibold no-underline"
+          href={primaryUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {title}
+        </a>
+      ) : (
+        <span class="text-lg font-semibold">{title}</span>
+      )
+    }
+    <span
+      class={`rounded-full border px-2 py-[1px] text-[10px] tracking-wider uppercase ${statusClass[status]}`}
+    >
+      {statusLabel[status]}
+    </span>
+    {year && <span class="text-muted text-xs">{year}</span>}
+  </div>
+
+  <p class="text-text-950 mt-1 mb-0">{description}</p>
+
+  <div class="mt-1 flex flex-wrap gap-x-4 text-sm">
+    {
+      url && repoUrl && (
+        <a href={repoUrl} target="_blank" rel="noopener noreferrer">
+          Source
+        </a>
+      )
+    }
+    {
+      !url && repoUrl && (
+        <a href={repoUrl} target="_blank" rel="noopener noreferrer">
+          GitHub
+        </a>
+      )
+    }
+    {
+      url && (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          Visit site
+        </a>
+      )
+    }
+  </div>
+
+  <slot />
+</div>
