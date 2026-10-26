@@ -1,0 +1,12 @@
+---
+import { Mermaid } from "./Mermaid";
+
+interface Props {
+  chart: string;
+}
+
+const { chart } = Astro.props;
+---
+
+{/* Mermaid renders in useEffect, so it needs a client directive to hydrate */}
+<Mermaid client:idle chart={chart} />

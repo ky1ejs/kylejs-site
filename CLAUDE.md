@@ -4,11 +4,13 @@
 An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for content management. The site features a modern design with dark/light theme support and is optimized for performance with zero JavaScript shipped by default (React islands used only where interactivity is needed).
 
 ## Technology Stack
-- **Framework**: Astro 6 (static output)
+- **Framework**: Astro 7 (static output, Rust compiler, Vite 8)
+- **Runtime**: Node.js 24.21.0 (`.nvmrc`; CI and Cloudflare Workers Builds read it). Astro needs >= 22.23.4; 24.21.0 is preinstalled on Cloudflare's build image, so builds skip the Node download
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 (CSS-first config via @tailwindcss/vite)
 - **Package Manager**: pnpm
 - **Content**: Astro Content Collections with MDX
+- **Markdown**: Sätteri processor (`@astrojs/markdown-satteri`); GFM and smart punctuation are built in
 - **Image Processing**: Sharp (via astro:assets)
 - **UI Islands**: React (for Mermaid diagrams and interactive components)
 
@@ -37,17 +39,17 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `drafts/` - Draft blog posts
 
 ### Components (`/src/components`)
-- `.astro` components - ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel
+- `.astro` components - MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel
 - `.tsx` React components - Mermaid (client:idle), HeadingWithLink (MDX override), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
-- `rehype-heading-ids.ts` - Custom rehype plugin for heading anchor IDs
-- `rehype-callouts.ts` - GitHub-style callout blockquotes
-- `rehype-mermaid-blocks.ts` - Mermaid code block → component conversion
+- `hast-heading-ids.ts` - Sätteri hast plugin for heading anchor IDs (keeps existing anchors stable; Astro's built-in slugger would change them)
+- `hast-callouts.ts` - GitHub-style callout blockquotes
+- `hast-mermaid-blocks.ts` - Mermaid code block → `<Mermaid>` component in MDX (needs `mermaid` in `syntaxHighlight.excludeLangs`)
 
 ### About Content (`/content/about`)
-- `intro.md`, `professional.mdx`, `personal.md` - Compiled at build time with MDX
+- `intro.mdx`, `professional.mdx`, `personal.mdx` - `about` content collection, rendered by `about.astro` with `render()` through the same Sätteri pipeline and component overrides as blog posts
 
 ### Styling
 - **Global CSS**: `src/styles/global.css` with Tailwind v4, CSS variable theme system, animations
@@ -63,6 +65,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - Re-initializes after ViewTransitions page swaps
 
 ### Blog
+- Astro 7 strips whitespace between elements with JSX rules (`compressHTML: 'jsx'`). Add `{" "}` between inline elements that need a space
 - Astro Content Collections with Zod schema validation
 - MDX support with custom component overrides (headings, images, mermaid, pills)
 - Reading time estimation
@@ -73,9 +76,9 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - Scripts re-initialize via `astro:after-swap` event
 
 ## Configuration Files
-- `astro.config.mjs` - Astro config with MDX, React, Tailwind, rehype plugins
+- `astro.config.mjs` - Astro config with MDX, React, Tailwind, Sätteri hast plugins
 - `tsconfig.json` - Extends astro/tsconfigs/strict
-- `src/content.config.ts` - Content collection schemas
+- `src/content.config.ts` - Content collections (`blog`, `about`)
 
 ## Content Guidelines
 - Blog posts go in `src/content/blog/` as `.md` or `.mdx` files

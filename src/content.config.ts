@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 const blog = defineCollection({
@@ -12,4 +13,9 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+// Sections of the about page, rendered by src/pages/about.astro
+const about = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./content/about" }),
+});
+
+export const collections = { blog, about };
