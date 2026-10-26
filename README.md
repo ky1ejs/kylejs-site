@@ -49,7 +49,7 @@ src/
 ├── lib/                # Utilities & custom Sätteri hast plugins
 └── styles/             # Global CSS with theme variables
 
-content/about/          # About page content (MD/MDX)
+content/about/          # About page content (MDX, `about` collection)
 public/                 # Static assets (images, icons)
 ```
 

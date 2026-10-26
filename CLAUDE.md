@@ -49,7 +49,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `hast-mermaid-blocks.ts` - Mermaid code block → `<Mermaid>` component in MDX (needs `mermaid` in `syntaxHighlight.excludeLangs`)
 
 ### About Content (`/content/about`)
-- `intro.md`, `professional.mdx`, `personal.md` - Compiled at build time with MDX
+- `intro.mdx`, `professional.mdx`, `personal.mdx` - `about` content collection, rendered by `about.astro` with `render()` through the same Sätteri pipeline and component overrides as blog posts
 
 ### Styling
 - **Global CSS**: `src/styles/global.css` with Tailwind v4, CSS variable theme system, animations
@@ -78,7 +78,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ## Configuration Files
 - `astro.config.mjs` - Astro config with MDX, React, Tailwind, Sätteri hast plugins
 - `tsconfig.json` - Extends astro/tsconfigs/strict
-- `src/content.config.ts` - Content collection schemas
+- `src/content.config.ts` - Content collections (`blog`, `about`)
 
 ## Content Guidelines
 - Blog posts go in `src/content/blog/` as `.md` or `.mdx` files

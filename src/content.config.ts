@@ -13,4 +13,9 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+// Sections of the about page, rendered by src/pages/about.astro
+const about = defineCollection({
+  loader: glob({ pattern: "*.mdx", base: "./content/about" }),
+});
+
+export const collections = { blog, about };
