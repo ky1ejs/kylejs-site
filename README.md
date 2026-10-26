@@ -4,7 +4,7 @@ Personal website and blog built with [Astro](https://astro.build).
 
 ## Tech Stack
 
-- **Framework**: [Astro 6](https://astro.build) (static output)
+- **Framework**: [Astro 7](https://astro.build) (static output)
 - **Language**: TypeScript
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config)
 - **Content**: MDX / Markdown via Astro Content Collections
@@ -14,7 +14,7 @@ Personal website and blog built with [Astro](https://astro.build).
 
 ## Getting Started
 
-**Prerequisites**: Node.js 22 and [pnpm](https://pnpm.io)
+**Prerequisites**: Node.js 22.23.4+ and [pnpm](https://pnpm.io)
 
 ```bash
 pnpm install
@@ -46,7 +46,7 @@ src/
 │   └── blog/           # Blog posts (MD/MDX)
 ├── components/         # Astro & React components
 ├── layouts/            # Base, Site, and Post layouts
-├── lib/                # Utilities & custom rehype plugins
+├── lib/                # Utilities & custom Sätteri hast plugins
 └── styles/             # Global CSS with theme variables
 
 content/about/          # About page content (MD/MDX)
