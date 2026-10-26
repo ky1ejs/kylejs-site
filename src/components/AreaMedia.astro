@@ -1,0 +1,60 @@
+---
+/**
+ * Renders an area's images according to its `media.layout`.
+ * An image without a `src` becomes a labelled placeholder, so every layout is
+ * complete before the photography exists.
+ */
+interface Image {
+  src?: string;
+  alt: string;
+  label?: string;
+}
+
+interface Props {
+  layout: "grid" | "wide" | "side" | "hero";
+  images: Image[];
+}
+
+const { layout, images } = Astro.props;
+
+const heights: Record<Props["layout"], string> = {
+  grid: "h-24 sm:h-28",
+  wide: "h-32 sm:h-40",
+  side: "h-28 sm:h-32",
+  hero: "h-48 sm:h-64",
+};
+
+const wrappers: Record<Props["layout"], string> = {
+  grid: "grid grid-cols-3 gap-2",
+  wide: "grid grid-cols-1 gap-2",
+  side: "grid grid-cols-1 gap-2",
+  hero: "grid grid-cols-1 gap-2",
+};
+
+const height = heights[layout];
+---
+
+{
+  images.length > 0 && (
+    <div class={`${wrappers[layout]} mb-3`}>
+      {images.map((image) =>
+        image.src ? (
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading="lazy"
+            class={`${height} w-full rounded-lg object-cover`}
+          />
+        ) : (
+          <div
+            class={`${height} border-muted/60 text-muted flex w-full items-center justify-center rounded-lg border border-dashed p-2 text-center`}
+          >
+            <span class="text-[10px] tracking-widest uppercase">
+              {image.label ?? image.alt}
+            </span>
+          </div>
+        )
+      )}
+    </div>
+  )
+}
