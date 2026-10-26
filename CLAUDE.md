@@ -5,7 +5,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 
 ## Technology Stack
 - **Framework**: Astro 7 (static output, Rust compiler, Vite 8)
-- **Runtime**: Node.js >= 22.23.4 (see `.nvmrc`)
+- **Runtime**: Node.js 24.21.0 (`.nvmrc`; CI and Cloudflare Workers Builds read it). Astro needs >= 22.23.4; 24.21.0 is preinstalled on Cloudflare's build image, so builds skip the Node download
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 (CSS-first config via @tailwindcss/vite)
 - **Package Manager**: pnpm

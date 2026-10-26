@@ -14,7 +14,7 @@ Personal website and blog built with [Astro](https://astro.build).
 
 ## Getting Started
 
-**Prerequisites**: Node.js 22.23.4+ and [pnpm](https://pnpm.io)
+**Prerequisites**: Node.js 24 (see `.nvmrc`) and [pnpm](https://pnpm.io)
 
 ```bash
 pnpm install
