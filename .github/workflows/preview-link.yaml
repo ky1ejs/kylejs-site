@@ -4,8 +4,10 @@ name: Preview link
 # build finishes; otherwise its comment can arrive an hour late. This posts
 # (and keeps updating) one comment with the preview links as soon as the PR
 # opens, then fills in the build result when the Workers Builds check completes.
+# Once the Cloudflare comment arrives, this comment is deleted.
 #
-# check_run workflows always run from the default branch's copy of this file.
+# check_run and issue_comment workflows always run from the default branch's
+# copy of this file.
 
 on:
   pull_request:
@@ -13,11 +15,13 @@ on:
     types: [opened, reopened, synchronize]
   check_run:
     types: [completed]
+  issue_comment:
+    types: [created]
 
 permissions: {}
 
 concurrency:
-  group: preview-link-${{ github.head_ref || github.event.check_run.check_suite.head_branch }}
+  group: preview-link-${{ github.head_ref || github.event.check_run.check_suite.head_branch || github.event.issue.number }}
 
 jobs:
   comment:
@@ -26,7 +30,10 @@ jobs:
         github.event.pull_request.head.repo.full_name == github.repository) ||
       (github.event_name == 'check_run' &&
         github.event.check_run.name == 'Workers Builds: kylejs-site' &&
-        github.event.check_run.check_suite.head_branch != 'main')
+        github.event.check_run.check_suite.head_branch != 'main') ||
+      (github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        github.event.comment.user.login == 'cloudflare-workers-and-pages[bot]')
     runs-on: ubuntu-latest
     permissions:
       checks: read
@@ -42,7 +49,32 @@ jobs:
             const WORKER = 'kylejs-site';
             const SUBDOMAIN = 'k-830.workers.dev';
             const MARKER = '<!-- workers-preview-link -->';
+            const CLOUDFLARE_BOT = 'cloudflare-workers-and-pages[bot]';
             const { owner, repo } = context.repo;
+
+            // Finds this workflow's comment on the PR. Once Cloudflare's own
+            // comment is there, deletes ours and reports it as superseded.
+            async function ownComment(number) {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: number, per_page: 100,
+              });
+              const existing = comments.find(
+                (c) => c.user?.login === 'github-actions[bot]' && c.body?.startsWith(MARKER),
+              );
+              if (!comments.some((c) => c.user?.login === CLOUDFLARE_BOT)) {
+                return { existing, superseded: false };
+              }
+              if (existing) {
+                await github.rest.issues.deleteComment({ owner, repo, comment_id: existing.id });
+                core.info(`Cloudflare has commented on #${number}; deleted ours`);
+              }
+              return { superseded: true };
+            }
+
+            if (context.eventName === 'issue_comment') {
+              await ownComment(context.payload.issue.number);
+              return;
+            }
 
             // Mirrors wrangler's generatePreviewAlias (packages/deploy-helpers/
             // src/deploy/helpers/preview-alias.ts), which Workers Builds uses to
@@ -121,12 +153,8 @@ jobs:
             const body = lines.join('\n');
 
             for (const pr of pulls) {
-              const comments = await github.paginate(github.rest.issues.listComments, {
-                owner, repo, issue_number: pr.number, per_page: 100,
-              });
-              const existing = comments.find(
-                (c) => c.user?.login === 'github-actions[bot]' && c.body?.startsWith(MARKER),
-              );
+              const { existing, superseded } = await ownComment(pr.number);
+              if (superseded) continue;
               if (existing) {
                 if (existing.body === body) continue;
                 await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
