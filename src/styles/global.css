@@ -334,6 +334,30 @@
 
 /* ===== Post styles ===== */
 .post {
+  /* More space above a heading than below, so it reads as the start of its section */
+  h2 {
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* A heading that opens the post sits under the metadata, which already has spacing */
+  article > :nth-child(2):is(h2),
+  article > :nth-child(2) > h2 {
+    margin-top: 1.5rem;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  p + :is(ol, ul) {
+    margin-top: 0.5rem;
+  }
+
   img {
     max-width: 100%;
     height: auto;
