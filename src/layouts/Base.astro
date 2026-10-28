@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import PageLoader from "../components/PageLoader.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -94,5 +95,6 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
   </head>
   <body>
     <slot />
+    <PageLoader />
   </body>
 </html>

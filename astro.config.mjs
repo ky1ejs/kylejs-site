@@ -10,10 +10,8 @@ import hastMermaidBlocks from "./src/lib/hast-mermaid-blocks.ts";
 export default defineConfig({
   site: "https://kylejs.me",
   output: "static",
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport",
-  },
+  // PageLoader prefetches into an in-memory cache instead
+  prefetch: false,
   markdown: {
     // Sätteri applies GFM and smart punctuation by default
     processor: satteri({

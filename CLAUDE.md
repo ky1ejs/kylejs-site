@@ -39,7 +39,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `drafts/` - Draft blog posts
 
 ### Components (`/src/components`)
-- `.astro` components - MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel
+- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel
 - `.tsx` React components - Mermaid (client:idle), HeadingWithLink (MDX override), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
 
 ### Library (`/src/lib`)
@@ -73,6 +73,8 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 
 ### ViewTransitions
 - Smooth page transitions via `astro:transitions`
+- Astro's `prefetch` is off. `PageLoader.astro` fetches internal pages into memory as their links enter the viewport and serves ClientRouter navigations from that cache. Cloudflare serves HTML with `max-age=0, must-revalidate`, so an HTTP-cache prefetch still costs a round trip on click
+- If the page is not ready 100ms after a click, `PageLoader` replaces the `[data-page-content]` slot in `Site.astro` (or the whole body on the home page) with a skeleton shaped like the destination
 - Scripts re-initialize via `astro:after-swap` event
 
 ## Configuration Files
