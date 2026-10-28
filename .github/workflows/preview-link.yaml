@@ -1,0 +1,138 @@
+name: Preview link
+
+# Workers Builds only comments promptly when the PR already exists when the
+# build finishes; otherwise its comment can arrive an hour late. This posts
+# (and keeps updating) one comment with the preview links as soon as the PR
+# opens, then fills in the build result when the Workers Builds check completes.
+#
+# check_run workflows always run from the default branch's copy of this file.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+  check_run:
+    types: [completed]
+
+permissions: {}
+
+concurrency:
+  group: preview-link-${{ github.head_ref || github.event.check_run.check_suite.head_branch }}
+
+jobs:
+  comment:
+    if: >-
+      (github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'check_run' &&
+        github.event.check_run.name == 'Workers Builds: kylejs-site' &&
+        github.event.check_run.check_suite.head_branch != 'main')
+    runs-on: ubuntu-latest
+    permissions:
+      checks: read
+      pull-requests: write
+    steps:
+      - name: Post or update the preview comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const crypto = require('crypto');
+
+            const CHECK_NAME = 'Workers Builds: kylejs-site';
+            const WORKER = 'kylejs-site';
+            const SUBDOMAIN = 'k-830.workers.dev';
+            const MARKER = '<!-- workers-preview-link -->';
+            const { owner, repo } = context.repo;
+
+            // Mirrors wrangler's generatePreviewAlias (packages/deploy-helpers/
+            // src/deploy/helpers/preview-alias.ts), which Workers Builds uses to
+            // turn the branch into the alias. Only used until the check run
+            // reports the real URL.
+            function branchAlias(branch) {
+              const alias = branch
+                .replace(/[^a-zA-Z0-9-]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .toLowerCase();
+              if (!/^[a-z](?:[a-z0-9-]*[a-z0-9])?$/.test(alias)) return undefined;
+              const space = 63 - WORKER.length - 1;
+              if (alias.length <= space) return alias;
+              const hash = crypto.createHash('sha256').update(branch).digest('hex').slice(0, 4);
+              return `${alias.slice(0, space - 5)}-${hash}`;
+            }
+
+            // The check run summary lists "Preview URL" (this commit's version)
+            // and "Preview Alias URL" (the branch). Only accept workers.dev
+            // URLs for this Worker.
+            function summaryUrl(summary, label) {
+              const host = `[a-z0-9-]+-${WORKER}\\.${SUBDOMAIN.replace(/\./g, '\\.')}`;
+              const match = (summary || '').match(new RegExp(`^${label}: (https://${host})/?$`, 'm'));
+              return match?.[1];
+            }
+
+            let branch, sha, run, pulls;
+            if (context.eventName === 'check_run') {
+              run = context.payload.check_run;
+              branch = run.check_suite.head_branch;
+              sha = run.head_sha;
+              // check_run.pull_requests is empty when the PR opened after the
+              // check run was created, so look the PR up by branch.
+              const { data } = await github.rest.pulls.list({
+                owner, repo, state: 'open', head: `${owner}:${branch}`,
+              });
+              pulls = data.filter((pr) => pr.head.sha === sha);
+            } else {
+              const pr = context.payload.pull_request;
+              branch = pr.head.ref;
+              sha = pr.head.sha;
+              pulls = [pr];
+              const { data } = await github.rest.checks.listForRef({
+                owner, repo, ref: sha, check_name: CHECK_NAME, filter: 'latest',
+              });
+              run = data.check_runs[0];
+            }
+
+            if (pulls.length === 0) {
+              core.info(`No open PR has ${branch} at ${sha}.`);
+              return;
+            }
+
+            const alias = branchAlias(branch);
+            const branchUrl =
+              summaryUrl(run?.output?.summary, 'Preview Alias URL') ??
+              (alias && `https://${alias}-${WORKER}.${SUBDOMAIN}`);
+            const commitUrl = summaryUrl(run?.output?.summary, 'Preview URL');
+            const shortSha = sha.slice(0, 7);
+            const logs = run?.details_url ? ` · [Build logs](${run.details_url})` : '';
+
+            let status;
+            if (!run || run.status !== 'completed') {
+              status = `⏳ Building \`${shortSha}\`. The branch preview updates when the build finishes.`;
+            } else if (run.conclusion === 'success') {
+              status = `✅ Built \`${shortSha}\`${logs}`;
+            } else {
+              status = `❌ Build of \`${shortSha}\` ended with \`${run.conclusion}\`${logs}. The branch preview still serves the last successful build, if any.`;
+            }
+
+            const lines = [MARKER, '### Preview', '', status, ''];
+            if (branchUrl) lines.push(`- Branch: ${branchUrl}`);
+            if (commitUrl && run.conclusion === 'success') lines.push(`- This commit: ${commitUrl}`);
+            if (!branchUrl) lines.push(`Couldn't derive a preview alias from \`${branch}\`.`);
+            const body = lines.join('\n');
+
+            for (const pr of pulls) {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: pr.number, per_page: 100,
+              });
+              const existing = comments.find(
+                (c) => c.user?.login === 'github-actions[bot]' && c.body?.startsWith(MARKER),
+              );
+              if (existing) {
+                if (existing.body === body) continue;
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+                core.info(`Updated comment on #${pr.number}`);
+              } else {
+                await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
+                core.info(`Commented on #${pr.number}`);
+              }
+            }
