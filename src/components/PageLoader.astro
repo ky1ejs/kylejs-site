@@ -5,8 +5,8 @@
 // skeleton shaped like the destination page until the HTML arrives.
 //
 // Astro's own prefetch stores pages in the HTTP cache. Cloudflare serves HTML
-// with `max-age=0, must-revalidate`, so ClientRouter's fetch still waits on a
-// revalidation round trip. This cache skips that request entirely.
+// with `max-age=0, must-revalidate` and no ETag, so ClientRouter's fetch
+// downloads the page again on every click. This cache skips that request.
 ---
 
 <template id="skeleton-header">
