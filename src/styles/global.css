@@ -340,7 +340,8 @@
 }
 
 /* ===== Heading links (added by hast-heading-links) ===== */
-.heading-link-wrapper {
+heading-wrapper {
+  display: block;
   position: relative;
 }
 
@@ -377,7 +378,7 @@
   }
 }
 
-.heading-link-wrapper:hover .heading-link,
+heading-wrapper:hover .heading-link,
 .heading-link:focus-visible,
 .heading-link[data-copied] {
   opacity: 1;
