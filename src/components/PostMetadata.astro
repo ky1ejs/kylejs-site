@@ -13,10 +13,12 @@ interface Props {
 const { content, date, showAvatar = true } = Astro.props;
 ---
 
-<div class="divide-muted text-muted mb-4 flex items-center divide-x-[1px] text-sm">
-  <div class="pr-2">
-    Written by{" "}
-    <a href="/">
+<div
+  class="divide-muted text-muted mb-4 flex flex-col gap-1 text-sm whitespace-nowrap sm:flex-row sm:items-center sm:gap-0 sm:divide-x-[1px]"
+>
+  <div class="flex items-center sm:pr-2">
+    <span class="mr-1">Written by</span>
+    <a href="/" class="flex items-center">
       {showAvatar && (
         <Image
           src={meImage}
@@ -24,14 +26,16 @@ const { content, date, showAvatar = true } = Astro.props;
           height={60}
           alt="Profile picture of Kyle Satti"
           loading="eager"
-          class="mr-2 inline h-[30px] w-[30px] rounded-full transition hover:scale-110"
+          class="mr-2 h-[30px] w-[30px] rounded-full transition hover:scale-110"
         />
       )}
       <span class="hover:text-primary transition">Kyle Satti</span>
     </a>
   </div>
-  <div class="px-2">{calculateReadingTime(content)}</div>
-  <div class="pl-2">
-    <RelativeDateLabel date={date} />
+  <div class="divide-muted flex items-center divide-x-[1px] sm:pl-2">
+    <div class="pr-2">{calculateReadingTime(content)}</div>
+    <div class="pl-2">
+      <RelativeDateLabel date={date} />
+    </div>
   </div>
 </div>
