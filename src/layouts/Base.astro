@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import PageLoader from "../components/PageLoader.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -21,7 +22,9 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://kylejs.me";
-const canonicalUrl = ogUrl || `${siteUrl}${Astro.url.pathname}`;
+// `build.format: "file"` puts `.html` in the build-time pathname; public URLs have none
+const pathname = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+const canonicalUrl = ogUrl || `${siteUrl}${pathname}`;
 const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
 ---
 
@@ -94,5 +97,6 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
   </head>
   <body>
     <slot />
+    <PageLoader />
   </body>
 </html>

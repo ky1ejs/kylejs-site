@@ -1,0 +1,334 @@
+---
+// Prefetches internal pages into memory as their links scroll into view, and
+// serves ClientRouter navigations from that cache. When a page is not ready
+// within SKELETON_DELAY_MS of a click, the current content is swapped for a
+// skeleton shaped like the destination page until the HTML arrives.
+//
+// Astro's own prefetch stores pages in the HTTP cache. Cloudflare serves HTML
+// with `max-age=0, must-revalidate` and no ETag, so ClientRouter's fetch
+// downloads the page again on every click. This cache skips that request.
+---
+
+<template id="skeleton-header">
+  <div class="bg-background-primary sticky top-0 z-[1000] pt-4 pb-4">
+    <div class="content-inset flex items-center justify-between">
+      <div class="skeleton-block h-8 w-24"></div>
+      <div class="flex items-center gap-4">
+        <div class="skeleton-block h-5 w-12"></div>
+        <div class="skeleton-block h-5 w-12"></div>
+        <div class="skeleton-block h-8 w-8 rounded-full"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="skeleton-post">
+  <div class="pt-4">
+    <div class="skeleton-block mb-3 h-9 w-4/5"></div>
+    <div class="skeleton-block mb-8 h-4 w-64"></div>
+    <div class="flex flex-col gap-3">
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-11/12"></div>
+      <div class="skeleton-block mb-5 h-4 w-3/5"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-4/5"></div>
+      <div class="skeleton-block mb-5 h-4 w-2/5"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-11/12"></div>
+      <div class="skeleton-block h-4 w-3/4"></div>
+    </div>
+  </div>
+</template>
+
+<template id="skeleton-list">
+  <div class="mt-4 pt-4">
+    <div class="skeleton-block mb-4 h-7 w-3/5"></div>
+    <div class="mb-10 flex flex-col gap-3">
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-4/5"></div>
+    </div>
+    {
+      Array.from({ length: 5 }, () => (
+        <div class="mb-8">
+          <div class="skeleton-block mb-2 h-6 w-3/4" />
+          <div class="skeleton-block mb-2 h-4 w-full" />
+          <div class="skeleton-block h-3 w-48" />
+        </div>
+      ))
+    }
+  </div>
+</template>
+
+<template id="skeleton-page">
+  <div class="pt-4">
+    <div class="skeleton-block mb-6 h-8 w-2/5"></div>
+    <div class="flex flex-col gap-3">
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-3/4"></div>
+      <div class="skeleton-block mb-5 h-4 w-1/2"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-5/6"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import type { TransitionBeforePreparationEvent } from "astro:transitions/client";
+
+  // Below ~100ms a navigation reads as instant, so a skeleton would only flash
+  const SKELETON_DELAY_MS = 100;
+  // Pick up new deploys in long-lived tabs
+  const CACHE_TTL_MS = 5 * 60 * 1000;
+
+  type Page = { html: string; url: string; mediaType: string };
+  type CacheEntry = { page: Promise<Page | null>; createdAt: number };
+
+  const cache = new Map<string, CacheEntry>();
+
+  function cacheKey(url: URL): string {
+    return url.origin + url.pathname + url.search;
+  }
+
+  async function fetchPage(url: URL, priority: RequestPriority): Promise<Page | null> {
+    try {
+      const res = await fetch(url, { priority });
+      if (!res.ok) return null;
+      const mediaType = (res.headers.get("content-type") ?? "").split(";", 1)[0].trim();
+      if (mediaType !== "text/html" && mediaType !== "application/xhtml+xml") return null;
+      return { html: await res.text(), url: res.url, mediaType };
+    } catch {
+      return null;
+    }
+  }
+
+  function loadPage(url: URL, priority: RequestPriority): Promise<Page | null> {
+    const key = cacheKey(url);
+    const entry = cache.get(key);
+    if (entry && Date.now() - entry.createdAt < CACHE_TTL_MS) return entry.page;
+
+    const page = fetchPage(url, priority).then((result) => {
+      // Let the next request retry instead of caching a failure
+      if (!result) cache.delete(key);
+      return result;
+    });
+    cache.set(key, { page, createdAt: Date.now() });
+    return page;
+  }
+
+  // ===== Prefetch =====
+
+  function isSlowConnection(): boolean {
+    const connection = (navigator as { connection?: { saveData?: boolean; effectiveType?: string } })
+      .connection;
+    return !!connection && (!!connection.saveData || /2g/.test(connection.effectiveType ?? ""));
+  }
+
+  function prefetchableUrl(anchor: HTMLAnchorElement): URL | null {
+    if (anchor.target && anchor.target !== "_self") return null;
+    if (anchor.hasAttribute("download") || anchor.hasAttribute("data-astro-reload")) return null;
+    const url = new URL(anchor.href, location.href);
+    if (url.origin !== location.origin) return null;
+    if (url.pathname === location.pathname && url.search === location.search) return null;
+    // Skip files such as images and downloads; pages have no extension
+    if (/\.[a-z0-9]+$/i.test(url.pathname) && !url.pathname.endsWith(".html")) return null;
+    return url;
+  }
+
+  function prefetchAnchor(anchor: HTMLAnchorElement, priority: RequestPriority) {
+    const url = prefetchableUrl(anchor);
+    if (url) void loadPage(url, priority);
+  }
+
+  const viewportObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      viewportObserver.unobserve(entry.target);
+      prefetchAnchor(entry.target as HTMLAnchorElement, "low");
+    }
+  });
+
+  function observeLinks() {
+    viewportObserver.disconnect();
+    if (isSlowConnection()) return;
+    for (const anchor of document.querySelectorAll<HTMLAnchorElement>("a[href]")) {
+      viewportObserver.observe(anchor);
+    }
+  }
+
+  // A press lands ~100ms before the click; start fetching links that were never in view
+  for (const type of ["touchstart", "mousedown"] as const) {
+    document.addEventListener(
+      type,
+      (event) => {
+        const anchor = (event.target as Element | null)?.closest?.("a[href]");
+        if (anchor instanceof HTMLAnchorElement) prefetchAnchor(anchor, "high");
+      },
+      { passive: true },
+    );
+  }
+
+  observeLinks();
+  document.addEventListener("astro:page-load", observeLinks);
+
+  // ===== Skeleton =====
+
+  type Skeleton = {
+    element: HTMLElement;
+    hidden: HTMLElement[];
+    scroll: { scrollX: number; scrollY: number };
+  };
+
+  let skeleton: Skeleton | null = null;
+
+  function skeletonVariant(url: URL): string {
+    const path = url.pathname.replace(/\/$/, "");
+    if (path === "/posts") return "skeleton-list";
+    if (path.startsWith("/posts/")) return "skeleton-post";
+    return "skeleton-page";
+  }
+
+  function cloneTemplate(id: string): DocumentFragment {
+    const template = document.getElementById(id) as HTMLTemplateElement;
+    return template.content.cloneNode(true) as DocumentFragment;
+  }
+
+  function showSkeleton(to: URL, navigationType: string) {
+    const previous = skeleton;
+    previous?.element.remove();
+    // Read before hiding content, which clamps the scroll offset
+    const scroll = previous?.scroll ?? { scrollX, scrollY };
+
+    const element = document.createElement("div");
+    element.setAttribute("aria-busy", "true");
+    element.setAttribute("aria-label", "Loading page");
+
+    const content = cloneTemplate(skeletonVariant(to));
+    const contentSlot = document.querySelector<HTMLElement>("[data-page-content]");
+    let hidden: HTMLElement[];
+
+    if (contentSlot) {
+      // Keep the real header and footer; replace only the page body
+      element.className = contentSlot.className;
+      element.append(content);
+      contentSlot.after(element);
+      hidden = [contentSlot];
+    } else {
+      // Pages without the site chrome (home) get a full-page skeleton
+      const inset = document.createElement("div");
+      inset.className = "mx-auto max-w-[800px] content-inset";
+      inset.append(content);
+      element.append(cloneTemplate("skeleton-header"), inset);
+      hidden = [...document.body.children].filter(
+        (child): child is HTMLElement => child instanceof HTMLElement && !child.hidden,
+      );
+      document.body.append(element);
+    }
+
+    for (const el of hidden) el.hidden = true;
+    skeleton = { element, hidden: previous?.hidden ?? hidden, scroll };
+
+    // Back/forward restores its own scroll position after the swap
+    if (navigationType !== "traverse") window.scrollTo(0, 0);
+  }
+
+  function hideSkeleton() {
+    if (!skeleton) return;
+    skeleton.element.remove();
+    for (const el of skeleton.hidden) el.hidden = false;
+    window.scrollTo(skeleton.scroll.scrollX, skeleton.scroll.scrollY);
+    skeleton = null;
+  }
+
+  // ===== Navigation =====
+
+  function preloadStylesheets(newDocument: Document): Promise<unknown>[] {
+    const pending: Promise<unknown>[] = [];
+    for (const link of newDocument.querySelectorAll<HTMLLinkElement>("head link[rel=stylesheet]")) {
+      const href = link.getAttribute("href");
+      if (!href || document.querySelector(`link[rel=stylesheet][href="${CSS.escape(href)}"]`)) {
+        continue;
+      }
+      const preload = document.createElement("link");
+      preload.rel = "preload";
+      preload.as = "style";
+      preload.href = href;
+      pending.push(
+        new Promise((resolve) => {
+          preload.addEventListener("load", resolve);
+          preload.addEventListener("error", resolve);
+        }),
+      );
+      document.head.append(preload);
+    }
+    return pending;
+  }
+
+  function untilAborted(signal: AbortSignal): Promise<null> {
+    return new Promise((resolve) => {
+      if (signal.aborted) resolve(null);
+      signal.addEventListener("abort", () => resolve(null), { once: true });
+    });
+  }
+
+  let latestNavigation = 0;
+
+  async function loadFromCache(event: TransitionBeforePreparationEvent, defaultLoader: () => Promise<void>) {
+    const navigation = ++latestNavigation;
+    // A navigation that starts while a skeleton shows keeps it up without a gap
+    const skeletonTimer = skeleton
+      ? (showSkeleton(event.to, event.navigationType), undefined)
+      : window.setTimeout(() => showSkeleton(event.to, event.navigationType), SKELETON_DELAY_MS);
+
+    try {
+      const page = await Promise.race([loadPage(event.to, "high"), untilAborted(event.signal)]);
+      if (event.signal.aborted) return;
+      if (!page) {
+        // Let ClientRouter decide, e.g. fall back to a full page load
+        await defaultLoader();
+        return;
+      }
+
+      const finalUrl = new URL(page.url);
+      if (finalUrl.origin !== event.to.origin) {
+        event.preventDefault();
+        return;
+      }
+      if (cacheKey(finalUrl) !== cacheKey(event.to)) {
+        finalUrl.hash = event.to.hash;
+        event.to = finalUrl;
+      }
+
+      const newDocument = new DOMParser().parseFromString(page.html, page.mediaType as DOMParserSupportedType);
+      newDocument.querySelectorAll("noscript").forEach((el) => el.remove());
+      if (!newDocument.querySelector('[name="astro-view-transitions-enabled"]')) {
+        event.preventDefault();
+        return;
+      }
+      event.newDocument = newDocument;
+      await Promise.all(preloadStylesheets(newDocument));
+    } finally {
+      window.clearTimeout(skeletonTimer);
+      // Restore the page if this navigation was cancelled and no newer one replaced it
+      if (event.signal.aborted && navigation === latestNavigation) hideSkeleton();
+    }
+  }
+
+  document.addEventListener("astro:before-preparation", (event) => {
+    if (event.formData) return;
+    const defaultLoader = event.loader;
+    event.loader = () => loadFromCache(event, defaultLoader);
+  });
+
+  document.addEventListener("astro:before-swap", (event) => {
+    if (!skeleton) return;
+    // ClientRouter saved the skeleton's scroll offset for the page being left; restore the real one
+    if (event.navigationType !== "traverse" && history.state) {
+      history.replaceState({ ...history.state, ...skeleton.scroll }, "");
+    }
+    skeleton = null;
+  });
+</script>
+
