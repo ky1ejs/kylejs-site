@@ -35,6 +35,8 @@ if (!matchingKey) {
 const image = (await images[matchingKey]()).default;
 
 const buffer = await sharp(`${process.cwd()}${matchingKey}`).resize(20).blur().webp({ quality: 20 }).toBuffer();
+// Shown as the img background until the image paints over it, then cleared
+// so it cannot show through transparent pixels
 const placeholder = `data:image/webp;base64,${buffer.toString("base64")}`;
 ---
 
@@ -47,9 +49,9 @@ const placeholder = `data:image/webp;base64,${buffer.toString("base64")}`;
   width={Math.min(image.width, MAX_WIDTH)}
   widths={widths}
   sizes={sizes}
-  class:list={[className, "img-loading"]}
+  class={className}
   loading={priority ? "eager" : "lazy"}
   fetchpriority={priority ? "high" : undefined}
-  style={`background-image:url(${placeholder});background-size:cover`}
-  onload="this.classList.add('img-loaded')"
+  style={`background-image:url(${placeholder});background-size:cover;background-position:center`}
+  onload="this.style.backgroundImage='none'"
 />
