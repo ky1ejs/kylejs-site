@@ -20,6 +20,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm preview` - Preview production build locally
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Run ESLint with auto-fix
+- `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 
 ## Project Structure
 
@@ -88,7 +89,9 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ## Content Guidelines
 - Blog posts go in `src/content/blog/` as `.md` or `.mdx` files
 - Frontmatter must include `title` and `date`; `description`, `shareImage`, and `reviewers` are optional
-- Images in `/public/posts/images/`
+- Images in `src/assets/posts/images/`, referenced in MDX as `<Image src="/posts/images/<file>">`. A missing file fails the build
+- Add `priority` to above-the-fold images, and `sizes` to images narrower than the post column
+- Never put images in `public/`: Astro copies them unoptimized and `pnpm check:images` fails CI
 - About page content in `/content/about/`
 
 # Workflow

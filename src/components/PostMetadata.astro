@@ -1,6 +1,8 @@
 ---
 import RelativeDateLabel from "./RelativeDateLabel.astro";
 import calculateReadingTime from "../lib/reading-time";
+import { Image } from "astro:assets";
+import meImage from "../assets/me.jpg";
 
 interface Props {
   content: string;
@@ -16,11 +18,12 @@ const { content, date, showAvatar = true } = Astro.props;
     Written by{" "}
     <a href="/">
       {showAvatar && (
-        <img
-          src="/me.jpg"
-          width="30"
-          height="30"
+        <Image
+          src={meImage}
+          width={60}
+          height={60}
           alt="Profile picture of Kyle Satti"
+          loading="eager"
           class="mr-2 inline h-[30px] w-[30px] rounded-full transition hover:scale-110"
         />
       )}
