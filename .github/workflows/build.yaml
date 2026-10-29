@@ -41,3 +41,9 @@ jobs:
 
       - name: Check images
         run: pnpm check:images
+
+      - name: Install Chromium for the layout shift check
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Check layout shift
+        run: pnpm check:layout-shift

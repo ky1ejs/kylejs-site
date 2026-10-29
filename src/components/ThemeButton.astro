@@ -1,9 +1,17 @@
 ---
 interface Props {
-  position?: "top" | "bottom";
+  // Where the popover opens relative to the button. "responsive" opens above
+  // on narrow screens, where the home page puts the button at the bottom
+  position?: "top" | "bottom" | "responsive";
 }
 
 const { position = "bottom" } = Astro.props;
+
+const POPOVER_POSITION = {
+  top: "bottom-12",
+  bottom: "top-10",
+  responsive: "bottom-12 min-[500px]:top-10 min-[500px]:bottom-auto",
+};
 ---
 
 <div class="bg-background-secondary hover:bg-background-200 relative flex h-10 w-12 items-center justify-center rounded-xl">
@@ -16,7 +24,7 @@ const { position = "bottom" } = Astro.props;
   </button>
   <div
     id="theme-popover"
-    class={`absolute -left-20 ${position === "top" ? "bottom-12" : "top-10"} bg-background-secondary hidden w-32 rounded-xl text-sm shadow-md dark:shadow-none`}
+    class={`absolute -left-20 ${POPOVER_POSITION[position]} bg-background-secondary hidden w-32 rounded-xl text-sm shadow-md dark:shadow-none`}
   >
     <button class="theme-option hover:bg-background-primary w-full px-2 py-1 text-left" data-theme-value="light">
       ☀️ light
