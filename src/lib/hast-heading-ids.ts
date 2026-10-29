@@ -26,6 +26,14 @@ export default function hastHeadingIds() {
     element: {
       filter: ["h1", "h2", "h3", "h4", "h5", "h6"],
       visit(node, ctx) {
+        // Keep IDs set upstream, e.g. GFM's "footnote-label", which the
+        // footnote refs point at through aria-describedby
+        const existing = node.properties.id;
+        if (typeof existing === "string") {
+          usedIds.add(existing);
+          return;
+        }
+
         const id = slugify(ctx.textContent(node));
 
         let finalId = id;

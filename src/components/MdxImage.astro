@@ -7,9 +7,12 @@ interface Props {
   src: string;
   alt?: string;
   className?: string;
+  // Responsive srcset; omit for a single image at the source's size
+  widths?: number[];
+  sizes?: string;
 }
 
-const { src, alt = "", className } = Astro.props;
+const { src, alt = "", className, widths, sizes } = Astro.props;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/posts/images/*.{jpeg,jpg,png,webp}",
@@ -32,6 +35,8 @@ if (matchingKey) {
     <Image
       src={image}
       alt={alt}
+      widths={widths}
+      sizes={sizes}
       class:list={[className, "img-loading"]}
       loading="lazy"
       style={`background-image:url(${placeholder});background-size:cover`}
