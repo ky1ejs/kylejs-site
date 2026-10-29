@@ -2,6 +2,7 @@
 import Base from "./Base.astro";
 import ThemeButton from "../components/ThemeButton.astro";
 import Copyright from "../components/Copyright.astro";
+import HeadingLinks from "../components/HeadingLinks.astro";
 
 interface Props {
   title?: string;
@@ -31,7 +32,7 @@ const props = Astro.props;
     </div>
   </div>
   <div class="mx-auto max-w-[800px]">
-    <div class="content-inset">
+    <div class="content-inset" data-page-content>
       <slot />
     </div>
     <div class="content-inset text-muted pt-12 pb-4 text-center">
@@ -43,4 +44,5 @@ const props = Astro.props;
       <Copyright />
     </div>
   </div>
+  <HeadingLinks />
 </Base>

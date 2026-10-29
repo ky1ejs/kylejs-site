@@ -28,7 +28,7 @@ const CALLOUT_REGEX = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*([^\n]*)/i;
  * Copies a node into a plain object. Sätteri hands visitors lazy, read-only
  * views of the tree, which can't be cloned with structuredClone.
  */
-function toPlain(node: ChildNode): ChildNode {
+export function toPlain(node: ChildNode): ChildNode {
   const copy: Record<string, unknown> = { type: node.type };
   if ("tagName" in node) copy.tagName = node.tagName;
   if ("properties" in node) copy.properties = { ...node.properties };

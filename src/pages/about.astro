@@ -2,7 +2,6 @@
 import { getEntry, render } from "astro:content";
 import Site from "../layouts/Site.astro";
 import { Pill, PillCollection } from "../components/Pill";
-import { H1, H2, H3, H4, H5, H6 } from "../components/HeadingWithLink";
 
 async function renderAboutSection(id: string) {
   const entry = await getEntry("about", id);
@@ -15,7 +14,6 @@ const Professional = await renderAboutSection("professional");
 const Personal = await renderAboutSection("personal");
 
 const components = {
-  h1: H1, h2: H2, h3: H3, h4: H4, h5: H5, h6: H6,
   Pill, PillCollection,
   Link: "a",
 };

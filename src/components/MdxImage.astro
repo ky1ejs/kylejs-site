@@ -9,6 +9,8 @@ interface Props {
   className?: string;
   // Rendered width hint for srcset selection; defaults to the full post column
   sizes?: string;
+  // Explicit srcset widths; omit to use Astro's breakpoints up to MAX_WIDTH
+  widths?: number[];
   // Above-the-fold images: load eagerly at high priority, no blur-in
   priority?: boolean;
 }
@@ -18,7 +20,7 @@ const COLUMN_SIZES = "(min-width: 800px) 736px, calc(100vw - 4rem)";
 // Column width at 2x DPR; larger files are never picked
 const MAX_WIDTH = 1472;
 
-const { src, alt = "", className, sizes = COLUMN_SIZES, priority = false } = Astro.props;
+const { src, alt = "", className, sizes = COLUMN_SIZES, widths, priority = false } = Astro.props;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/posts/images/*.{jpeg,jpg,png,webp}",
@@ -46,6 +48,7 @@ if (!priority) {
   fallbackFormat="webp"
   layout="constrained"
   width={Math.min(image.width, MAX_WIDTH)}
+  widths={widths}
   sizes={sizes}
   class:list={[className, placeholder && "img-loading"]}
   loading={priority ? "eager" : "lazy"}

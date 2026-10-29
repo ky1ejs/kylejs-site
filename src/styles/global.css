@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@fontsource-variable/lexend";
 
 @theme {
   --breakpoint-sm: 460px;
@@ -112,6 +113,9 @@
 
   --primary: var(--primary-500);
 
+  /* Bold text */
+  --emphasis: var(--primary);
+
   --secondary-50: #eeecf8;
   --secondary-100: #ddd9f2;
   --secondary-200: #bab4e4;
@@ -185,6 +189,9 @@
 
   --primary: var(--primary-800);
 
+  /* Bold text: a shade lighter and more saturated than primary-800 */
+  --emphasis: #d6adff;
+
   --secondary-50: #080713;
   --secondary-100: #110d26;
   --secondary-200: #211b4b;
@@ -243,7 +250,7 @@
   }
 
   strong {
-    color: var(--primary);
+    color: var(--emphasis);
   }
 
   a {
@@ -332,8 +339,121 @@
   }
 }
 
+/* ===== Heading links (added by hast-heading-links) ===== */
+.heading-link-wrapper {
+  position: relative;
+}
+
+/* An icon in the left gutter: 2rem wide, so the pointer can move from the
+   heading to it without losing :hover */
+.heading-link {
+  --icon-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+  --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  position: absolute;
+  top: 50%;
+  left: -2rem;
+  width: 2rem;
+  height: 2rem;
+  transform: translateY(-50%);
+  color: var(--muted);
+  background-color: currentColor;
+  /* Icon at the outer edge, clear of the h2 highlight's 10px overhang */
+  -webkit-mask: var(--icon-link) left center / 1.125rem no-repeat;
+  mask: var(--icon-link) left center / 1.125rem no-repeat;
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+
+  &[data-copied] {
+    color: var(--primary);
+    -webkit-mask-image: var(--icon-check);
+    mask-image: var(--icon-check);
+  }
+}
+
+.heading-link-wrapper:hover .heading-link,
+.heading-link:focus-visible,
+.heading-link[data-copied] {
+  opacity: 1;
+}
+
 /* ===== Post styles ===== */
 .post {
+  --font-heading: "Lexend Variable", system-ui, sans-serif;
+  --heading-mark-bg: var(--primary-100);
+  --heading-mark-text: var(--primary-800);
+  --h3-color: var(--primary-800);
+
+  .post-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  /* More space above a heading than below, so it reads as the start of its section */
+  h2 {
+    margin-top: 2.75rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.625rem;
+    line-height: 1.35;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    color: var(--heading-mark-text);
+  }
+
+  /* Highlighter behind the words, added by hast-heading-marks */
+  .heading-mark {
+    padding: 1px 10px 3px;
+    margin-left: -10px;
+    border-radius: 4px 10px 6px 12px;
+    background-color: var(--heading-mark-bg);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* A heading that opens the post sits under the metadata, which already has spacing */
+  article > :nth-child(2):is(h2),
+  article > :nth-child(2) > h2 {
+    margin-top: 1.5rem;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.25rem;
+    font-family: var(--font-heading);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    /* Not the purple of bold text, so h3s don't read as bold paragraphs */
+    color: var(--h3-color);
+
+    /* Short hand-drawn squiggle under the start of the heading. A mask, so it
+       takes the theme's primary colour. Replaces the base dotted underline */
+    &::after {
+      content: "";
+      display: block;
+      width: 64px;
+      height: 10px;
+      margin-top: 1px;
+      border: 0;
+      background-color: var(--primary);
+      --squiggle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 10'%3E%3Cpath d='M2 5 Q 7 0 12 5 T 22 5 T 32 5 T 42 5 T 52 5 T 62 5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round'/%3E%3C/svg%3E");
+      -webkit-mask: var(--squiggle) no-repeat;
+      mask: var(--squiggle) no-repeat;
+    }
+  }
+
+  p + :is(ol, ul) {
+    margin-top: 0.5rem;
+  }
+
   img {
     max-width: 100%;
     height: auto;
@@ -417,6 +537,22 @@
     background-color: #fee2e2;
   }
 
+  .footnotes {
+    margin-top: 3rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--text-300);
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+
+    li + li {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .data-footnote-backref {
+    text-decoration: none;
+  }
+
   .mermaid-diagram {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -441,6 +577,11 @@
 }
 
 [data-theme="dark"] .post {
+  --heading-mark-bg: var(--primary-300);
+  --heading-mark-text: var(--primary-950);
+  /* Clearly purple, a step deeper than bold text (primary-800) */
+  --h3-color: var(--primary-700);
+
   .callout-note {
     background-color: var(--primary-100);
   }
@@ -556,6 +697,27 @@
   animation-iteration-count: infinite;
   transform-origin: 70% 70%;
   display: inline-block;
+}
+
+/* ===== Page loading skeleton (PageLoader.astro) ===== */
+/* In the components layer so utilities such as rounded-full override it */
+@layer components {
+  .skeleton-block {
+    border-radius: 0.375rem;
+    background-color: color-mix(in srgb, var(--text-950) 9%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton-block {
+      animation: skeleton-pulse 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* ===== Selector (Bio toggle) ===== */
