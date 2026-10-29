@@ -21,6 +21,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
+- `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
 
 ## Project Structure
 
@@ -73,6 +74,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - Astro Content Collections with Zod schema validation
 - MDX support with custom component overrides (headings, images, mermaid, pills)
 - Reading time estimation
+- Set anything that depends on the reader (relative dates, theme, viewport) before paint: in CSS, or in an inline script beside the element plus an `astro:before-swap` handler on the incoming document (see `RelativeDateLabel.astro` and `Base.astro`). A module script or `astro:after-swap` handler can run after paint, and `pnpm check:layout-shift` fails on the shift
 - Safari Reader drops a `div` whose class or id matches words like `link`, `meta` or `share`, or whose text is under 25 characters. Wrap short blocks in a `p` or a custom element instead
 - OG/Twitter metadata per post
 
