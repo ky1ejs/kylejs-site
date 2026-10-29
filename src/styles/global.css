@@ -409,10 +409,15 @@ heading-wrapper:hover .heading-link,
     color: var(--heading-mark-text);
   }
 
+  /* Pull the h2 into the gutter rather than the mark: a negative margin on the
+     mark only shifts its first line, so a wrapped heading indents its second */
+  h2:has(> .heading-mark) {
+    margin-left: -10px;
+  }
+
   /* Highlighter behind the words, added by hast-heading-marks */
   .heading-mark {
     padding: 1px 10px 3px;
-    margin-left: -10px;
     border-radius: 4px 10px 6px 12px;
     background-color: var(--heading-mark-bg);
     box-decoration-break: clone;
