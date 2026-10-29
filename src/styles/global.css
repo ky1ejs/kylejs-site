@@ -466,13 +466,16 @@ heading-wrapper:hover .heading-link,
     height: auto;
   }
 
-  img.img-loading {
-    opacity: 0;
-    transition: opacity var(--img-fade, 0.3s) ease-in;
-  }
+  /* Only with scripts on: the inline onload that adds img-loaded is a script */
+  @media (scripting: enabled) {
+    img.img-loading {
+      opacity: 0;
+      transition: opacity var(--img-fade, 0.3s) ease-in;
+    }
 
-  img.img-loaded {
-    opacity: 1;
+    img.img-loaded {
+      opacity: 1;
+    }
   }
   table {
     width: 100%;
