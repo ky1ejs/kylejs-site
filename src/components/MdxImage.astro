@@ -34,24 +34,41 @@ if (!matchingKey) {
 }
 const image = (await images[matchingKey]()).default;
 
-const buffer = await sharp(`${process.cwd()}${matchingKey}`).resize(20).blur().webp({ quality: 20 }).toBuffer();
-// Shown as the img background until the image paints over it, then cleared
-// so it cannot show through transparent pixels
-const placeholder = `data:image/webp;base64,${buffer.toString("base64")}`;
+const width = Math.min(image.width, MAX_WIDTH);
+
+// A 16px-wide thumbnail stretched over an SVG Gaussian blur. Scaling the
+// thumbnail up on its own shows its pixel grid as blocks. The blur radius is
+// 3% of the image width, and the alpha table keeps the edges opaque.
+const thumbWidth = 16;
+const thumbHeight = Math.max(1, Math.round((thumbWidth * image.height) / image.width));
+const thumb = await sharp(`${process.cwd()}${matchingKey}`)
+  .resize(thumbWidth, thumbHeight, { fit: "fill" })
+  .webp({ quality: 50 })
+  .toBuffer();
+const svgWidth = thumbWidth * 40;
+const svgHeight = thumbHeight * 40;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgWidth} ${svgHeight}"><filter id="b" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="${svgWidth * 0.03}"/><feComponentTransfer><feFuncA type="discrete" tableValues="1 1"/></feComponentTransfer></filter><image width="100%" height="100%" preserveAspectRatio="none" filter="url(#b)" href="data:image/webp;base64,${thumb.toString("base64")}"/></svg>`;
+const placeholder = `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 ---
 
-<Picture
-  src={image}
-  alt={alt}
-  formats={["avif"]}
-  fallbackFormat="webp"
-  layout="constrained"
-  width={Math.min(image.width, MAX_WIDTH)}
-  widths={widths}
-  sizes={sizes}
-  class={className}
-  loading={priority ? "eager" : "lazy"}
-  fetchpriority={priority ? "high" : undefined}
-  style={`background-image:url(${placeholder});background-size:cover;background-position:center`}
-  onload="this.style.backgroundImage='none'"
-/>
+<span class="img-frame">
+  <span
+    class:list={["img-placeholder", className]}
+    style={`--img-width:${width}px;--img-ratio:${image.width}/${image.height};background-image:url(${placeholder})`}
+    aria-hidden="true"
+  ></span>
+  <Picture
+    src={image}
+    alt={alt}
+    formats={["avif"]}
+    fallbackFormat="webp"
+    layout="constrained"
+    width={width}
+    widths={widths}
+    sizes={sizes}
+    class:list={[className, "img-loading"]}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : undefined}
+    onload="this.classList.add('img-loaded')"
+  />
+</span>

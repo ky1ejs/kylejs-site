@@ -468,7 +468,7 @@ heading-wrapper:hover .heading-link,
 
   img.img-loading {
     opacity: 0;
-    transition: opacity 0.3s ease-in;
+    transition: opacity var(--img-fade, 0.3s) ease-in;
   }
 
   img.img-loaded {
@@ -726,6 +726,45 @@ heading-wrapper:hover .heading-link,
   animation-iteration-count: infinite;
   transform-origin: 70% 70%;
   display: inline-block;
+}
+
+/* ===== Image placeholder (MdxImage.astro) ===== */
+/* The placeholder and the img share one grid cell. The img fades in over the
+   placeholder, then the placeholder hides so it cannot show through
+   transparent pixels. In the components layer so the classes a post passes
+   (w-full, aspect-*, rounded) override the default size */
+@layer components {
+  .img-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    place-items: start;
+
+    > *,
+    > picture > img {
+      grid-area: 1 / 1;
+    }
+
+    > picture {
+      display: contents;
+    }
+  }
+
+  /* Matches the img box: its width attribute, capped at the column, at the
+     image's aspect ratio */
+  .img-placeholder {
+    display: block;
+    width: var(--img-width);
+    max-width: 100%;
+    aspect-ratio: var(--img-ratio);
+    background-size: cover;
+    background-position: center;
+    /* Hides once the img has faded in over it */
+    transition: opacity 0s var(--img-fade, 0.3s);
+  }
+
+  .img-frame:has(img.img-loaded) > .img-placeholder {
+    opacity: 0;
+  }
 }
 
 /* ===== Page loading skeleton (PageLoader.astro) ===== */
