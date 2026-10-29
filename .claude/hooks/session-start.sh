@@ -6,7 +6,8 @@
 # ~130 byte LFS pointer files, so `astro build` fails as soon as Sharp tries to
 # process an "image" that is really a text pointer.
 #
-# This hook installs git-lfs, materialises the real binaries, and installs node deps.
+# This hook installs git-lfs, materialises the real binaries, installs the .nvmrc
+# Node version, and installs node deps.
 set -euo pipefail
 
 # Only run in Claude Code on the web - local machines already have their own setup.
@@ -42,6 +43,23 @@ sample="$(git lfs ls-files -n | head -1 || true)"
 if [ -n "$sample" ] && [ -f "$sample" ] && head -c 40 "$sample" | grep -q "git-lfs.github.com"; then
   echo "WARNING: $sample is still a Git LFS pointer - image builds will fail." >&2
 fi
+
+# The container's default Node (/opt/node22) is older than Astro's minimum, so
+# install the .nvmrc version and put it first on PATH. CLAUDE_ENV_FILE carries
+# the PATH into every later Bash command in the session.
+echo "Installing Node $(cat .nvmrc)..."
+export NVM_DIR="${NVM_DIR:-/opt/nvm}"
+set +u
+# shellcheck source=/dev/null
+. "$NVM_DIR/nvm.sh" --no-use
+nvm install --no-progress >/dev/null
+node_bin="$(dirname "$(nvm which "$(cat .nvmrc)")")"
+set -u
+export PATH="$node_bin:$PATH"
+if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
+  echo "export PATH=\"$node_bin:\$PATH\"" >> "$CLAUDE_ENV_FILE"
+fi
+echo "Using Node $(node -v) from $node_bin"
 
 echo "Installing node dependencies..."
 export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
