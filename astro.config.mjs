@@ -12,10 +12,14 @@ import hastHeadingMarks from "./src/lib/hast-heading-marks.ts";
 export default defineConfig({
   site: "https://kylejs.me",
   output: "static",
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport",
+  // Pages build to `about.html` rather than `about/index.html`, so Cloudflare
+  // serves them at `/about` without a trailing-slash redirect
+  trailingSlash: "never",
+  build: {
+    format: "file",
   },
+  // PageLoader prefetches into an in-memory cache instead
+  prefetch: false,
   markdown: {
     // Sätteri applies GFM and smart punctuation by default
     processor: satteri({
