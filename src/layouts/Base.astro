@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import PageLoader from "../components/PageLoader.astro";
+import WebAnalytics from "../components/WebAnalytics.astro";
 import "../styles/global.css";
 import lexendLatinUrl from "@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2?url";
 
@@ -86,6 +87,7 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
       document.startViewTransition = undefined;
     </script>
     <ClientRouter />
+    <WebAnalytics />
 
     {/* Theme detection - runs before paint to prevent flash */}
     <script is:inline>

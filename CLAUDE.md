@@ -23,6 +23,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
+- `node scripts/weekly-report.mjs --dry-run` - Print the weekly traffic and activity email. `.github/workflows/weekly-report.yaml` sends it on Mondays; the script's header lists the secrets it reads
 
 ## Project Structure
 
@@ -42,7 +43,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `drafts/` - Draft blog posts
 
 ### Components (`/src/components`)
-- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
+- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), WebAnalytics (Cloudflare Web Analytics beacon, loaded only on kylejs.me), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
 - `.tsx` React components - Mermaid (client:idle), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
 
 ### Library (`/src/lib`)
