@@ -338,7 +338,6 @@
   --font-heading: "Lexend Variable", system-ui, sans-serif;
   --heading-mark-bg: var(--primary-100);
   --heading-mark-text: var(--primary-800);
-  --h3-color: var(--primary-600);
 
   .post-title {
     font-family: var(--font-heading);
@@ -378,10 +377,11 @@
     margin-top: 2rem;
     margin-bottom: 0.25rem;
     font-family: var(--font-heading);
-    font-size: 1.3125rem;
+    font-size: 1.375rem;
     font-weight: 600;
     letter-spacing: 0.015em;
-    color: var(--h3-color);
+    /* The h2's text colour, so h3s don't read as purple bold text */
+    color: var(--heading-mark-text);
 
     &::after {
       display: none;
@@ -517,7 +517,6 @@
 [data-theme="dark"] .post {
   --heading-mark-bg: var(--primary-300);
   --heading-mark-text: var(--primary-950);
-  --h3-color: var(--primary-700);
 
   .callout-note {
     background-color: var(--primary-100);
