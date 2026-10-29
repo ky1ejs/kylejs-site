@@ -743,6 +743,22 @@ heading-wrapper:hover .heading-link,
   }
 }
 
+/* The skeleton fades out over the incoming page while its content fades in */
+.skeleton-leaving {
+  pointer-events: none;
+  animation: skeleton-leave 0.2s ease-in forwards;
+}
+
+[data-skeleton-swap] [data-page-content] {
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes skeleton-leave {
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes skeleton-pulse {
   50% {
     opacity: 0.5;
