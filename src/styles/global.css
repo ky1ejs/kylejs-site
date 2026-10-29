@@ -338,6 +338,7 @@
   --font-heading: "Lexend Variable", system-ui, sans-serif;
   --heading-mark-bg: var(--primary-100);
   --heading-mark-text: var(--primary-800);
+  --h3-color: var(--primary-800);
 
   .post-title {
     font-family: var(--font-heading);
@@ -380,8 +381,8 @@
     font-size: 1.375rem;
     font-weight: 600;
     letter-spacing: 0.015em;
-    /* The h2's text colour, so h3s don't read as purple bold text */
-    color: var(--heading-mark-text);
+    /* Not the purple of bold text, so h3s don't read as bold paragraphs */
+    color: var(--h3-color);
 
     &::after {
       display: none;
@@ -517,6 +518,8 @@
 [data-theme="dark"] .post {
   --heading-mark-bg: var(--primary-300);
   --heading-mark-text: var(--primary-950);
+  /* The h2 text colour is near-white here, too close to body text off the highlight */
+  --h3-color: var(--primary-900);
 
   .callout-note {
     background-color: var(--primary-100);
