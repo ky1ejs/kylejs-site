@@ -8,11 +8,11 @@ export type FileMetadata = {
 export function DownloadFile({ name, path }: FileMetadata) {
   const extension = name.includes(".") ? name.split(".").pop()!.toUpperCase() : "FILE";
   return (
-    <p className="my-3">
+    <p className="-mx-2.5 my-3 pt-0">
       <a
         href={path}
         download={name}
-        className="group flex items-center gap-3 rounded-xl border border-primary-200 bg-primary-50 p-3 no-underline transition-colors hover:border-primary-400 hover:bg-primary-100"
+        className="group flex items-center gap-3 rounded-xl border border-primary-200 bg-primary-50 px-[9px] py-2.5 no-underline transition-colors hover:border-primary-400 hover:bg-primary-100"
       >
         <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary-200 text-xs font-bold tracking-wide text-primary-800">
           {extension}
