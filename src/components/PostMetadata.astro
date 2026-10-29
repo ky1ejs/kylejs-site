@@ -13,29 +13,32 @@ interface Props {
 const { content, date, showAvatar = true } = Astro.props;
 ---
 
-<div
-  class="divide-muted text-muted mb-4 flex flex-col gap-1 text-sm whitespace-nowrap sm:flex-row sm:items-center sm:gap-0 sm:divide-x-[1px]"
->
-  <div class="flex items-center sm:pr-2">
-    <span class="mr-1">Written by</span>
-    <a href="/" class="flex items-center">
-      {showAvatar && (
-        <Image
-          src={meImage}
-          width={60}
-          height={60}
-          alt="Profile picture of Kyle Satti"
-          loading="eager"
-          class="mr-2 h-[30px] w-[30px] rounded-full transition hover:scale-110"
-        />
-      )}
-      <span class="hover:text-primary transition">Kyle Satti</span>
+<div class="text-muted mb-4 flex items-center gap-3 text-sm">
+  {showAvatar && (
+    <a href="/" class="shrink-0" aria-hidden="true" tabindex="-1">
+      <Image
+        src={meImage}
+        width={80}
+        height={80}
+        alt=""
+        loading="eager"
+        class="img-loading h-10 w-10 rounded-full transition hover:scale-110"
+        onload="this.classList.add('img-loaded')"
+      />
     </a>
-  </div>
-  <div class="divide-muted flex items-center divide-x-[1px] sm:pl-2">
-    <div class="pr-2">{calculateReadingTime(content)}</div>
-    <div class="pl-2">
-      <RelativeDateLabel date={date} />
+  )}
+  <div class="flex flex-col gap-0.5">
+    {showAvatar && (
+      <a href="/" class="hover:text-primary w-fit transition">
+        Kyle Satti
+      </a>
+    )}
+    <div>
+      <span class="whitespace-nowrap">{calculateReadingTime(content)}</span>
+      {" "}<span aria-hidden="true">·</span>{" "}
+      <span class="whitespace-nowrap">
+        <RelativeDateLabel date={date} />
+      </span>
     </div>
   </div>
 </div>

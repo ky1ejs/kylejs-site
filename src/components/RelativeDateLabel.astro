@@ -26,9 +26,9 @@ const fullDate = date.toLocaleDateString("en-US", {
 });
 ---
 
-<div class="cursor-pointer" title={fullDate} data-relative-date={isoDate}>
+<span class="cursor-pointer" title={fullDate} data-relative-date={isoDate}>
   {absolute}
-</div>
+</span>
 
 <script>
   // "Today" depends on the reader's time zone and the day they read the post,
