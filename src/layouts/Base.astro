@@ -39,14 +39,22 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     {/*
-      Headings use Lexend with `font-display: swap`. Without a preload the
-      browser requests the font only after layout finds a heading, so even a
-      cached font arrives after the first paint and the title flashes in the
-      fallback font.
+      Post headings use Lexend with `font-display: swap`. Without a preload the
+      browser requests the font only after layout finds a heading, so it
+      arrives after the first paint and the title flashes in the fallback font.
+      Other pages don't use Lexend; they load it once the page has loaded, so
+      it is ready when a reader opens a post. `/_astro/*` files are cached for
+      a year (`public/_headers`), so neither needs a request on a later visit.
     */}
-    {preloadHeadingFont && (
-      <link rel="preload" href={lexendLatinUrl} as="font" type="font/woff2" crossorigin />
-    )}
+    {
+      preloadHeadingFont ? (
+        <link rel="preload" href={lexendLatinUrl} as="font" type="font/woff2" crossorigin />
+      ) : (
+        <script is:inline>
+          addEventListener("load", () => document.fonts.load('1em "Lexend Variable"'), { once: true });
+        </script>
+      )
+    }
     <title>{title}</title>
     <meta name="description" content={description} />
 
