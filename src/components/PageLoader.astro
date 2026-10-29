@@ -74,6 +74,72 @@
   </div>
 </template>
 
+<!--
+  The home page has no site header, so its skeleton fills the whole body. The
+  wrapper is a screen tall so the card centers as it does on the real page
+-->
+<template id="skeleton-home">
+  <div class="relative min-h-svh">
+    <div class="fixed right-4 bottom-4 z-[1000] min-[500px]:top-4 min-[500px]:bottom-auto">
+      <div class="skeleton-block h-10 w-12 rounded-xl"></div>
+    </div>
+    <div class="mt-16 flex items-center justify-center sm:absolute sm:inset-0 sm:m-auto sm:mt-0">
+      <div class="w-[85%] sm:w-[358px]">
+        <div class="bg-background-secondary flex flex-col items-center rounded-xl px-6 pt-8 pb-6">
+          <div class="skeleton-block h-36 w-36 rounded-full"></div>
+          <div class="skeleton-block mt-5 h-7 w-36"></div>
+          <div class="skeleton-block mt-2 h-5 w-14"></div>
+          <div class="skeleton-block mt-4 h-4 w-11/12"></div>
+          <div class="skeleton-block mt-2 h-4 w-4/5"></div>
+          <div class="mt-11 mb-4 flex gap-4">
+            {Array.from({ length: 5 }, () => <div class="skeleton-block h-10 w-10 rounded-full" />)}
+          </div>
+        </div>
+        <div class="my-4 flex flex-col items-center">
+          <div class="skeleton-block mt-1 h-4 w-48"></div>
+          <div class="skeleton-block mt-2.5 h-4 w-24"></div>
+          <div class="skeleton-block mt-5 h-3 w-12"></div>
+          <div class="skeleton-block mt-1 h-3 w-16"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="skeleton-about">
+  <div class="flow-root">
+    <div class="skeleton-block mt-[42px] h-9 w-36"></div>
+    <div class="mt-3.5 flex flex-col gap-2">
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block mb-5 h-4 w-1/2"></div>
+      <div class="skeleton-block h-4 w-full"></div>
+      <div class="skeleton-block h-4 w-1/4"></div>
+    </div>
+    <div class="bg-background-secondary mt-4 rounded-[20px] pb-8">
+      <div class="bg-background-100 flex h-10 rounded-t-[20px]">
+        <div class="bg-background-secondary flex w-1/2 items-center justify-center rounded-tl-[20px]">
+          <div class="skeleton-block h-4 w-24"></div>
+        </div>
+        <div class="flex w-1/2 items-center justify-center">
+          <div class="skeleton-block h-4 w-20"></div>
+        </div>
+      </div>
+      <div class="px-4">
+        <div class="skeleton-block mt-[46px] h-10 w-48"></div>
+        <div class="skeleton-block mt-11 h-7 w-3/5"></div>
+        <div class="mt-3 flex flex-col gap-2">
+          <div class="skeleton-block h-4 w-full"></div>
+          <div class="skeleton-block h-4 w-full"></div>
+          <div class="skeleton-block h-4 w-full"></div>
+          <div class="skeleton-block h-4 w-11/12"></div>
+          <div class="skeleton-block h-4 w-full"></div>
+          <div class="skeleton-block h-4 w-2/3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <template id="skeleton-page">
   <div class="flow-root">
     <div class="skeleton-block mt-[42px] h-9 w-2/5"></div>
@@ -198,6 +264,8 @@
 
   function skeletonVariant(url: URL): string {
     const path = url.pathname.replace(/\/$/, "");
+    if (path === "") return "skeleton-home";
+    if (path === "/about") return "skeleton-about";
     if (path === "/posts") return "skeleton-list";
     if (path.startsWith("/posts/")) return "skeleton-post";
     return "skeleton-page";
@@ -210,7 +278,11 @@
 
   function showSkeleton(to: URL, navigationType: string) {
     const previous = skeleton;
-    previous?.element.remove();
+    // The new skeleton may cover a different part of the page, so start from the real page
+    if (previous) {
+      previous.element.remove();
+      for (const el of previous.hidden) el.hidden = false;
+    }
     // Read before hiding content, which clamps the scroll offset
     const scroll = previous?.scroll ?? { scrollX, scrollY };
 
@@ -218,11 +290,12 @@
     element.setAttribute("aria-busy", "true");
     element.setAttribute("aria-label", "Loading page");
 
-    const content = cloneTemplate(skeletonVariant(to));
+    const variant = skeletonVariant(to);
+    const content = cloneTemplate(variant);
     const contentSlot = document.querySelector<HTMLElement>("[data-page-content]");
     let hidden: HTMLElement[];
 
-    if (contentSlot) {
+    if (contentSlot && variant !== "skeleton-home") {
       // Keep the real header and footer; replace only the page body. A
       // screen-tall skeleton keeps the footer below the fold, as on most pages
       element.className = `${contentSlot.className} min-h-svh`;
@@ -230,11 +303,15 @@
       contentSlot.after(element);
       hidden = [contentSlot];
     } else {
-      // Pages without the site chrome (home) get a full-page skeleton
-      const inset = document.createElement("div");
-      inset.className = "mx-auto max-w-[800px] content-inset";
-      inset.append(content);
-      element.append(cloneTemplate("skeleton-header"), inset);
+      // Going to or from a page without the site chrome (home) replaces the whole body
+      if (variant === "skeleton-home") {
+        element.append(content);
+      } else {
+        const inset = document.createElement("div");
+        inset.className = "mx-auto max-w-[800px] content-inset";
+        inset.append(content);
+        element.append(cloneTemplate("skeleton-header"), inset);
+      }
       hidden = [...document.body.children].filter(
         (child): child is HTMLElement => child instanceof HTMLElement && !child.hidden,
       );
@@ -242,7 +319,7 @@
     }
 
     for (const el of hidden) el.hidden = true;
-    skeleton = { element, hidden: previous?.hidden ?? hidden, scroll };
+    skeleton = { element, hidden, scroll };
 
     // Back/forward restores its own scroll position after the swap
     if (navigationType !== "traverse") window.scrollTo(0, 0);
