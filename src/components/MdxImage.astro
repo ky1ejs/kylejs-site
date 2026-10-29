@@ -11,7 +11,7 @@ interface Props {
   sizes?: string;
   // Explicit srcset widths; omit to use Astro's breakpoints up to MAX_WIDTH
   widths?: number[];
-  // Above-the-fold images: load eagerly at high priority, no blur-in
+  // Above-the-fold images: load eagerly at high priority
   priority?: boolean;
 }
 
@@ -34,11 +34,8 @@ if (!matchingKey) {
 }
 const image = (await images[matchingKey]()).default;
 
-let placeholder: string | undefined;
-if (!priority) {
-  const buffer = await sharp(`${process.cwd()}${matchingKey}`).resize(20).blur().webp({ quality: 20 }).toBuffer();
-  placeholder = `data:image/webp;base64,${buffer.toString("base64")}`;
-}
+const buffer = await sharp(`${process.cwd()}${matchingKey}`).resize(20).blur().webp({ quality: 20 }).toBuffer();
+const placeholder = `data:image/webp;base64,${buffer.toString("base64")}`;
 ---
 
 <Picture
@@ -50,9 +47,9 @@ if (!priority) {
   width={Math.min(image.width, MAX_WIDTH)}
   widths={widths}
   sizes={sizes}
-  class:list={[className, placeholder && "img-loading"]}
+  class:list={[className, "img-loading"]}
   loading={priority ? "eager" : "lazy"}
   fetchpriority={priority ? "high" : undefined}
-  style={placeholder && `background-image:url(${placeholder});background-size:cover`}
-  onload={placeholder && "this.classList.add('img-loaded')"}
+  style={`background-image:url(${placeholder});background-size:cover`}
+  onload="this.classList.add('img-loaded')"
 />
