@@ -1,0 +1,24 @@
+<script>
+  // Copies a heading's URL when its link (added by hast-heading-links) is
+  // clicked. One listener on the document, so it survives view transitions.
+  // Capture phase, so it runs before Astro's router handles the link.
+  const COPIED_MS = 1500;
+
+  document.addEventListener("click", async (event) => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(".heading-link");
+    if (!link) return;
+
+    // Cancel now: the browser follows the link before an await resolves
+    event.preventDefault();
+    const url = new URL(link.getAttribute("href") ?? "", window.location.href);
+    try {
+      await navigator.clipboard.writeText(url.href);
+    } catch {
+      // No clipboard access: jump to the heading, as the link would
+      window.location.hash = url.hash;
+      return;
+    }
+    link.dataset.copied = "";
+    setTimeout(() => delete link.dataset.copied, COPIED_MS);
+  }, { capture: true });
+</script>
