@@ -7,9 +7,12 @@ import meImage from "../assets/me.jpg";
 ---
 
 <Base>
-  {/* Home theme button - fixed position */}
-  <div id="home-theme-btn" class="fixed right-4 top-4 z-[1000] flex justify-end">
-    <ThemeButton position="bottom" />
+  {/*
+    Bottom right on narrow screens, top right from 500px. Set in CSS so the
+    button is in place at first paint.
+  */}
+  <div class="fixed right-4 bottom-4 z-[1000] flex justify-end min-[500px]:top-4 min-[500px]:bottom-auto">
+    <ThemeButton position="responsive" />
   </div>
 
   <div class="mt-16 flex items-center justify-center sm:absolute sm:top-0 sm:right-0 sm:bottom-0 sm:left-0 sm:m-auto sm:mt-0">
@@ -69,34 +72,6 @@ import meImage from "../assets/me.jpg";
     </div>
   </div>
 </Base>
-
-<script>
-  function initHomeThemeButton() {
-    const btn = document.getElementById("home-theme-btn");
-    if (!btn) return;
-
-    function updatePosition() {
-      const isMobile = window.innerWidth < 500;
-      btn!.className = `fixed right-4 z-[1000] flex justify-end ${isMobile ? "bottom-4" : "top-4"}`;
-
-      const popover = document.getElementById("theme-popover");
-      if (!popover) return;
-      if (isMobile) {
-        popover.classList.remove("top-10");
-        popover.classList.add("bottom-12");
-      } else {
-        popover.classList.remove("bottom-12");
-        popover.classList.add("top-10");
-      }
-    }
-
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-  }
-
-  initHomeThemeButton();
-  document.addEventListener("astro:after-swap", initHomeThemeButton);
-</script>
 
 <style>
   .wave-label:hover .hand {
