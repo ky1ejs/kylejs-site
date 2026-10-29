@@ -7,6 +7,7 @@ import hastHeadingIds from "./src/lib/hast-heading-ids.ts";
 import hastCallouts from "./src/lib/hast-callouts.ts";
 import hastMermaidBlocks from "./src/lib/hast-mermaid-blocks.ts";
 import hastFootnoteRefSeparators from "./src/lib/hast-footnote-ref-separators.ts";
+import hastHeadingMarks from "./src/lib/hast-heading-marks.ts";
 
 export default defineConfig({
   site: "https://kylejs.me",
@@ -20,6 +21,7 @@ export default defineConfig({
     processor: satteri({
       hastPlugins: [
         hastHeadingIds,
+        hastHeadingMarks,
         hastCallouts,
         hastMermaidBlocks,
         hastFootnoteRefSeparators,
