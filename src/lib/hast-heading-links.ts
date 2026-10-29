@@ -1,12 +1,16 @@
 import { defineHastPlugin } from "satteri";
 import { toPlain } from "./hast-callouts.ts";
 
-const WRAPPER_CLASS = "heading-link-wrapper";
+const WRAPPER_TAG = "heading-wrapper";
 
 /**
  * Sätteri hast plugin that puts a "copy link" anchor beside each heading
  * that has an ID. The anchor sits next to the heading, not inside it, so
  * screen readers don't read its label as part of the heading.
+ *
+ * The wrapper is a custom element, not a div. Safari Reader prunes a div
+ * whose class matches /link/ or whose text is under 25 characters, which
+ * dropped every heading. It leaves unknown elements alone.
  *
  * Without JavaScript the anchor jumps to the heading; the HeadingLinks
  * component's script copies the URL instead. Skips GFM's footnotes heading.
@@ -20,15 +24,12 @@ export default defineHastPlugin({
       if (typeof id !== "string" || id === "footnote-label") return;
 
       const parent = ctx.parent(node);
-      if (parent?.type === "element") {
-        const className = parent.properties.className;
-        if (Array.isArray(className) && className.includes(WRAPPER_CLASS)) return;
-      }
+      if (parent?.type === "element" && parent.tagName === WRAPPER_TAG) return;
 
       ctx.replaceNode(node, {
         type: "element",
-        tagName: "div",
-        properties: { className: [WRAPPER_CLASS] },
+        tagName: WRAPPER_TAG,
+        properties: {},
         children: [
           toPlain(node),
           {

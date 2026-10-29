@@ -72,6 +72,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - Astro Content Collections with Zod schema validation
 - MDX support with custom component overrides (headings, images, mermaid, pills)
 - Reading time estimation
+- Safari Reader drops a `div` whose class or id matches words like `link`, `meta` or `share`, or whose text is under 25 characters. Wrap short blocks in a `p` or a custom element instead
 - OG/Twitter metadata per post
 
 ### ViewTransitions
