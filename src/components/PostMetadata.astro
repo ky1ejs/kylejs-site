@@ -13,25 +13,35 @@ interface Props {
 const { content, date, showAvatar = true } = Astro.props;
 ---
 
-<div class="divide-muted text-muted mb-4 flex items-center divide-x-[1px] text-sm">
-  <div class="pr-2">
-    Written by{" "}
-    <a href="/">
-      {showAvatar && (
-        <Image
-          src={meImage}
-          width={60}
-          height={60}
-          alt="Profile picture of Kyle Satti"
-          loading="eager"
-          class="mr-2 inline h-[30px] w-[30px] rounded-full transition hover:scale-110"
-        />
-      )}
-      <span class="hover:text-primary transition">Kyle Satti</span>
+<div class="text-muted mb-4 flex items-center gap-3 text-sm">
+  {showAvatar && (
+    <a href="/" class="shrink-0" aria-hidden="true" tabindex="-1">
+      <Image
+        src={meImage}
+        width={80}
+        height={80}
+        alt=""
+        loading="eager"
+        class="img-loading h-10 w-10 rounded-full transition hover:scale-110"
+        onload="this.classList.add('img-loaded')"
+      />
     </a>
-  </div>
-  <div class="px-2">{calculateReadingTime(content)}</div>
-  <div class="pl-2">
-    <RelativeDateLabel date={date} />
+  )}
+  <div class="flex flex-col gap-0.5">
+    {showAvatar && (
+      <div>
+        by{" "}
+        <a href="/" class="hover:text-primary transition">
+          Kyle Satti
+        </a>
+      </div>
+    )}
+    <div>
+      <span class="whitespace-nowrap">{calculateReadingTime(content)}</span>
+      {" "}<span aria-hidden="true">·</span>{" "}
+      <span class="whitespace-nowrap">
+        <RelativeDateLabel date={date} />
+      </span>
+    </div>
   </div>
 </div>
