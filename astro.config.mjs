@@ -10,6 +10,12 @@ import hastMermaidBlocks from "./src/lib/hast-mermaid-blocks.ts";
 export default defineConfig({
   site: "https://kylejs.me",
   output: "static",
+  // Pages build to `about.html` rather than `about/index.html`, so Cloudflare
+  // serves them at `/about` without a trailing-slash redirect
+  trailingSlash: "never",
+  build: {
+    format: "file",
+  },
   // PageLoader prefetches into an in-memory cache instead
   prefetch: false,
   markdown: {

@@ -22,7 +22,9 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://kylejs.me";
-const canonicalUrl = ogUrl || `${siteUrl}${Astro.url.pathname}`;
+// `build.format: "file"` puts `.html` in the build-time pathname; public URLs have none
+const pathname = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+const canonicalUrl = ogUrl || `${siteUrl}${pathname}`;
 const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
 ---
 
