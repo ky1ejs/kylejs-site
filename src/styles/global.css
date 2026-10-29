@@ -384,8 +384,19 @@
     /* Not the purple of bold text, so h3s don't read as bold paragraphs */
     color: var(--h3-color);
 
+    /* Short hand-drawn squiggle under the start of the heading. A mask, so it
+       takes the theme's primary colour. Replaces the base dotted underline */
     &::after {
-      display: none;
+      content: "";
+      display: block;
+      width: 64px;
+      height: 10px;
+      margin-top: 1px;
+      border: 0;
+      background-color: var(--primary);
+      --squiggle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 10'%3E%3Cpath d='M2 5 Q 7 0 12 5 T 22 5 T 32 5 T 42 5 T 52 5 T 62 5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round'/%3E%3C/svg%3E");
+      -webkit-mask: var(--squiggle) no-repeat;
+      mask: var(--squiggle) no-repeat;
     }
   }
 
