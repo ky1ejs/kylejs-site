@@ -12,7 +12,7 @@ interface Props {
 const props = Astro.props;
 ---
 
-<Site {...props} ogType="article">
+<Site {...props} ogType="article" preloadHeadingFont>
   <div class="post">
     <slot />
   </div>
