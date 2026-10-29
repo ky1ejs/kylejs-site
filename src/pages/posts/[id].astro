@@ -11,6 +11,7 @@ import { Pill, PillCollection } from "../../components/Pill";
 import { GitHubRepoCard } from "../../components/GitHubRepoCard";
 import { DownloadFile } from "../../components/DownloadFile";
 import MdxImage from "../../components/MdxImage.astro";
+import meImage from "../../assets/me.jpg";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -30,20 +31,23 @@ const shareImages = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/posts/images/*.{jpeg,jpg,png,webp}",
 );
 
-let imagePath = "/me.jpg";
+let shareImage: ImageMetadata = meImage;
 if (post.data.shareImage) {
   const filename = post.data.shareImage.split("/").pop();
   const matchKey = Object.keys(shareImages).find((k) => k.endsWith(`/${filename}`));
-  if (matchKey) {
-    const imported = (await shareImages[matchKey]()).default;
-    const optimized = await getImage({ src: imported, format: "jpg", width: 1200 });
-    imagePath = optimized.src;
-  } else {
-    console.warn(
-      `[posts/${slug}] shareImage "${post.data.shareImage}" not found in src/assets/posts/images/, falling back to /me.jpg`,
+  if (!matchKey) {
+    throw new Error(
+      `[posts/${slug}] shareImage "${post.data.shareImage}" not found in src/assets/posts/images/`,
     );
   }
+  shareImage = (await shareImages[matchKey]()).default;
 }
+const optimizedShareImage = await getImage({
+  src: shareImage,
+  format: "jpg",
+  width: Math.min(shareImage.width, 1200),
+});
+const imagePath = optimizedShareImage.src;
 ---
 
 <Post

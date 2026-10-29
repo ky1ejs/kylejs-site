@@ -14,6 +14,18 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: "viewport",
   },
+  image: {
+    // Sharp encoder defaults; a per-image `quality` prop overrides these.
+    // Higher effort trades build time for smaller files at the same quality.
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+      config: {
+        avif: { quality: 55, effort: 4 },
+        webp: { quality: 78, effort: 5 },
+        jpeg: { quality: 80, mozjpeg: true },
+      },
+    },
+  },
   markdown: {
     // Sätteri applies GFM and smart punctuation by default
     processor: satteri({

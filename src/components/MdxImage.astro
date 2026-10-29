@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import sharp from "sharp";
 
@@ -7,9 +7,18 @@ interface Props {
   src: string;
   alt?: string;
   className?: string;
+  // Rendered width hint for srcset selection; defaults to the full post column
+  sizes?: string;
+  // Above-the-fold images: load eagerly at high priority, no blur-in
+  priority?: boolean;
 }
 
-const { src, alt = "", className } = Astro.props;
+// Post column: max-w-[800px] minus content-inset padding (2rem each side)
+const COLUMN_SIZES = "(min-width: 800px) 736px, calc(100vw - 4rem)";
+// Column width at 2x DPR; larger files are never picked
+const MAX_WIDTH = 1472;
+
+const { src, alt = "", className, sizes = COLUMN_SIZES, priority = false } = Astro.props;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/posts/images/*.{jpeg,jpg,png,webp}",
@@ -17,27 +26,30 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 
 const filename = src.split("/").pop();
 const matchingKey = Object.keys(images).find((key) => key.endsWith(`/${filename}`));
-const image = matchingKey ? (await images[matchingKey]()).default : null;
+if (!matchingKey) {
+  // Fail the build rather than ship an image that skips optimization
+  throw new Error(`<Image src="${src}">: ${filename} not found in src/assets/posts/images/`);
+}
+const image = (await images[matchingKey]()).default;
 
 let placeholder: string | undefined;
-if (matchingKey) {
-  const filePath = `${process.cwd()}${matchingKey}`;
-  const buffer = await sharp(filePath).resize(20).blur().webp({ quality: 20 }).toBuffer();
+if (!priority) {
+  const buffer = await sharp(`${process.cwd()}${matchingKey}`).resize(20).blur().webp({ quality: 20 }).toBuffer();
   placeholder = `data:image/webp;base64,${buffer.toString("base64")}`;
 }
 ---
 
-{
-  image && placeholder ? (
-    <Image
-      src={image}
-      alt={alt}
-      class:list={[className, "img-loading"]}
-      loading="lazy"
-      style={`background-image:url(${placeholder});background-size:cover`}
-      onload="this.classList.add('img-loaded')"
-    />
-  ) : (
-    <img src={src} alt={alt} class={className} loading="lazy" />
-  )
-}
+<Picture
+  src={image}
+  alt={alt}
+  formats={["avif"]}
+  fallbackFormat="webp"
+  layout="constrained"
+  width={Math.min(image.width, MAX_WIDTH)}
+  sizes={sizes}
+  class:list={[className, placeholder && "img-loading"]}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : undefined}
+  style={placeholder && `background-image:url(${placeholder});background-size:cover`}
+  onload={placeholder && "this.classList.add('img-loaded')"}
+/>
