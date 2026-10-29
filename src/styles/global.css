@@ -113,6 +113,9 @@
 
   --primary: var(--primary-500);
 
+  /* Bold text */
+  --emphasis: var(--primary);
+
   --secondary-50: #eeecf8;
   --secondary-100: #ddd9f2;
   --secondary-200: #bab4e4;
@@ -186,6 +189,9 @@
 
   --primary: var(--primary-800);
 
+  /* Bold text: a shade lighter and more saturated than primary-800 */
+  --emphasis: #d6adff;
+
   --secondary-50: #080713;
   --secondary-100: #110d26;
   --secondary-200: #211b4b;
@@ -244,7 +250,7 @@
   }
 
   strong {
-    color: var(--primary);
+    color: var(--emphasis);
   }
 
   a {
