@@ -529,8 +529,8 @@
 [data-theme="dark"] .post {
   --heading-mark-bg: var(--primary-300);
   --heading-mark-text: var(--primary-950);
-  /* The h2 text colour is near-white here, too close to body text off the highlight */
-  --h3-color: var(--primary-900);
+  /* Clearly purple, a step deeper than bold text (primary-800) */
+  --h3-color: var(--primary-700);
 
   .callout-note {
     background-color: var(--primary-100);
