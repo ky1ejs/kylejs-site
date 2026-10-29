@@ -8,6 +8,7 @@ import hastCallouts from "./src/lib/hast-callouts.ts";
 import hastMermaidBlocks from "./src/lib/hast-mermaid-blocks.ts";
 import hastFootnoteRefSeparators from "./src/lib/hast-footnote-ref-separators.ts";
 import hastHeadingMarks from "./src/lib/hast-heading-marks.ts";
+import hastHeadingLinks from "./src/lib/hast-heading-links.ts";
 
 export default defineConfig({
   site: "https://kylejs.me",
@@ -22,6 +23,7 @@ export default defineConfig({
       hastPlugins: [
         hastHeadingIds,
         hastHeadingMarks,
+        hastHeadingLinks,
         hastCallouts,
         hastMermaidBlocks,
         hastFootnoteRefSeparators,

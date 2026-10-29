@@ -339,6 +339,50 @@
   }
 }
 
+/* ===== Heading links (added by hast-heading-links) ===== */
+.heading-link-wrapper {
+  position: relative;
+}
+
+/* An icon in the left gutter: 2rem wide, so the pointer can move from the
+   heading to it without losing :hover */
+.heading-link {
+  --icon-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+  --icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  position: absolute;
+  top: 50%;
+  left: -2rem;
+  width: 2rem;
+  height: 2rem;
+  transform: translateY(-50%);
+  color: var(--muted);
+  background-color: currentColor;
+  /* Icon at the outer edge, clear of the h2 highlight's 10px overhang */
+  -webkit-mask: var(--icon-link) left center / 1.125rem no-repeat;
+  mask: var(--icon-link) left center / 1.125rem no-repeat;
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+
+  &[data-copied] {
+    color: var(--primary);
+    -webkit-mask-image: var(--icon-check);
+    mask-image: var(--icon-check);
+  }
+}
+
+.heading-link-wrapper:hover .heading-link,
+.heading-link:focus-visible,
+.heading-link[data-copied] {
+  opacity: 1;
+}
+
 /* ===== Post styles ===== */
 .post {
   --font-heading: "Lexend Variable", system-ui, sans-serif;

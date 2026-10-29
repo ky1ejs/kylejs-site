@@ -39,13 +39,16 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `drafts/` - Draft blog posts
 
 ### Components (`/src/components`)
-- `.astro` components - MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel
-- `.tsx` React components - Mermaid (client:idle), HeadingWithLink (MDX override), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
+- `.astro` components - MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
+- `.tsx` React components - Mermaid (client:idle), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
 - `hast-heading-ids.ts` - Sätteri hast plugin for heading anchor IDs (keeps existing anchors stable; Astro's built-in slugger would change them)
 - `hast-callouts.ts` - GitHub-style callout blockquotes
+- `hast-heading-marks.ts` - Wraps each h2's content in `<span class="heading-mark">` for the highlighter style
+- `hast-heading-links.ts` - Adds a copy-link anchor beside each heading with an ID (React components in MDX overrides are never hydrated, so this is done at build time)
+- `hast-footnote-ref-separators.ts` - Comma between adjacent footnote refs
 - `hast-mermaid-blocks.ts` - Mermaid code block → `<Mermaid>` component in MDX (needs `mermaid` in `syntaxHighlight.excludeLangs`)
 
 ### About Content (`/content/about`)
