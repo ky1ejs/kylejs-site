@@ -390,6 +390,7 @@ heading-wrapper:hover .heading-link,
   --heading-mark-bg: var(--primary-100);
   --heading-mark-text: var(--primary-800);
   --h3-color: var(--primary-800);
+  --table-rule: var(--primary-100);
 
   .post-title {
     font-family: var(--font-heading);
@@ -409,10 +410,15 @@ heading-wrapper:hover .heading-link,
     color: var(--heading-mark-text);
   }
 
+  /* Pull the h2 into the gutter rather than the mark: a negative margin on the
+     mark only shifts its first line, so a wrapped heading indents its second */
+  h2:has(> .heading-mark) {
+    margin-left: -10px;
+  }
+
   /* Highlighter behind the words, added by hast-heading-marks */
   .heading-mark {
     padding: 1px 10px 3px;
-    margin-left: -10px;
     border-radius: 4px 10px 6px 12px;
     background-color: var(--heading-mark-bg);
     box-decoration-break: clone;
@@ -468,24 +474,45 @@ heading-wrapper:hover .heading-link,
   img.img-loaded {
     opacity: 1;
   }
-  th {
+  table {
+    width: 100%;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.625rem 0.75rem;
     text-align: left;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    vertical-align: top;
+
+    /* Flush with the text column, like the paragraphs around it */
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  th {
+    padding-top: 0;
+    border-bottom: 2px solid var(--primary-300);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--h3-color);
   }
 
   td {
-    border-top: 1px solid #9ca3af;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    border-bottom: 1px solid var(--table-rule);
   }
 
-  table {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+  tr:last-child td {
+    border-bottom: 0;
   }
 
   .callout {
@@ -582,6 +609,7 @@ heading-wrapper:hover .heading-link,
   --heading-mark-text: var(--primary-950);
   /* Clearly purple, a step deeper than bold text (primary-800) */
   --h3-color: var(--primary-700);
+  --table-rule: var(--primary-200);
 
   .callout-note {
     background-color: var(--primary-100);
