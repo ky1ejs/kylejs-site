@@ -94,6 +94,31 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
         }
       });
     </script>
+
+    {/*
+      Relative post dates ("Posted yesterday"). "Today" depends on the reader's
+      time zone and the day they read the post, so the build can't set them.
+      They are applied before paint: by an inline call after each label on a
+      full load, and to the incoming document here on ClientRouter navigations.
+    */}
+    <script is:inline>
+      function applyRelativeDate(el) {
+        const [year, month, day] = (el.dataset.relativeDate ?? "").split("-").map(Number);
+        const posted = new Date(year, month - 1, day);
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // Round, as a day across a DST change is 23 or 25 hours
+        const daysAgo = Math.round((today.getTime() - posted.getTime()) / 86400000);
+
+        if (daysAgo === 0) el.textContent = "Posted today";
+        else if (daysAgo === 1) el.textContent = "Posted yesterday";
+        else if (daysAgo > 1 && daysAgo <= 7) el.textContent = `Posted ${daysAgo} days ago`;
+      }
+
+      document.addEventListener("astro:before-swap", (e) => {
+        e.newDocument.querySelectorAll("[data-relative-date]").forEach(applyRelativeDate);
+      });
+    </script>
   </head>
   <body>
     <slot />

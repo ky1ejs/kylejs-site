@@ -30,34 +30,12 @@ const fullDate = date.toLocaleDateString("en-US", {
   {absolute}
 </span>
 
-<script>
-  // "Today" depends on the reader's time zone and the day they read the post,
-  // so the relative label is set in the browser. The build only knows its own
-  // clock (UTC) and the label would stay frozen until the next deploy.
-  const MS_PER_DAY = 24 * 60 * 60 * 1000;
-
-  function relativeLabel(isoDate: string): string | null {
-    const [year, month, day] = isoDate.split("-").map(Number);
-    const posted = new Date(year, month - 1, day);
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    // Round, as a day across a DST change is 23 or 25 hours
-    const daysAgo = Math.round((today.getTime() - posted.getTime()) / MS_PER_DAY);
-
-    if (daysAgo === 0) return "Posted today";
-    if (daysAgo === 1) return "Posted yesterday";
-    if (daysAgo > 1 && daysAgo <= 7) return `Posted ${daysAgo} days ago`;
-    return null;
-  }
-
-  function initRelativeDates() {
-    document.querySelectorAll<HTMLElement>("[data-relative-date]").forEach((el) => {
-      const label = relativeLabel(el.dataset.relativeDate ?? "");
-      if (label) el.textContent = label;
-    });
-  }
-
-  // Run on initial load and after view transitions
-  initRelativeDates();
-  document.addEventListener("astro:after-swap", initRelativeDates);
+{/*
+  A classic inline script runs before the label is painted. A module script
+  runs after parsing, so the absolute date showed first and the line shifted.
+  `applyRelativeDate` is defined in Base.astro, which also applies it to the
+  incoming page on ClientRouter navigations.
+*/}
+<script is:inline>
+  applyRelativeDate(document.currentScript.previousElementSibling);
 </script>
