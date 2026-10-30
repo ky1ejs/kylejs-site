@@ -8,7 +8,9 @@
 //
 // Traffic needs CLOUDFLARE_API_TOKEN (Account Analytics: Read),
 // CLOUDFLARE_ACCOUNT_ID and CF_WEB_ANALYTICS_SITE_TAG. Without them a dry run
-// still prints the activity section. Sending needs SMTP_USERNAME and
+// still prints the activity section. CLOUDFLARE_ZONE_ID is optional and adds
+// daily unique IPs from the zone's edge logs (the token then also needs Zone
+// Analytics: Read). Sending needs SMTP_USERNAME and
 // SMTP_PASSWORD (a Gmail app password); REPORT_TO defaults to SMTP_USERNAME.
 import { execFileSync } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
@@ -131,31 +133,14 @@ async function readTraffic() {
       }
     }`;
 
-  const response = await fetch("https://api.cloudflare.com/client/v4/graphql", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query,
-      variables: {
-        accountTag: CLOUDFLARE_ACCOUNT_ID,
-        siteTag: CF_WEB_ANALYTICS_SITE_TAG,
-        prevStart: prevStart.toISOString(),
-        start: start.toISOString(),
-        end: end.toISOString(),
-      },
-    }),
+  const data = await cloudflareGraphql(query, {
+    accountTag: CLOUDFLARE_ACCOUNT_ID,
+    siteTag: CF_WEB_ANALYTICS_SITE_TAG,
+    prevStart: prevStart.toISOString(),
+    start: start.toISOString(),
+    end: end.toISOString(),
   });
-  const body = await response.json().catch(() => null);
-  if (!response.ok || !body || body.errors?.length) {
-    const detail =
-      body?.errors?.map((e) => e.message).join("; ") ||
-      `HTTP ${response.status}`;
-    throw new Error(`Cloudflare GraphQL: ${detail}`);
-  }
-  const account = body.data?.viewer?.accounts?.[0];
+  const account = data.viewer?.accounts?.[0];
   if (!account)
     throw new Error(
       `Cloudflare GraphQL: no account ${CLOUDFLARE_ACCOUNT_ID} for this token`,
@@ -203,6 +188,68 @@ async function readTraffic() {
     countries: rows(account.countries),
     devices: rows(account.devices),
   };
+}
+
+// Unique IPs per day from the zone's edge logs. Every request counts: bots,
+// crawlers and feed readers included, and one IP can be many people behind
+// one network. Cloudflare counts uniques per day, so a week's figure would
+// count a reader once per day they came back. The report shows the daily
+// average instead of a sum that would look like people.
+async function readEdgeUniques() {
+  const { CLOUDFLARE_ZONE_ID } = process.env;
+  if (!CLOUDFLARE_ZONE_ID) return null;
+  const date = (d) => d.toISOString().slice(0, 10);
+  try {
+    const data = await cloudflareGraphql(
+      `query EdgeUniques($zoneTag: string!, $from: Date!, $to: Date!) {
+        viewer {
+          zones(filter: { zoneTag: $zoneTag }) {
+            days: httpRequests1dGroups(limit: 14, filter: { date_geq: $from, date_lt: $to }) {
+              dimensions { date }
+              uniq { uniques }
+            }
+          }
+        }
+      }`,
+      { zoneTag: CLOUDFLARE_ZONE_ID, from: date(prevStart), to: date(end) },
+    );
+    const zone = data.viewer?.zones?.[0];
+    if (!zone) throw new Error(`no zone ${CLOUDFLARE_ZONE_ID} for this token`);
+    const average = (from, to) => {
+      const days = zone.days.filter(
+        (d) => d.dimensions.date >= date(from) && d.dimensions.date < date(to),
+      );
+      const total = days.reduce((sum, d) => sum + d.uniq.uniques, 0);
+      return days.length ? Math.round(total / days.length) : 0;
+    };
+    return {
+      current: average(start, end),
+      previous: average(prevStart, start),
+    };
+  } catch (error) {
+    // A secondary number: report the failure in the email rather than
+    // failing the run and losing the rest of the report.
+    return { error: error.message };
+  }
+}
+
+async function cloudflareGraphql(query, variables) {
+  const response = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+  const body = await response.json().catch(() => null);
+  if (!response.ok || !body || body.errors?.length) {
+    const detail =
+      body?.errors?.map((e) => e.message).join("; ") ||
+      `HTTP ${response.status}`;
+    throw new Error(`Cloudflare GraphQL: ${detail}`);
+  }
+  return body.data ?? {};
 }
 
 function normalizePath(path) {
@@ -287,7 +334,12 @@ function subjectLine(traffic, activity) {
   return `[kylejs.me] weekly: ${parts.join(", ") || "quiet week"}`;
 }
 
-function renderText(traffic, activity, posts) {
+function edgeLine(edge) {
+  if (edge.error) return `Not available: ${edge.error}`;
+  return `${number(edge.current)} a day (${change(edge.current, edge.previous)}), from edge logs, includes bots`;
+}
+
+function renderText(traffic, edge, activity, posts) {
   const lines = [`kylejs.me, ${windowLabel} (UTC)`, ""];
   const table = (rows) => {
     const width = Math.min(48, Math.max(...rows.map((r) => r[0].length)));
@@ -311,6 +363,7 @@ function renderText(traffic, activity, posts) {
     lines.push(
       `  Visits      ${number(current.visits)} (${change(current.visits, previous.visits)})`,
     );
+    if (edge) lines.push(`  Unique IPs  ${edgeLine(edge)}`);
     if (traffic.pages.length) {
       lines.push("", "TOP PAGES (views, change on last week)");
       lines.push(
@@ -387,8 +440,9 @@ const escape = (s) =>
       ],
   );
 
-function renderHtml(traffic, activity, posts) {
-  const cell = "padding:4px 12px 4px 0;border-bottom:1px solid #e5e5e5;text-align:left;";
+function renderHtml(traffic, edge, activity, posts) {
+  const cell =
+    "padding:4px 12px 4px 0;border-bottom:1px solid #e5e5e5;text-align:left;";
   const num = `${cell}text-align:right;font-variant-numeric:tabular-nums;`;
   const heading = (text) =>
     `<h2 style="font-size:15px;margin:24px 0 8px;">${escape(text)}</h2>`;
@@ -428,9 +482,27 @@ function renderHtml(traffic, activity, posts) {
             number(current.visits),
             escape(change(current.visits, previous.visits)),
           ],
+          ...(edge && !edge.error
+            ? [
+                [
+                  "Unique IPs a day",
+                  number(edge.current),
+                  escape(change(edge.current, edge.previous)),
+                ],
+              ]
+            : []),
         ],
       ),
     );
+    if (edge) {
+      parts.push(
+        `<p style="color:#666;font-size:13px;margin:4px 0 0;">${
+          edge.error
+            ? `Unique IPs not available: ${escape(edge.error)}`
+            : "Unique IPs: daily average from Cloudflare's edge logs. Includes bots, and one IP can be several readers."
+        }</p>`,
+      );
+    }
     if (traffic.pages.length) {
       parts.push(heading("Top pages"));
       parts.push(
@@ -531,9 +603,11 @@ try {
   traffic = { error: error.message };
 }
 
+const edge = await readEdgeUniques();
+
 const subject = subjectLine(traffic, activity);
-const text = renderText(traffic, activity, posts);
-const html = renderHtml(traffic, activity, posts);
+const text = renderText(traffic, edge, activity, posts);
+const html = renderHtml(traffic, edge, activity, posts);
 
 if (dryRun) {
   console.log(printHtml ? html : `Subject: ${subject}\n\n${text}`);
