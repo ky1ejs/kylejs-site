@@ -9,7 +9,8 @@
 //
 // Traffic needs CLOUDFLARE_API_TOKEN (Account Analytics: Read),
 // CLOUDFLARE_ACCOUNT_ID and CF_WEB_ANALYTICS_SITE_TAG. Without them a dry run
-// still prints the activity section. CLOUDFLARE_ZONE_ID is optional and adds
+// still prints the activity section. Performance comes from the same Web
+// Analytics site. CLOUDFLARE_ZONE_ID is optional and adds
 // daily unique IPs from the zone's edge logs (the token then also needs Zone
 // Analytics: Read). Sending needs SMTP_USERNAME and
 // SMTP_PASSWORD (a Gmail app password); REPORT_TO defaults to SMTP_USERNAME.
@@ -234,6 +235,169 @@ async function readEdgeUniques() {
   }
 }
 
+// --- Performance ------------------------------------------------------------
+
+// Google's Core Web Vitals thresholds, rated at the 75th percentile:
+// at or under `good` is good, over `poor` is poor.
+// https://web.dev/articles/vitals
+const VITALS = [
+  {
+    key: "lcp",
+    label: "LCP",
+    what: "main content shown",
+    field: "largestContentfulPaintP75",
+    good: 2.5,
+    poor: 4,
+    unit: "s",
+  },
+  {
+    key: "inp",
+    label: "INP",
+    what: "response to a tap or click",
+    field: "interactionToNextPaintP75",
+    good: 0.2,
+    poor: 0.5,
+    unit: "s",
+  },
+  {
+    key: "cls",
+    label: "CLS",
+    what: "layout shift, Chromium only",
+    field: "cumulativeLayoutShiftP75",
+    good: 0.1,
+    poor: 0.25,
+    unit: "",
+  },
+];
+// A page needs this many samples before the report calls it slow.
+const MIN_PAGE_SAMPLES = 5;
+
+// Real-reader timings from the same beacon. Cloudflare stores times in
+// microseconds; CLS is a unitless score. A secondary section: a failed query
+// shows in the email rather than stopping the send.
+async function readPerformance() {
+  const {
+    CLOUDFLARE_API_TOKEN,
+    CLOUDFLARE_ACCOUNT_ID,
+    CF_WEB_ANALYTICS_SITE_TAG,
+  } = process.env;
+  if (
+    !CLOUDFLARE_API_TOKEN ||
+    !CLOUDFLARE_ACCOUNT_ID ||
+    !CF_WEB_ANALYTICS_SITE_TAG
+  )
+    return null;
+
+  const filter = (from, to) =>
+    `filter: { AND: [{ datetime_geq: ${from}, datetime_lt: ${to} }, { siteTag: $siteTag }, { bot: 0 }] }`;
+  const vitals = VITALS.map((v) => v.field).join(" ");
+  try {
+    const data = await cloudflareGraphql(
+      `query WeeklyPerformance($accountTag: string!, $siteTag: string!, $prevStart: Time!, $start: Time!, $end: Time!) {
+        viewer {
+          accounts(filter: { accountTag: $accountTag }) {
+            vitals: rumWebVitalsEventsAdaptiveGroups(limit: 1, ${filter("$start", "$end")}) {
+              count
+              quantiles { ${vitals} }
+            }
+            prevVitals: rumWebVitalsEventsAdaptiveGroups(limit: 1, ${filter("$prevStart", "$start")}) {
+              quantiles { ${vitals} }
+            }
+            pageVitals: rumWebVitalsEventsAdaptiveGroups(limit: 50, orderBy: [count_DESC], ${filter("$start", "$end")}) {
+              count
+              quantiles { largestContentfulPaintP75 }
+              dimensions { key: requestPath }
+            }
+            load: rumPerformanceEventsAdaptiveGroups(limit: 1, ${filter("$start", "$end")}) {
+              quantiles { pageLoadTimeP75 }
+            }
+            prevLoad: rumPerformanceEventsAdaptiveGroups(limit: 1, ${filter("$prevStart", "$start")}) {
+              quantiles { pageLoadTimeP75 }
+            }
+          }
+        }
+      }`,
+      {
+        accountTag: CLOUDFLARE_ACCOUNT_ID,
+        siteTag: CF_WEB_ANALYTICS_SITE_TAG,
+        prevStart: prevStart.toISOString(),
+        start: start.toISOString(),
+        end: end.toISOString(),
+      },
+    );
+    const account = data.viewer?.accounts?.[0];
+    if (!account)
+      throw new Error(`no account ${CLOUDFLARE_ACCOUNT_ID} for this token`);
+
+    const value = (v, quantiles) => {
+      const raw = quantiles?.[v.field];
+      if (raw == null) return null;
+      return v.unit === "s" ? raw / 1e6 : raw;
+    };
+    const current = account.vitals?.[0]?.quantiles;
+    const previous = account.prevVitals?.[0]?.quantiles;
+    const seconds = (g) => {
+      const raw = g?.[0]?.quantiles?.pageLoadTimeP75;
+      return raw == null ? null : raw / 1e6;
+    };
+    const lcp = VITALS[0];
+
+    return {
+      samples: account.vitals?.[0]?.count ?? 0,
+      vitals: VITALS.map((v) => ({
+        ...v,
+        current: value(v, current),
+        previous: value(v, previous),
+      })),
+      load: {
+        current: seconds(account.load),
+        previous: seconds(account.prevLoad),
+      },
+      slowPages: (account.pageVitals ?? [])
+        .filter((r) => r.count >= MIN_PAGE_SAMPLES)
+        .map((r) => ({
+          path: normalizePath(r.dimensions.key),
+          samples: r.count,
+          lcp: value(lcp, r.quantiles),
+        }))
+        .filter((r) => r.lcp != null && r.lcp > lcp.poor)
+        .sort((a, b) => b.lcp - a.lcp)
+        .slice(0, 5),
+    };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+function rating(v, x) {
+  if (x == null) return "";
+  if (x <= v.good) return "good";
+  if (x <= v.poor) return "needs improvement";
+  return "poor";
+}
+
+function formatMetric(unit, x) {
+  if (x == null) return "no data";
+  if (unit !== "s") return x.toFixed(2);
+  return x < 1 ? `${Math.round(x * 1000)} ms` : `${x.toFixed(2)} s`;
+}
+
+// Lower is better for every timing, so a rise is labelled "slower".
+function timingChange(unit, current, previous) {
+  if (current == null || previous == null || previous === 0) return "";
+  const pct = Math.round(((current - previous) / previous) * 100);
+  if (pct === 0) return "no change";
+  const word =
+    unit === "s"
+      ? pct > 0
+        ? "slower"
+        : "faster"
+      : pct > 0
+        ? "worse"
+        : "better";
+  return `${Math.abs(pct)}% ${word}`;
+}
+
 async function cloudflareGraphql(query, variables) {
   const response = await fetch("https://api.cloudflare.com/client/v4/graphql", {
     method: "POST",
@@ -340,7 +504,7 @@ function edgeLine(edge) {
   return `${number(edge.current)} a day (${change(edge.current, edge.previous)}), from edge logs, includes bots`;
 }
 
-function renderText(traffic, edge, activity, posts) {
+function renderText(traffic, edge, perf, activity, posts) {
   const lines = [`kylejs.me, ${windowLabel} (UTC)`, ""];
   const table = (rows) => {
     const width = Math.min(48, Math.max(...rows.map((r) => r[0].length)));
@@ -409,6 +573,40 @@ function renderText(traffic, edge, activity, posts) {
     }
   }
 
+  if (perf) {
+    lines.push("", "PERFORMANCE (75th percentile reader)");
+    if (perf.error) {
+      lines.push(`  Not available: ${perf.error}`);
+    } else {
+      const rows = perf.vitals.map((v) => [
+        `${v.label} (${v.what})`,
+        formatMetric(v.unit, v.current).padStart(8),
+        rating(v, v.current).padEnd(17),
+        timingChange(v.unit, v.current, v.previous),
+      ]);
+      rows.push([
+        "Page load",
+        formatMetric("s", perf.load.current).padStart(8),
+        "".padEnd(17),
+        timingChange("s", perf.load.current, perf.load.previous),
+      ]);
+      lines.push(...table(rows).map((line) => line.trimEnd()));
+      lines.push(`  From ${number(perf.samples)} page views.`);
+      if (perf.slowPages.length) {
+        lines.push("", "SLOW PAGES (LCP over 4 s)");
+        lines.push(
+          ...table(
+            perf.slowPages.map((p) => [
+              pageLabel(p.path, posts),
+              formatMetric("s", p.lcp).padStart(8),
+              `${number(p.samples)} views`,
+            ]),
+          ),
+        );
+      }
+    }
+  }
+
   lines.push("", "ACTIVITY");
   if (activity.published.length) {
     lines.push("  Published:");
@@ -441,7 +639,7 @@ const escape = (s) =>
       ],
   );
 
-function renderHtml(traffic, edge, activity, posts) {
+function renderHtml(traffic, edge, perf, activity, posts) {
   const cell =
     "padding:4px 12px 4px 0;border-bottom:1px solid #e5e5e5;text-align:left;";
   const num = `${cell}text-align:right;font-variant-numeric:tabular-nums;`;
@@ -551,6 +749,56 @@ function renderHtml(traffic, edge, activity, posts) {
     }
   }
 
+  if (perf) {
+    parts.push(heading("Performance"));
+    if (perf.error) {
+      parts.push(`<p>Not available: ${escape(perf.error)}</p>`);
+    } else {
+      const colour = {
+        good: "#0a7d32",
+        "needs improvement": "#a15c00",
+        poor: "#b42318",
+      };
+      const rated = (v, x) => {
+        const r = rating(v, x);
+        return r ? `<span style="color:${colour[r]};">${escape(r)}</span>` : "";
+      };
+      parts.push(
+        table(
+          ["75th percentile", "This week", "Rating", "Change"],
+          [
+            ...perf.vitals.map((v) => [
+              `${escape(v.label)} <span style="color:#666;">${escape(v.what)}</span>`,
+              escape(formatMetric(v.unit, v.current)),
+              rated(v, v.current),
+              escape(timingChange(v.unit, v.current, v.previous)),
+            ]),
+            [
+              "Page load",
+              escape(formatMetric("s", perf.load.current)),
+              "",
+              escape(timingChange("s", perf.load.current, perf.load.previous)),
+            ],
+          ],
+        ),
+        `<p style="color:#666;font-size:13px;margin:4px 0 0;">From ${number(perf.samples)} page views. Ratings use Google's Core Web Vitals thresholds.</p>`,
+      );
+      if (perf.slowPages.length) {
+        parts.push(
+          heading("Slow pages (LCP over 4 s)"),
+          table(
+            ["Page", "LCP", "Views"],
+            perf.slowPages.map((p) => [
+              `<a href="${escape(SITE_URL + p.path)}">${escape(pageLabel(p.path, posts))}</a>`,
+              escape(formatMetric("s", p.lcp)),
+              number(p.samples),
+            ]),
+          ),
+        );
+      }
+    }
+  }
+
   parts.push(heading("Activity"));
   const list = (items) =>
     `<ul style="margin:4px 0;padding-left:20px;">${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
@@ -605,10 +853,11 @@ try {
 }
 
 const edge = await readEdgeUniques();
+const perf = traffic.missing ? null : await readPerformance();
 
 const subject = subjectLine(traffic, activity);
-const text = renderText(traffic, edge, activity, posts);
-const html = renderHtml(traffic, edge, activity, posts);
+const text = renderText(traffic, edge, perf, activity, posts);
+const html = renderHtml(traffic, edge, perf, activity, posts);
 
 if (dryRun) {
   console.log(printHtml ? html : `Subject: ${subject}\n\n${text}`);
