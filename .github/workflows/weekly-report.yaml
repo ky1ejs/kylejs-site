@@ -1,0 +1,55 @@
+name: Weekly report
+
+# Emails last week's traffic and activity for kylejs.me. See
+# scripts/weekly-report.mjs for what it reads and the secrets it needs.
+#
+# GitHub disables scheduled workflows after 60 days without a commit to the
+# repository. A failed run emails whoever last changed the schedule below.
+
+on:
+  schedule:
+    # Mondays 07:47 UTC, covering Monday to Sunday of the week just gone
+    - cron: "47 7 * * 1"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Print the report in the job log instead of sending it
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # The activity section reads the last week of history on main
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Send the report
+        run: node scripts/weekly-report.mjs ${{ inputs.dry-run && '--dry-run' || '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_WEB_ANALYTICS_SITE_TAG: ${{ secrets.CF_WEB_ANALYTICS_SITE_TAG }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          REPORT_TO: ${{ secrets.REPORT_TO }}

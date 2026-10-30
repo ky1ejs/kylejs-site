@@ -23,6 +23,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
+- `node scripts/weekly-report.mjs --dry-run` - Print the weekly traffic and activity email. `.github/workflows/weekly-report.yaml` sends it on Mondays; the script's header lists the secrets it reads
 
 ## Project Structure
 
