@@ -1,5 +1,6 @@
 // Emails a weekly report on kylejs.me: traffic from Cloudflare Web Analytics,
-// and what changed on main. Run by .github/workflows/weekly-report.yaml.
+// and what changed on main. Cloudflare injects the Web Analytics beacon into
+// pages at its edge (automatic setup), so the site has no analytics code. Run by .github/workflows/weekly-report.yaml.
 //
 //   node scripts/weekly-report.mjs --dry-run         print the plain-text email
 //   node scripts/weekly-report.mjs --dry-run --html  print the HTML email

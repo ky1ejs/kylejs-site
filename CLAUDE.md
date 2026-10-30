@@ -43,7 +43,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `drafts/` - Draft blog posts
 
 ### Components (`/src/components`)
-- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), WebAnalytics (Cloudflare Web Analytics beacon, loaded only on kylejs.me), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
+- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
 - `.tsx` React components - Mermaid (client:idle), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
 
 ### Library (`/src/lib`)
