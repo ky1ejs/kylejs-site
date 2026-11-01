@@ -1,0 +1,137 @@
+name: Preview
+
+# Deploys each PR to a Worker Preview named pr-<number> under the
+# kylejs-site Worker, comments its URL on the PR, and deletes the Preview
+# when the PR closes or merges. Production deploys stay with Workers Builds.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, closed]
+
+permissions: {}
+
+# One run per PR at a time. A deploy in flight is cancelled by a newer push,
+# but the delete run doesn't cancel, so it waits and deletes after it.
+concurrency:
+  group: preview-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: ${{ github.event.action != 'closed' }}
+
+jobs:
+  deploy:
+    name: Deploy preview
+    # Fork and Dependabot runs have no Cloudflare token.
+    if: >-
+      github.event.action != 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+      && github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Cache optimized images
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.astro
+          key: astro-assets-${{ hashFiles('src/assets/**', 'astro.config.mjs') }}
+          restore-keys: astro-assets-
+
+      - name: Build the site
+        run: pnpm build
+
+      - name: Deploy Worker Preview
+        id: preview
+        run: |
+          pnpm exec wrangler preview \
+            --name "pr-${PR_NUMBER}" \
+            --tag "${HEAD_SHA:0:7}" \
+            --message "PR #${PR_NUMBER} (${HEAD_SHA})"
+          entry=$(jq -c 'select(.type == "preview")' "$WRANGLER_OUTPUT_FILE_PATH" | tail -1)
+          echo "branch_url=$(jq -r '.preview_urls[0] // empty' <<<"$entry")" >> "$GITHUB_OUTPUT"
+          echo "commit_url=$(jq -r '.deployment_urls[0] // empty' <<<"$entry")" >> "$GITHUB_OUTPUT"
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.json
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Comment preview links
+        uses: actions/github-script@v7
+        env:
+          BRANCH_URL: ${{ steps.preview.outputs.branch_url }}
+          COMMIT_URL: ${{ steps.preview.outputs.commit_url }}
+        with:
+          script: |
+            const MARKER = '<!-- worker-preview -->';
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const { BRANCH_URL, COMMIT_URL } = process.env;
+
+            const lines = [MARKER, '### Preview', '', `✅ Deployed \`${pr.head.sha.slice(0, 7)}\``, ''];
+            if (BRANCH_URL) lines.push(`- This PR (latest push): ${BRANCH_URL}`);
+            if (COMMIT_URL) lines.push(`- This commit: ${COMMIT_URL}`);
+            if (!BRANCH_URL && !COMMIT_URL) lines.push('No URL in the wrangler output; see the job log.');
+            const body = lines.join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: pr.number, per_page: 100,
+            });
+            const existing = comments.find(
+              (c) => c.user?.login === 'github-actions[bot]' && c.body?.startsWith(MARKER),
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
+            }
+
+  delete:
+    name: Delete preview
+    if: >-
+      github.event.action == 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+      && github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Worker Preview
+        run: |
+          # --worker-name stands in for wrangler.jsonc, so no checkout.
+          status=0
+          output=$(npx --yes wrangler@4 preview delete \
+            --worker-name kylejs-site \
+            --name "pr-${PR_NUMBER}" \
+            --skip-confirmation 2>&1) || status=$?
+          echo "$output"
+          if [ "$status" -ne 0 ]; then
+            # 10025 is Cloudflare's "Preview not found": the PR closed before
+            # its first deploy finished, or it predates this workflow.
+            if grep -q "code: 10025" <<<"$output"; then
+              echo "No Worker Preview pr-${PR_NUMBER}; nothing to delete."
+              exit 0
+            fi
+            exit "$status"
+          fi
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
