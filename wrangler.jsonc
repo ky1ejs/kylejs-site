@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kylejs-site",
   "compatibility_date": "2026-04-14",
+  // Settings for PR Worker Previews (`wrangler preview`). Empty means each
+  // Preview uses the top-level config.
+  "previews": {},
   "assets": {
     "directory": "./dist"
   }

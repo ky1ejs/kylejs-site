@@ -71,30 +71,31 @@ Blog posts live in `src/content/blog/` as `.md` or `.mdx` files.
 The site is deployed to **Cloudflare Workers** as a static assets Worker —
 `wrangler.jsonc` points the Worker at the `dist/` build output.
 
-Deploys run through [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/),
-Cloudflare's Git integration, which is connected to this repository. Cloudflare
-builds every push itself; there is no deploy step in GitHub Actions. The Actions
-workflows only lint (`lint.yaml`) and build (`build.yaml`) on push/PR to `main`
-as a check.
+Production deploys run through [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/),
+Cloudflare's Git integration, which is connected to this repository and builds
+every push to `main`. The Actions workflows lint (`lint.yaml`) and build
+(`build.yaml`) on push/PR to `main` as a check, and `preview.yaml` handles PR
+previews.
 
 ### PR previews
 
-Every pull request gets a live preview automatically — nothing to configure.
-Cloudflare builds the branch and the `cloudflare-workers-and-pages` bot posts a
-comment on the PR with two links:
+`preview.yaml` builds each pull request and deploys it as a
+[Worker Preview](https://developers.cloudflare.com/workers/previews/) named
+`pr-<number>` under the `kylejs-site` Worker. It then posts one comment on the
+PR with two links, and updates that comment on every push:
 
 | Link | Points at | Use it for |
 |---|---|---|
-| **Commit Preview URL** | One specific commit, immutable | Comparing two builds of the same PR |
-| **Branch Preview URL** | Latest commit on the branch | Sharing a link that stays current as you push |
+| **This PR** | Latest push to the PR | Sharing a link that stays current as you push |
+| **This commit** | One specific deployment, immutable | Comparing two builds of the same PR |
 
-The URLs look like this:
+The PR link looks like `https://pr-<number>-kylejs-site.k-830.workers.dev`.
 
-```
-https://<commit-hash>-kylejs-site.k-830.workers.dev     # commit preview
-https://<branch-name>-kylejs-site.k-830.workers.dev     # branch preview
-```
+A Preview gets no production traffic, so opening one never affects the live
+site. When the PR closes or merges, the same workflow deletes the Preview and
+all its deployments.
 
-Previews are versions uploaded without production traffic routed to them, so
-opening one never affects the live site. The build logs are linked from the same
-comment, which is the place to look when a preview doesn't come up.
+The workflow needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+repository secrets. Workers Builds' own preview builds are turned off: each one
+left a preview alias on the Worker that kept serving after its PR closed, and
+an alias can't be deleted.
