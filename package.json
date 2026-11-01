@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "check:images": "node scripts/check-images.mjs",
     "check:layout-shift": "node scripts/check-layout-shift.mjs",
-    "lint:fix": "pnpm run lint --fix"
+    "lint:fix": "pnpm run lint --fix",
+    "knip": "knip"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.5",
@@ -34,6 +35,7 @@
     "eslint": "10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^3.2.1",
+    "knip": "^6.44.1",
     "playwright": "1.63.0",
     "prettier": "^3.9.10",
     "prettier-plugin-astro": "^1.1.2",
