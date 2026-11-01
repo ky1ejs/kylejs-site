@@ -25,6 +25,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm knip` - Find unused files, dependencies and exports (runs in CI with lint)
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
+- `pnpm check:back-navigation` - After a build, land on a page, follow a link, then go back and forward in a phone-sized Chromium on a slow network. Fails if a page the reader has already seen shows the loading skeleton
 - `pnpm test` - Vitest: design token contrast and CSS sync, component markup
 - `pnpm storybook` - Browse the design system at http://localhost:6006
 - `pnpm build-storybook` then `pnpm test:design` - axe accessibility checks on every story in both themes, plus screenshot comparisons once reference images exist (see `tests/design/README.md`)
@@ -100,6 +101,7 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 ### ViewTransitions
 - Smooth page transitions via `astro:transitions`
 - Astro's `prefetch` is off. `PageLoader.astro` fetches internal pages into memory as their links enter the viewport and serves ClientRouter navigations from that cache. Cloudflare serves HTML with `max-age=0, must-revalidate` and no `ETag`, so an HTTP-cache prefetch is downloaded again on click. Pages build as `about.html` (`build.format: "file"`, `trailingSlash: "never"`), so Cloudflare serves them at `/about` and 307s `/about/` there. Link without a trailing slash
+- `PageLoader` also keeps each page the reader has seen, starting with the one they landed on, reading the browser's copy with `fetch(..., { cache: "force-cache" })`. Going back or forward to it needs no request and shows no skeleton. `pnpm check:back-navigation` fails if it does
 - If the page is not ready 100ms after a click, `PageLoader` replaces the `[data-page-content]` slot in `Site.astro` (or the whole body on the home page) with a skeleton shaped like the destination
 - Scripts re-initialize via `astro:after-swap` event
 

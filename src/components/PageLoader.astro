@@ -170,9 +170,9 @@
     return url.origin + url.pathname + url.search;
   }
 
-  async function fetchPage(url: URL, priority: RequestPriority): Promise<Page | null> {
+  async function fetchPage(url: URL, priority: RequestPriority, httpCache: RequestCache): Promise<Page | null> {
     try {
-      const res = await fetch(url, { priority });
+      const res = await fetch(url, { priority, cache: httpCache });
       if (!res.ok) return null;
       const mediaType = (res.headers.get("content-type") ?? "").split(";", 1)[0].trim();
       if (mediaType !== "text/html" && mediaType !== "application/xhtml+xml") return null;
@@ -182,12 +182,12 @@
     }
   }
 
-  function loadPage(url: URL, priority: RequestPriority): Promise<Page | null> {
+  function loadPage(url: URL, priority: RequestPriority, httpCache: RequestCache = "default"): Promise<Page | null> {
     const key = cacheKey(url);
     const entry = cache.get(key);
     if (entry && Date.now() - entry.createdAt < CACHE_TTL_MS) return entry.page;
 
-    const page = fetchPage(url, priority).then((result) => {
+    const page = fetchPage(url, priority, httpCache).then((result) => {
       // Let the next request retry instead of caching a failure
       if (!result) cache.delete(key);
       return result;
@@ -250,6 +250,20 @@
 
   observeLinks();
   document.addEventListener("astro:page-load", observeLinks);
+
+  // Keeps a page the reader has seen, so going back to it needs no fetch and
+  // shows no skeleton. The page they landed on came from a full page load,
+  // not this cache, and a page's entry can expire while they read it.
+  // `force-cache` reads the copy the browser kept when the page loaded, so this
+  // is usually not a request. It is the HTML the reader saw, so it is not stale.
+  function keepSeenPage(url: URL) {
+    if (!isSlowConnection()) void loadPage(url, "low", "force-cache");
+  }
+
+  // After load, so it does not compete with the page's own images and fonts
+  const landingUrl = new URL(location.href);
+  if (document.readyState === "complete") keepSeenPage(landingUrl);
+  else window.addEventListener("load", () => keepSeenPage(landingUrl), { once: true });
 
   // ===== Skeleton =====
 
@@ -430,6 +444,7 @@
 
   document.addEventListener("astro:before-preparation", (event) => {
     if (event.formData) return;
+    keepSeenPage(event.from);
     const defaultLoader = event.loader;
     event.loader = () => loadFromCache(event, defaultLoader);
   });
