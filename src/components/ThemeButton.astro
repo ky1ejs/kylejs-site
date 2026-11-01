@@ -50,7 +50,7 @@ const OPTIONS = [
   </button>
   <div
     id="theme-popover"
-    class={`absolute right-0 ${POPOVER_POSITION[position]} bg-surface border-rule hidden w-40 overflow-hidden rounded-xl border py-1 text-sm shadow-md dark:shadow-none`}
+    class={`absolute right-0 ${POPOVER_POSITION[position]} bg-surface border-rule hidden w-48 overflow-hidden rounded-xl border py-1 text-sm shadow-md dark:shadow-none`}
   >
     {
       OPTIONS.map((o) => (
@@ -70,7 +70,19 @@ const OPTIONS = [
           >
             <path d={ICONS[o.value]} />
           </svg>
-          <span class="theme-option-label">{o.label}</span>
+          <span class="theme-option-label flex-1">{o.label}</span>
+          <svg
+            class="theme-option-check h-4 w-4 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
         </button>
       ))
     }
@@ -87,6 +99,27 @@ const OPTIONS = [
   :root[data-theme-pref="light"] .theme-icon[data-icon="light"],
   :root[data-theme-pref="dark"] .theme-icon[data-icon="dark"] {
     display: block;
+  }
+
+  /* The current choice in the menu: soft accent, on-soft text and a check */
+  .theme-option-check {
+    visibility: hidden;
+  }
+  :root:not([data-theme-pref]) .theme-option[data-theme-value="system"],
+  :root[data-theme-pref="system"] .theme-option[data-theme-value="system"],
+  :root[data-theme-pref="light"] .theme-option[data-theme-value="light"],
+  :root[data-theme-pref="dark"] .theme-option[data-theme-value="dark"] {
+    background: var(--ks-accent-soft);
+    color: var(--ks-on-soft);
+    font-weight: 600;
+
+    svg {
+      color: inherit;
+    }
+
+    .theme-option-check {
+      visibility: visible;
+    }
   }
 </style>
 
@@ -128,6 +161,7 @@ const OPTIONS = [
     // The icon follows data-theme-pref on <html>, set before paint in Base.astro
     function updateIcon(theme: string) {
       document.documentElement.setAttribute("data-theme-pref", theme);
+      button!.setAttribute("aria-label", `Theme: ${theme}. Change theme`);
       popover!.querySelectorAll<HTMLElement>(".theme-option").forEach((opt) => {
         opt.setAttribute("aria-pressed", String(opt.dataset.themeValue === theme));
       });

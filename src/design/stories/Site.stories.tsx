@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SiteHeader, SiteFooter } from "../components";
+import { SiteHeader, SiteFooter, SocialLinks } from "../components";
 
 const meta = {
   title: "Components/Site chrome",
@@ -25,4 +25,8 @@ export const Header: Story = {
 
 export const Footer: Story = {
   render: () => <SiteFooter year={2026} />,
+};
+
+export const Socials: Story = {
+  render: () => <SocialLinks />,
 };

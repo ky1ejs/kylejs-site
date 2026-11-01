@@ -674,15 +674,6 @@ a.ks-area-item-title:hover {
   color: var(--ks-ink-2);
 }
 
-.ks-footer-links[data-quiet] a {
-  color: var(--ks-muted);
-  text-decoration: none;
-}
-
-.ks-footer-links[data-quiet] a:hover {
-  color: var(--ks-ink);
-  text-decoration: underline;
-}
 
 .ks-footer-copyright {
   margin: 0;
@@ -691,4 +682,38 @@ a.ks-area-item-title:hover {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ks-muted);
+}
+
+/* ===== Social links ===== */
+.ks-social {
+  display: flex;
+  flex-wrap: wrap;
+  /* The 44px tap targets touch; the icons sit 24px apart */
+  margin: 0 -12px;
+  padding: 0;
+  list-style: none;
+}
+
+.ks-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--ks-radius-control);
+  color: var(--ks-muted);
+  transition: color 0.15s;
+}
+
+.ks-social-link svg {
+  fill: currentColor;
+}
+
+.ks-social-link:hover {
+  color: var(--ks-ink);
+}
+
+.ks-social-link:focus-visible {
+  outline: 2px solid var(--ks-accent);
+  outline-offset: -4px;
 }

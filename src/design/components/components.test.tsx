@@ -13,6 +13,8 @@ import {
   PostListItem,
   SiteFooter,
   SiteHeader,
+  SocialLinks,
+  socialLinks,
 } from ".";
 
 const html = (node: React.ReactElement) => renderToStaticMarkup(node);
@@ -132,5 +134,20 @@ describe("Site chrome", () => {
   it("limits the nav and footer to the given sections", () => {
     expect(html(<SiteHeader sections={["writing", "about"]} />)).not.toContain("/projects");
     expect(html(<SiteFooter year={2026} sections={["writing"]} />)).not.toContain("/about");
+  });
+});
+
+describe("SocialLinks", () => {
+  it("draws each profile's icon in a named 44px link", () => {
+    const out = html(<SocialLinks />);
+    for (const link of socialLinks) {
+      expect(out).toContain(`href="${link.href}" aria-label="${link.label}"`);
+      expect(out).toContain(link.icon);
+    }
+    expect(out.match(/aria-hidden="true"/g)).toHaveLength(socialLinks.length);
+  });
+
+  it("is in the footer", () => {
+    expect(html(<SiteFooter year={2026} />)).toContain('class="ks-social"');
   });
 });

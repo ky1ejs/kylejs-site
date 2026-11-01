@@ -52,7 +52,8 @@ Framework-agnostic: plain CSS plus React components that only take props and ret
 - `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
 - `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
 - `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
-- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, SiteHeader, SiteFooter (and its `socialLinks`). `index.ts` is the public API
+- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
+- `socials.ts` - The social profiles and their brand icons, used by the footer and home page
 - `stories/` - Storybook stories. Storybook shows each story in light and dark: side by side from 900px wide, stacked for stories with `themeLayout: "stack"`
 
 Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props.
