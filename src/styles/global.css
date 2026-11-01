@@ -2,8 +2,9 @@
 @import "@fontsource-variable/lexend";
 @import "@fontsource-variable/jetbrains-mono";
 @import "../design/tokens.css";
-@import "../design/components.css";
-@import "../design/prose.css";
+/* In Tailwind's components layer, so utility classes on the same element win */
+@import "../design/components.css" layer(components);
+@import "../design/prose.css" layer(components);
 
 /* Tailwind utilities for the design tokens (src/design/tokens.css):
    bg-paper, text-ink, border-rule, text-accent-text, font-display, … */
