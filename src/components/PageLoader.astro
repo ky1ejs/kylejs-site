@@ -153,6 +153,7 @@
 </template>
 
 <script>
+  import { TEXT_COLUMN_CLASS } from "../lib/layout";
   import type { TransitionBeforePreparationEvent } from "astro:transitions/client";
 
   // Below ~100ms a navigation reads as instant, so a skeleton would only flash
@@ -306,7 +307,7 @@
         element.append(content);
       } else {
         const inset = document.createElement("div");
-        inset.className = "mx-auto max-w-[800px] content-inset";
+        inset.className = TEXT_COLUMN_CLASS;
         inset.append(content);
         element.append(cloneTemplate("skeleton-header"), inset);
       }

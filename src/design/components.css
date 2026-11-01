@@ -440,7 +440,6 @@ a.ks-area-card:hover {
   border-radius: var(--ks-radius-card);
   background: var(--ks-surface);
   color: var(--ks-ink);
-  scroll-margin-top: 96px;
 }
 
 .ks-area-band-body {
@@ -529,9 +528,17 @@ a.ks-area-card:hover {
   text-decoration: none;
 }
 
+/* A resting underline, so links read as links without hover (WCAG 1.4.1) */
+a.ks-area-item-title {
+  text-decoration: underline;
+  text-decoration-color: var(--ks-rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 a.ks-area-item-title:hover {
   color: var(--ks-accent-text);
-  text-decoration: underline;
+  text-decoration-color: currentColor;
 }
 
 .ks-area-item-desc {

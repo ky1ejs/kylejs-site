@@ -28,14 +28,13 @@ const OPTIONS = [
 ] as const;
 ---
 
-<div class="relative">
+<div class="theme-control relative">
   <button id="theme-button" class="ks-icon-button" aria-label="Change theme" aria-expanded="false" aria-controls="theme-popover">
     {
       OPTIONS.map((o) => (
         <svg
           class="theme-icon h-5 w-5"
           data-icon={o.value}
-          hidden={o.value !== "system"}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -78,6 +77,19 @@ const OPTIONS = [
   </div>
 </div>
 
+<style is:global>
+  /* One icon per stored choice; html[data-theme-pref] is set before paint */
+  .theme-icon {
+    display: none;
+  }
+  :root:not([data-theme-pref]) .theme-icon[data-icon="system"],
+  :root[data-theme-pref="system"] .theme-icon[data-icon="system"],
+  :root[data-theme-pref="light"] .theme-icon[data-icon="light"],
+  :root[data-theme-pref="dark"] .theme-icon[data-icon="dark"] {
+    display: block;
+  }
+</style>
+
 <script>
   // Document and media-query listeners outlive a ClientRouter swap, so the
   // previous page's are removed before adding new ones
@@ -113,10 +125,9 @@ const OPTIONS = [
       updateIcon(theme);
     }
 
+    // The icon follows data-theme-pref on <html>, set before paint in Base.astro
     function updateIcon(theme: string) {
-      button!.querySelectorAll<SVGElement>(".theme-icon").forEach((icon) => {
-        icon.toggleAttribute("hidden", icon.dataset.icon !== theme);
-      });
+      document.documentElement.setAttribute("data-theme-pref", theme);
       popover!.querySelectorAll<HTMLElement>(".theme-option").forEach((opt) => {
         opt.setAttribute("aria-pressed", String(opt.dataset.themeValue === theme));
       });
@@ -146,6 +157,12 @@ const OPTIONS = [
     document.addEventListener("click", (e) => {
       const target = e.target as Node;
       if (!button.contains(target) && !popover.contains(target)) setOpen(false);
+    }, { signal });
+
+    // Close when keyboard focus moves past the last option
+    button.parentElement!.addEventListener("focusout", (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (!next || (!button.contains(next) && !popover.contains(next))) setOpen(false);
     }, { signal });
 
     document.addEventListener("keydown", (e) => {

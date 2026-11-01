@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Started by update-screenshots.yaml after it commits new reference images:
+  # pushes made with GITHUB_TOKEN don't trigger workflows on their own
+  workflow_dispatch:
 
 jobs:
   test:
@@ -12,6 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Reference screenshots are PNGs, which .gitattributes stores in LFS
+          lfs: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4

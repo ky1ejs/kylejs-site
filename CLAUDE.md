@@ -52,8 +52,8 @@ Framework-agnostic: plain CSS plus React components that only take props and ret
 - `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
 - `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
 - `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
-- `components/` - Mark, Button, Pill, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand, SiteHeader, SiteFooter
-- `stories/` - Storybook stories. Storybook shows each story in light and dark side by side
+- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, SiteHeader, SiteFooter (and its `socialLinks`). `index.ts` is the public API
+- `stories/` - Storybook stories. Storybook shows each story in light and dark: side by side from 900px wide, stacked for stories with `themeLayout: "stack"`
 
 Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props.
 
@@ -76,7 +76,7 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 ### Styling
 - **Global CSS**: `src/styles/global.css` imports Tailwind v4, the fonts and the design-system CSS, and sets base styles
 - **Dark Mode**: `data-theme` attribute with `@variant dark` in Tailwind. The token selectors match any element, so a subtree can render in the other theme
-- **Color System**: ten `--ks-*` tokens per theme in `src/design/tokens.css`, exposed to Tailwind as `bg-paper`, `bg-surface`, `text-ink`, `text-ink-2`, `text-muted`, `border-rule`, `text-accent`, `text-accent-text`, `bg-accent-soft`, `text-on-soft`. There are no colour ramps; don't add `primary-500`-style shades
+- **Color System**: twelve `--ks-*` colour tokens per theme in `src/design/tokens.css`, plus a foreground and background for each of the four callout types. Tailwind gets the twelve as `paper`, `surface`, `ink`, `ink-2`, `muted`, `rule`, `accent`, `accent-text`, `accent-soft`, `on-soft`, `on-accent` and `accent-hover` (`bg-paper`, `text-ink`, `border-rule`…). There are no colour ramps; don't add `primary-500`-style shades
 - **Fonts**: Lexend (headings, wordmark) and JetBrains Mono (labels, metadata) via Fontsource; body text uses the system font. `Base.astro` preloads Lexend on every page
 
 ## Key Features

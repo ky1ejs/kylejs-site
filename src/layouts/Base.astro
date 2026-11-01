@@ -75,7 +75,8 @@ const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
     {publishedTime && <meta property="article:author" content="Kyle Satti" />}
 
     {/* Twitter */}
-    <meta name="twitter:card" content="summary_large_image" />
+    {/* The headshot fallback is square, which a large card would crop to 2:1 */}
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:creator" content="@_kylejs_" />
@@ -99,6 +100,8 @@ const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
             .split("; ")
             .find((row) => row.startsWith("theme="));
           const theme = cookieTheme ? cookieTheme.split("=")[1] : null;
+          // The stored choice (light, dark or system), for ThemeButton's icon
+          document.documentElement.setAttribute("data-theme-pref", theme || "system");
 
           if (theme && theme !== "system") {
             document.documentElement.setAttribute("data-theme", theme);
@@ -116,6 +119,10 @@ const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
         const currentTheme = document.documentElement.getAttribute("data-theme");
         if (currentTheme) {
           e.newDocument.documentElement.setAttribute("data-theme", currentTheme);
+        }
+        const pref = document.documentElement.getAttribute("data-theme-pref");
+        if (pref) {
+          e.newDocument.documentElement.setAttribute("data-theme-pref", pref);
         }
       });
     </script>

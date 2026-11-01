@@ -26,7 +26,14 @@ const TYPES = {
 
 createServer(async (req, res) => {
   const { pathname } = new URL(req.url ?? "/", "http://localhost");
-  let path = normalize(join(root, decodeURIComponent(pathname)));
+  let path;
+  try {
+    path = normalize(join(root, decodeURIComponent(pathname)));
+  } catch {
+    // Malformed percent-encoding: decodeURIComponent throws URIError
+    res.writeHead(400).end();
+    return;
+  }
   if (!path.startsWith(root)) {
     res.writeHead(403).end();
     return;

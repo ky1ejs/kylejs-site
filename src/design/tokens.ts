@@ -98,9 +98,17 @@ export const textPairs: Array<[fg: keyof ThemeColors, bg: keyof ThemeColors]> = 
   ["accentText", "paper"],
   ["accentText", "surface"],
   ["onSoft", "accentSoft"],
+  // Prose h2 text sits on paper outside its highlighter
+  ["onSoft", "paper"],
   ["onAccent", "accentText"],
   ["onAccent", "accentHover"],
+  // Text links (.ks-button-more) on hover
+  ["accentHover", "paper"],
+  ["accentHover", "surface"],
 ];
+
+/** Colours used as text inside callouts, on every status background. */
+export const calloutTextColors: Array<keyof ThemeColors> = ["ink", "accentText", "muted"];
 
 export const fonts = {
   display: '"Lexend Variable", system-ui, sans-serif',

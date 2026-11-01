@@ -3,6 +3,7 @@ import Base from "./Base.astro";
 import ThemeButton from "../components/ThemeButton.astro";
 import HeadingLinks from "../components/HeadingLinks.astro";
 import { SiteHeader, SiteFooter, type NavSection } from "../design/components";
+import { TEXT_COLUMN_CLASS } from "../lib/layout";
 
 interface Props {
   title?: string;
@@ -26,10 +27,10 @@ const year = new Date().getFullYear();
   <SiteHeader current={section} sections={sections}>
     <ThemeButton />
   </SiteHeader>
-  <div class="mx-auto max-w-[calc(var(--ks-width-text)+4rem)] px-6 min-[640px]:px-8">
-    <div data-page-content>
+  <div class={TEXT_COLUMN_CLASS}>
+    <main data-page-content>
       <slot />
-    </div>
+    </main>
     <div class="pt-12">
       <SiteFooter year={year} sections={sections} />
     </div>

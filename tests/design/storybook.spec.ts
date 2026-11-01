@@ -38,7 +38,12 @@ for (const story of stories) {
     for (const width of [1280, 390]) {
       test(`matches its screenshot at ${width}px`, async ({ page }, testInfo) => {
         const name = `${story.id}-${width}.png`;
-        test.skip(!existsSync(testInfo.snapshotPath(name)), `No reference image yet: ${name}`);
+        const updating = testInfo.config.updateSnapshots !== "none";
+        // Reference images are rendered on CI's Linux image; fonts render
+        // differently elsewhere, so other platforms only run the axe checks
+        test.skip(!updating && process.platform !== "linux", "Screenshots are compared on Linux only");
+        // Without a reference image there is nothing to compare, unless this run creates one
+        test.skip(!updating && !existsSync(testInfo.snapshotPath(name)), `No reference image yet: ${name}`);
         await page.setViewportSize({ width, height: 800 });
         await openStory(page, story.id, "both");
         await expect(page).toHaveScreenshot(name, { fullPage: true });

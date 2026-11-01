@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { status, textPairs, themes, type ThemeColors, type ThemeName } from "./tokens";
+import { calloutTextColors, status, textPairs, themes, type ThemeColors, type ThemeName } from "./tokens";
 
 // WCAG 2.x relative luminance and contrast ratio
 function luminance(hex: string): number {
@@ -32,9 +32,11 @@ describe("text contrast meets WCAG AA (4.5:1)", () => {
       it(`${theme}: ${name} callout label on its background`, () => {
         expect(contrast(fg, bg)).toBeGreaterThanOrEqual(AA);
       });
-      it(`${theme}: ink on the ${name} callout background`, () => {
-        expect(contrast(themes[theme].ink, bg)).toBeGreaterThanOrEqual(AA);
-      });
+      for (const color of calloutTextColors) {
+        it(`${theme}: ${color} on the ${name} callout background`, () => {
+          expect(contrast(themes[theme][color], bg)).toBeGreaterThanOrEqual(AA);
+        });
+      }
     }
   }
 });
@@ -45,6 +47,7 @@ describe("tokens.css matches tokens.ts", () => {
   // The first block whose selector list includes the theme's selector
   function block(selector: string): Record<string, string> {
     const start = css.indexOf(selector);
+    if (start < 0) throw new Error(`tokens.css has no ${selector} block`);
     const body = css.slice(css.indexOf("{", start) + 1, css.indexOf("}", start));
     return Object.fromEntries(
       [...body.matchAll(/(--ks-[\w-]+):\s*(#[0-9a-fA-F]{6})/g)].map(([, k, v]) => [k, v.toUpperCase()]),
@@ -69,6 +72,12 @@ describe("tokens.css matches tokens.ts", () => {
         expect(declared[`--ks-${name}-fg`]).toBe(fg.toUpperCase());
         expect(declared[`--ks-${name}-bg`]).toBe(bg.toUpperCase());
       }
+      // And nothing in tokens.css that tokens.ts doesn't know about
+      const expected = [
+        ...(Object.keys(themes[theme]) as Array<keyof ThemeColors>).map(cssName),
+        ...Object.keys(status[theme]).flatMap((name) => [`--ks-${name}-fg`, `--ks-${name}-bg`]),
+      ];
+      expect(Object.keys(declared).sort()).toEqual(expected.sort());
     });
   }
 

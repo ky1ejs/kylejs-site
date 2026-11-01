@@ -8,13 +8,27 @@ on:
 
 permissions:
   contents: write
+  # To start the Design system workflow on the new commit (see the last step)
+  actions: write
+
+# Two runs on one branch would race to push
+concurrency:
+  group: update-screenshots-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   update:
+    # Only on a branch other than main: on a tag the push has no branch to go
+    # to, and on main it would skip review
+    if: github.ref_type == 'branch' && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Installs Git LFS hooks, so the PNGs (LFS per .gitattributes) are
+          # uploaded on push rather than left as pointers
+          lfs: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -39,6 +53,7 @@ jobs:
         run: pnpm test:design --update-snapshots=all -g "screenshot"
 
       - name: Commit the images
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -48,4 +63,14 @@ jobs:
           else
             git commit -m "Update design system reference screenshots"
             git push
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # A push made with GITHUB_TOKEN doesn't trigger workflows, so the new
+      # commit would otherwise have no checks and the images would never be
+      # compared
+      - name: Check the new images
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run design-system.yaml --ref "$GITHUB_REF_NAME"
