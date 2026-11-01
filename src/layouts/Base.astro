@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import PageLoader from "../components/PageLoader.astro";
 import "../styles/global.css";
 import lexendLatinUrl from "@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2?url";
+import monoLatinUrl from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url";
 import { getImage } from "astro:assets";
 import meImage from "../assets/me.jpg";
 
@@ -52,6 +53,12 @@ const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
       for a year (`public/_headers`), so later visits need no request.
     */}
     <link rel="preload" href={lexendLatinUrl} as="font" type="font/woff2" crossorigin />
+    {/*
+      Labels and metadata use JetBrains Mono. A late swap changes the width of
+      a metadata line, which moved the text after it on a ClientRouter
+      navigation from a page without mono text (CI, / -> /posts)
+    */}
+    <link rel="preload" href={monoLatinUrl} as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
 
