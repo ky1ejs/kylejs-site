@@ -1,4 +1,4 @@
-import { defineCollection } from "astro:content";
+import { defineCollection, reference } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 import { markNames, type MarkName } from "./design/marks";
@@ -11,6 +11,8 @@ const blog = defineCollection({
     date: z.coerce.date(),
     shareImage: z.string().optional(),
     reviewers: z.array(z.string()).optional(),
+    /** Area IDs (file names in src/content/areas). The post shows under each one on the home page. */
+    areas: z.array(reference("areas")).default([]),
   }),
 });
 
@@ -78,13 +80,11 @@ const areas = defineCollection({
       items: z
         .array(
           z.object({
-            /** Repo, Post, Site, Print… shown as a pill. */
+            /** Repo, Site, Print… shown as a pill. Posts come from the post's own `areas` field. */
             kind: z.string(),
             title: z.string(),
             desc: z.string().optional(),
             href: z.string().optional(),
-            /** A post: accent pill with the writing mark. */
-            writing: z.boolean().default(false),
           }),
         )
         .default([]),
