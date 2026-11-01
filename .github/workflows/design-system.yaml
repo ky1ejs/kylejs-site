@@ -1,0 +1,53 @@
+name: Design system
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Started by update-screenshots.yaml after it commits new reference images:
+  # pushes made with GITHUB_TOKEN don't trigger workflows on their own
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Reference screenshots are PNGs, which .gitattributes stores in LFS
+          lfs: true
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Unit tests (token contrast, component markup)
+        run: pnpm test
+
+      - name: Build Storybook
+        run: pnpm build-storybook
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Accessibility and screenshot tests
+        run: pnpm test:design
+
+      - name: Upload the report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-system-report
+          path: playwright-report/
+          retention-days: 14

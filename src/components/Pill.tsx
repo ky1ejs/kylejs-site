@@ -1,30 +1,25 @@
-export const Pill = ({ title, hex }: { title: string; hex: string }) => (
-  <div
-    style={{ backgroundColor: hex }}
-    className="inline-block rounded-lg px-3 py-1"
-  >
-    {title}
-  </div>
+import { Pill as DesignPill } from "../design/components";
+
+// MDX overrides for the About page's tech lists. The `hex` colours in the
+// content are no longer used: every pill shares the design-system style.
+
+export const Pill = ({ title }: { title: string; hex?: string }) => (
+  <DesignPill>{title}</DesignPill>
 );
 
 type PillCollectionProps = {
   titles: string[];
-  hex: string;
+  hex?: string;
 };
 
-export const PillCollection = ({
-  collections,
-}: {
-  collections: PillCollectionProps[];
-  hex?: string;
-}) => (
-  <div className="mt-2 flex flex-wrap gap-2 text-black">
+export const PillCollection = ({ collections }: { collections: PillCollectionProps[] }) => (
+  <ul className="ks-pill-list mt-2">
     {collections
-      .map((collection) =>
-        collection.titles.map((title) => (
-          <Pill key={title} title={title} hex={collection.hex} />
-        )),
-      )
-      .flat()}
-  </div>
+      .flatMap((collection) => collection.titles)
+      .map((title) => (
+        <li key={title}>
+          <DesignPill>{title}</DesignPill>
+        </li>
+      ))}
+  </ul>
 );

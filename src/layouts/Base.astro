@@ -3,6 +3,9 @@ import { ClientRouter } from "astro:transitions";
 import PageLoader from "../components/PageLoader.astro";
 import "../styles/global.css";
 import lexendLatinUrl from "@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2?url";
+import monoLatinUrl from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url";
+import { getImage } from "astro:assets";
+import meImage from "../assets/me.jpg";
 
 interface Props {
   title?: string;
@@ -11,8 +14,6 @@ interface Props {
   ogType?: string;
   ogUrl?: string;
   publishedTime?: string;
-  // Lexend is only used for headings inside `.post`
-  preloadHeadingFont?: boolean;
 }
 
 const {
@@ -22,14 +23,20 @@ const {
   ogType = "website",
   ogUrl,
   publishedTime,
-  preloadHeadingFont = false,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://kylejs.me";
 // `build.format: "file"` puts `.html` in the build-time pathname; public URLs have none
 const pathname = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
 const canonicalUrl = ogUrl || `${siteUrl}${pathname}`;
-const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
+// Pages without their own share image (home, about, the post list) use the
+// headshot, so a shared link still previews with an image
+const defaultShareImage = await getImage({
+  src: meImage,
+  format: "jpg",
+  width: Math.min(meImage.width, 1200),
+});
+const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
 ---
 
 <!doctype html>
@@ -39,22 +46,19 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     {/*
-      Post headings use Lexend with `font-display: swap`. Without a preload the
-      browser requests the font only after layout finds a heading, so it
-      arrives after the first paint and the title flashes in the fallback font.
-      Other pages don't use Lexend; they load it once the page has loaded, so
-      it is ready when a reader opens a post. `/_astro/*` files are cached for
-      a year (`public/_headers`), so neither needs a request on a later visit.
+      Every heading and the wordmark use Lexend with `font-display: swap`.
+      Without a preload the browser requests the font only after layout finds
+      a heading, so it arrives after the first paint, and a heading that
+      rewraps in Lexend moves the text below it. `/_astro/*` files are cached
+      for a year (`public/_headers`), so later visits need no request.
     */}
-    {
-      preloadHeadingFont ? (
-        <link rel="preload" href={lexendLatinUrl} as="font" type="font/woff2" crossorigin />
-      ) : (
-        <script is:inline>
-          addEventListener("load", () => document.fonts.load('1em "Lexend Variable"'), { once: true });
-        </script>
-      )
-    }
+    <link rel="preload" href={lexendLatinUrl} as="font" type="font/woff2" crossorigin />
+    {/*
+      Labels and metadata use JetBrains Mono. A late swap changes the width of
+      a metadata line, which moved the text after it on a ClientRouter
+      navigation from a page without mono text (CI, / -> /posts)
+    */}
+    <link rel="preload" href={monoLatinUrl} as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
 
@@ -65,17 +69,18 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="Kyle Satti" />
     <meta property="og:locale" content="en_US" />
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta property="og:image" content={imageUrl} />
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {publishedTime && <meta property="article:modified_time" content={publishedTime} />}
     {publishedTime && <meta property="article:author" content="Kyle Satti" />}
 
     {/* Twitter */}
-    <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+    {/* The headshot fallback is square, which a large card would crop to 2:1 */}
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:creator" content="@_kylejs_" />
-    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+    <meta name="twitter:image" content={imageUrl} />
 
     {/*
       Disable native View Transitions API to prevent iOS Safari from clipping
@@ -95,6 +100,8 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
             .split("; ")
             .find((row) => row.startsWith("theme="));
           const theme = cookieTheme ? cookieTheme.split("=")[1] : null;
+          // The stored choice (light, dark or system), for ThemeButton's icon
+          document.documentElement.setAttribute("data-theme-pref", theme || "system");
 
           if (theme && theme !== "system") {
             document.documentElement.setAttribute("data-theme", theme);
@@ -112,6 +119,10 @@ const imageUrl = ogImage ? `${siteUrl}${ogImage}` : undefined;
         const currentTheme = document.documentElement.getAttribute("data-theme");
         if (currentTheme) {
           e.newDocument.documentElement.setAttribute("data-theme", currentTheme);
+        }
+        const pref = document.documentElement.getAttribute("data-theme-pref");
+        if (pref) {
+          e.newDocument.documentElement.setAttribute("data-theme-pref", pref);
         }
       });
     </script>

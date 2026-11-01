@@ -26,3 +26,8 @@ npm-debug.log*
 worktrees/
 .orca/.bootstrapped
 settings.local.json
+
+# storybook and design tests
+/storybook-static/
+/test-results/
+/playwright-report/
