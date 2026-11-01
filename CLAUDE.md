@@ -33,7 +33,8 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ## Project Structure
 
 ### Pages (`/src/pages`)
-- `index.astro` - Home/landing page
+- `index.astro` - Home page: hero, area rail, then each area from the `areas` collection as a full band or a compact card
+- `projects.astro` - Projects grouped by `src/lib/project-groups.ts`
 - `about.astro` - About page with bio toggle
 - `posts/index.astro` - Blog listing
 - `posts/[id].astro` - Individual blog post (dynamic route)
@@ -46,6 +47,8 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ### Content (`/src/content`)
 - `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?)
 - `drafts/` - Draft blog posts
+- `areas/` - One file per area on the home page. Layout is content: `display: band | compact`, `order`, `media.layout: side | stack`. An image without `src` renders as a labelled placeholder; photos go in `src/assets/areas/` with `src` relative to the area file
+- `projects/` - One file per project for /projects (group, repo, url, status, order; optional body becomes a note)
 
 ### Design system (`/src/design`)
 Framework-agnostic: plain CSS plus React components that only take props and return markup. Astro renders them to HTML at build time, so they ship no JavaScript. Design source: the "kylejs.me design system" canvas on claude.ai.
@@ -53,14 +56,16 @@ Framework-agnostic: plain CSS plus React components that only take props and ret
 - `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
 - `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
 - `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
-- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
+- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, AreaRail, ProjectItem, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
 - `socials.ts` - The social profiles and their brand icons, used by the footer and home page
 - `stories/` - Storybook stories. Storybook shows each story in light and dark: side by side from 900px wide, stacked for stories with `themeLayout: "stack"`
 
-Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props.
+Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props. Astro passes a slot even when its content is empty, so render the component without the slot when there is nothing to put in it (see `index.astro` and `projects.astro`).
+
+`Site.astro` takes `width="text"` (680px, default) or `width="wide"` (1120px, the home page).
 
 ### Components (`/src/components`)
-- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata (renders the design-system Byline), PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
+- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata (renders the design-system Byline), PostHeader, PostFooter, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
 - `.tsx` React components - Mermaid (client:idle), Pill (MDX override, renders the design-system Pill), GitHubRepoCard, DownloadFile, MdxImage
 
 ### Library (`/src/lib`)
@@ -102,13 +107,13 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 - Smooth page transitions via `astro:transitions`
 - Astro's `prefetch` is off. `PageLoader.astro` fetches internal pages into memory as their links enter the viewport and serves ClientRouter navigations from that cache. Cloudflare serves HTML with `max-age=0, must-revalidate` and no `ETag`, so an HTTP-cache prefetch is downloaded again on click. Pages build as `about.html` (`build.format: "file"`, `trailingSlash: "never"`), so Cloudflare serves them at `/about` and 307s `/about/` there. Link without a trailing slash
 - `PageLoader` also keeps each page the reader has seen, starting with the one they landed on, reading the browser's copy with `fetch(..., { cache: "force-cache" })`. Going back or forward to it needs no request and shows no skeleton. `pnpm check:back-navigation` fails if it does
-- If the page is not ready 100ms after a click, `PageLoader` replaces the `[data-page-content]` slot in `Site.astro` (or the whole body on the home page) with a skeleton shaped like the destination
+- If the page is not ready 100ms after a click, `PageLoader` replaces the `[data-page-content]` slot in `Site.astro` with a skeleton shaped like the destination
 - Scripts re-initialize via `astro:after-swap` event
 
 ## Configuration Files
 - `astro.config.mjs` - Astro config with MDX, React, Tailwind, Sätteri hast plugins
 - `tsconfig.json` - Extends astro/tsconfigs/strict
-- `src/content.config.ts` - Content collections (`blog`, `about`)
+- `src/content.config.ts` - Content collections (`blog`, `about`, `projects`, `areas`)
 
 ## Content Guidelines
 - Blog posts go in `src/content/blog/` as `.md` or `.mdx` files

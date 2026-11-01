@@ -9,8 +9,10 @@ import {
   Callout,
   Chain,
   Mark,
+  AreaRail,
   Pill,
   PostListItem,
+  ProjectItem,
   SiteFooter,
   SiteHeader,
   SocialLinks,
@@ -149,5 +151,31 @@ describe("SocialLinks", () => {
 
   it("is in the footer", () => {
     expect(html(<SiteFooter year={2026} />)).toContain('class="ks-social"');
+  });
+});
+
+describe("AreaRail", () => {
+  it("links each area to its id", () => {
+    const out = html(<AreaRail areas={[{ id: "coffee", label: "Coffee", mark: "coffee" }]} />);
+    expect(out).toContain('aria-label="Areas"');
+    expect(out).toContain('href="#coffee"');
+  });
+});
+
+describe("ProjectItem", () => {
+  it("links the title to the site and adds a source link when both exist", () => {
+    const out = html(
+      <ProjectItem title="T" description="d" status="active" url="https://x.dev" repo="ky1ejs/x" />,
+    );
+    expect(out).toContain('<a class="ks-area-item-title" href="https://x.dev">T</a>');
+    expect(out).toContain('<a href="https://github.com/ky1ejs/x">Source</a>');
+    expect(out).toContain("data-accent");
+  });
+
+  it("links the title to the repo without a site", () => {
+    const out = html(<ProjectItem title="T" description="d" status="archived" repo="ky1ejs/x" />);
+    expect(out).toContain('href="https://github.com/ky1ejs/x">T</a>');
+    expect(out).not.toContain("Source");
+    expect(out).not.toContain("data-accent");
   });
 });
