@@ -4,7 +4,7 @@ date: 2023-07-22
 ---
 
 ## Moza Slypod Pro
-The Moza Slypod Pro is the most appealing concept due to it's monopod design. When it pushes out you have no need to try hit the rails of usually automated sliders. It can also push through tight gaps and mounting it to a tripod seems more trivial that chunky track sliders.
+The Moza Slypod Pro is the most appealing concept due to its monopod design. When it pushes out you have no need to try hit the rails of usually automated sliders. It can also push through tight gaps and mounting it to a tripod seems more trivial than chunky track sliders.
 
 However the execution of the concept is terrible, particularly when it comes to the app. Every single YouTube video I've seen either spoke to this, or seemed to choose to not mention any cons about the Slypod at all, perhaps for sponsorship reasons (I know that's a speculative thought, but the people who hate it really hate it so I'm surprised for the other videos to not mention a single con.)
 
