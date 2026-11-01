@@ -72,35 +72,26 @@
   </div>
 </template>
 
-<!--
-  The home page has no site header, so its skeleton fills the whole body. The
-  wrapper is a screen tall so the card centers as it does on the real page
--->
+<!-- Hero, area rail, then the first two area bands -->
 <template id="skeleton-home">
-  <div class="relative min-h-svh">
-    <div class="fixed right-4 bottom-4 z-[1000] min-[500px]:top-4 min-[500px]:bottom-auto">
-      <div class="skeleton-block h-10 w-12 rounded-xl"></div>
-    </div>
-    <div class="mt-16 flex items-center justify-center sm:absolute sm:inset-0 sm:m-auto sm:mt-0">
-      <div class="w-[85%] sm:w-[358px]">
-        <div class="bg-surface flex flex-col items-center rounded-xl px-6 pt-8 pb-6">
-          <div class="skeleton-block h-36 w-36 rounded-full"></div>
-          <div class="skeleton-block mt-5 h-7 w-36"></div>
-          <div class="skeleton-block mt-2 h-5 w-14"></div>
-          <div class="skeleton-block mt-4 h-4 w-11/12"></div>
-          <div class="skeleton-block mt-2 h-4 w-4/5"></div>
-          <div class="mt-11 mb-4 flex gap-4">
-            {Array.from({ length: 5 }, () => <div class="skeleton-block h-10 w-10 rounded-full" />)}
-          </div>
-        </div>
-        <div class="my-4 flex flex-col items-center">
-          <div class="skeleton-block mt-1 h-4 w-48"></div>
-          <div class="skeleton-block mt-2.5 h-4 w-24"></div>
-          <div class="skeleton-block mt-5 h-3 w-12"></div>
-          <div class="skeleton-block mt-1 h-3 w-16"></div>
-        </div>
+  <div class="flow-root">
+    <div class="mt-12 flex items-center gap-3 min-[640px]:mt-16">
+      <div class="skeleton-block h-14 w-14 rounded-full"></div>
+      <div class="flex flex-col gap-2">
+        <div class="skeleton-block h-4 w-24"></div>
+        <div class="skeleton-block h-3 w-48"></div>
       </div>
     </div>
+    <div class="skeleton-block mt-6 h-10 w-full max-w-[640px] min-[640px]:h-14"></div>
+    <div class="skeleton-block mt-3 h-10 w-3/5 max-w-[480px] min-[640px]:h-14"></div>
+    <div class="skeleton-block mt-5 h-4 w-full max-w-[560px]"></div>
+    <div class="skeleton-block mt-6 h-11 w-64 rounded-lg"></div>
+    <div class="skeleton-block mt-16 h-[58px] w-full rounded-none"></div>
+    {
+      Array.from({ length: 2 }, () => (
+        <div class="skeleton-block mt-6 h-64 w-full rounded-xl" />
+      ))
+    }
   </div>
 </template>
 
@@ -265,7 +256,7 @@
     const path = url.pathname.replace(/\/$/, "");
     if (path === "") return "skeleton-home";
     if (path === "/about") return "skeleton-about";
-    if (path === "/posts") return "skeleton-list";
+    if (path === "/posts" || path === "/projects") return "skeleton-list";
     if (path.startsWith("/posts/")) return "skeleton-post";
     return "skeleton-page";
   }
@@ -294,7 +285,7 @@
     const contentSlot = document.querySelector<HTMLElement>("[data-page-content]");
     let hidden: HTMLElement[];
 
-    if (contentSlot && variant !== "skeleton-home") {
+    if (contentSlot) {
       // Keep the real header and footer; replace only the page body. A
       // screen-tall skeleton keeps the footer below the fold, as on most pages
       element.className = `${contentSlot.className} min-h-svh`;
@@ -302,15 +293,11 @@
       contentSlot.after(element);
       hidden = [contentSlot];
     } else {
-      // Going to or from a page without the site chrome (home) replaces the whole body
-      if (variant === "skeleton-home") {
-        element.append(content);
-      } else {
-        const inset = document.createElement("div");
-        inset.className = TEXT_COLUMN_CLASS;
-        inset.append(content);
-        element.append(cloneTemplate("skeleton-header"), inset);
-      }
+      // A page without the site chrome: draw the header too
+      const inset = document.createElement("div");
+      inset.className = TEXT_COLUMN_CLASS;
+      inset.append(content);
+      element.append(cloneTemplate("skeleton-header"), inset);
       hidden = [...document.body.children].filter(
         (child): child is HTMLElement => child instanceof HTMLElement && !child.hidden,
       );
