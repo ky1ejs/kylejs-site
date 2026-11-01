@@ -16,6 +16,6 @@ export default [
     },
   },
   {
-    ignores: ["dist/", ".astro/", "node_modules/"],
+    ignores: ["dist/", ".astro/", "node_modules/", "storybook-static/", "test-results/", "playwright-report/"],
   },
 ];

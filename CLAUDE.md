@@ -25,6 +25,9 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm knip` - Find unused files, dependencies and exports (runs in CI with lint)
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
+- `pnpm test` - Vitest: design token contrast and CSS sync, component markup
+- `pnpm storybook` - Browse the design system at http://localhost:6006
+- `pnpm build-storybook` then `pnpm test:design` - axe accessibility checks on every story in both themes, plus screenshot comparisons once reference images exist (see `tests/design/README.md`)
 
 ## Project Structure
 
@@ -43,9 +46,20 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?)
 - `drafts/` - Draft blog posts
 
+### Design system (`/src/design`)
+Framework-agnostic: plain CSS plus React components that only take props and return markup. Astro renders them to HTML at build time, so they ship no JavaScript. Design source: the "kylejs.me design system" canvas on claude.ai.
+- `tokens.ts` - Source of truth for colour, type, space and radius. `tokens.css` declares the same values as `--ks-*` custom properties; `tokens.test.ts` fails if they drift or if a text colour drops below 4.5:1
+- `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
+- `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
+- `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
+- `components/` - Mark, Button, Pill, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand, SiteHeader, SiteFooter
+- `stories/` - Storybook stories. Storybook shows each story in light and dark side by side
+
+Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props.
+
 ### Components (`/src/components`)
-- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
-- `.tsx` React components - Mermaid (client:idle), Pill, GitHubRepoCard, DownloadFile, MdxImage
+- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata (renders the design-system Byline), PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
+- `.tsx` React components - Mermaid (client:idle), Pill (MDX override, renders the design-system Pill), GitHubRepoCard, DownloadFile, MdxImage
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
@@ -60,9 +74,10 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `intro.mdx`, `professional.mdx`, `personal.mdx` - `about` content collection, rendered by `about.astro` with `render()` through the same Sätteri pipeline and component overrides as blog posts
 
 ### Styling
-- **Global CSS**: `src/styles/global.css` with Tailwind v4, CSS variable theme system, animations
-- **Dark Mode**: `data-theme` attribute with `@variant dark` in Tailwind
-- **Color System**: CSS custom properties defined per theme (light/dark), registered in `@theme` block
+- **Global CSS**: `src/styles/global.css` imports Tailwind v4, the fonts and the design-system CSS, and sets base styles
+- **Dark Mode**: `data-theme` attribute with `@variant dark` in Tailwind. The token selectors match any element, so a subtree can render in the other theme
+- **Color System**: ten `--ks-*` tokens per theme in `src/design/tokens.css`, exposed to Tailwind as `bg-paper`, `bg-surface`, `text-ink`, `text-ink-2`, `text-muted`, `border-rule`, `text-accent`, `text-accent-text`, `bg-accent-soft`, `text-on-soft`. There are no colour ramps; don't add `primary-500`-style shades
+- **Fonts**: Lexend (headings, wordmark) and JetBrains Mono (labels, metadata) via Fontsource; body text uses the system font. `Base.astro` preloads Lexend on every page
 
 ## Key Features
 

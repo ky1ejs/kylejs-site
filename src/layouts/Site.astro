@@ -1,8 +1,8 @@
 ---
 import Base from "./Base.astro";
 import ThemeButton from "../components/ThemeButton.astro";
-import Copyright from "../components/Copyright.astro";
 import HeadingLinks from "../components/HeadingLinks.astro";
+import { SiteHeader, SiteFooter, type NavSection } from "../design/components";
 
 interface Props {
   title?: string;
@@ -11,38 +11,27 @@ interface Props {
   ogType?: string;
   ogUrl?: string;
   publishedTime?: string;
-  preloadHeadingFont?: boolean;
+  /** Nav item marked as the current page */
+  section?: NavSection;
 }
 
-const props = Astro.props;
+const { section, ...props } = Astro.props;
+
+// Projects joins the nav once /projects exists
+const sections: NavSection[] = ["writing", "about"];
+const year = new Date().getFullYear();
 ---
 
 <Base {...props}>
-  <div class="bg-background-primary sticky top-0 z-[1000] pt-4 pb-4">
-    <div class="content-inset flex items-center justify-between">
-      <div>
-        <a href="/">
-          <span class="text-3xl">kylejs</span>
-        </a>
-      </div>
-      <div class="flex items-center gap-4">
-        <a class="text-lg" href="/about">About</a>
-        <a class="text-lg" href="/posts">Posts</a>
-        <ThemeButton />
-      </div>
-    </div>
-  </div>
-  <div class="mx-auto max-w-[800px]">
-    <div class="content-inset" data-page-content>
+  <SiteHeader current={section} sections={sections}>
+    <ThemeButton />
+  </SiteHeader>
+  <div class="mx-auto max-w-[calc(var(--ks-width-text)+4rem)] px-6 min-[640px]:px-8">
+    <div data-page-content>
       <slot />
     </div>
-    <div class="content-inset text-muted pt-12 pb-4 text-center">
-      <hr class="border-muted mb-3 border-t-[0.5px]" />
-      <div class="flex justify-center gap-4">
-        <a href="/about">About</a>
-        <a href="/posts">Posts</a>
-      </div>
-      <Copyright />
+    <div class="pt-12">
+      <SiteFooter year={year} sections={sections} />
     </div>
   </div>
   <HeadingLinks />

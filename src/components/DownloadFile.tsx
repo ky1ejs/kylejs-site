@@ -12,16 +12,16 @@ export function DownloadFile({ name, path }: FileMetadata) {
       <a
         href={path}
         download={name}
-        className="group flex items-center gap-3 rounded-xl border border-primary-200 bg-primary-50 px-[9px] py-2.5 no-underline transition-colors hover:border-primary-400 hover:bg-primary-100"
+        className="group border-rule bg-surface hover:border-accent-text flex items-center gap-3 rounded-xl border px-[9px] py-2.5 no-underline transition-colors"
       >
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary-200 text-xs font-bold tracking-wide text-primary-800">
+        <span className="bg-accent-soft text-on-soft flex size-11 shrink-0 items-center justify-center rounded-lg font-mono text-xs font-medium tracking-wide">
           {extension}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate font-medium text-text-900">{name}</span>
+          <span className="text-ink block truncate font-medium">{name}</span>
           <span className="block text-sm text-muted">{extension} file</span>
         </span>
-        <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary-500 px-3 py-1.5 text-sm font-medium text-white transition-transform group-hover:-translate-y-px">
+        <span className="bg-accent-text text-on-accent group-hover:bg-accent-hover flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors">
           <svg
             aria-hidden="true"
             className="size-4 transition-transform group-hover:translate-y-0.5"

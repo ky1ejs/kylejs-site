@@ -1,46 +1,35 @@
 ---
 import RelativeDateLabel from "./RelativeDateLabel.astro";
 import calculateReadingTime from "../lib/reading-time";
-import { Image } from "astro:assets";
+import { getImage } from "astro:assets";
 import meImage from "../assets/me.jpg";
+import { Byline } from "../design/components";
 
 interface Props {
   content: string;
   date: Date;
-  showAvatar?: boolean;
 }
 
-const { content, date, showAvatar = true } = Astro.props;
+const { content, date } = Astro.props;
+
+// 40px avatar, 2x and 3x for high-density screens
+const avatar = await getImage({ src: meImage, width: 80, height: 80, format: "webp" });
+const avatar3x = await getImage({ src: meImage, width: 120, height: 120, format: "webp" });
 ---
 
-<div class="text-muted mb-4 flex items-center gap-3 text-sm">
-  {showAvatar && (
-    <a href="/" class="shrink-0" aria-hidden="true" tabindex="-1">
-      <Image
-        src={meImage}
-        width={80}
-        height={80}
-        alt=""
-        loading="eager"
-        class="h-10 w-10 rounded-full transition hover:scale-110"
-      />
-    </a>
-  )}
-  <div class="flex flex-col gap-0.5">
-    {showAvatar && (
-      <div>
-        by{" "}
-        <a href="/" class="hover:text-primary transition">
-          Kyle Satti
-        </a>
-      </div>
-    )}
-    <div>
-      <span class="whitespace-nowrap">{calculateReadingTime(content)}</span>
-      {" "}<span aria-hidden="true">·</span>{" "}
-      <span class="whitespace-nowrap">
-        <RelativeDateLabel date={date} />
-      </span>
-    </div>
-  </div>
-</div>
+<Byline
+  name="Kyle Satti"
+  href="/"
+  avatar={{
+    src: avatar.src,
+    srcSet: `${avatar.src} 2x, ${avatar3x.src} 3x`,
+    width: 40,
+    height: 40,
+  }}
+>
+  <Fragment slot="meta">
+    <span class="whitespace-nowrap">{calculateReadingTime(content)}</span>
+    {" "}<span aria-hidden="true">·</span>{" "}
+    <span class="whitespace-nowrap"><RelativeDateLabel date={date} /></span>
+  </Fragment>
+</Byline>

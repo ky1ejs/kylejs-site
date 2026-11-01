@@ -3,23 +3,10 @@ import { defineHastPlugin, type HastNode } from "satteri";
 type ElementNode = Extract<HastNode, { type: "element" }>;
 type ChildNode = ElementNode["children"][number];
 
-type CalloutType = "note" | "tip" | "important" | "warning" | "caution";
+import { calloutIcons, calloutTitles, type CalloutType } from "../design/callouts.ts";
 
-const CALLOUT_ICONS: Record<CalloutType, string> = {
-  note: "ℹ️",
-  tip: "💡",
-  important: "❗",
-  warning: "⚠️",
-  caution: "🔴",
-};
-
-const DEFAULT_TITLES: Record<CalloutType, string> = {
-  note: "Note",
-  tip: "Tip",
-  important: "Important",
-  warning: "Warning",
-  caution: "Caution",
-};
+// GitHub's [!IMPORTANT] renders as a note titled "Important"
+type MarkerType = CalloutType | "important";
 
 // Captures: [1] = type, [2] = title (rest of first line)
 const CALLOUT_REGEX = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*([^\n]*)/i;
@@ -72,13 +59,12 @@ function stripMarker(node: ChildNode): boolean {
  * Input: > [!NOTE] Title here
  *        > Content here
  *
- * Output: <div class="callout callout-note">
- *           <div class="callout-title">
- *             <span class="callout-icon">ℹ️</span>
- *             <span>Title here</span>
- *           </div>
- *           <div class="callout-content">...</div>
- *         </div>
+ * Output: <aside class="ks-callout" data-type="note">
+ *           <p class="ks-callout-title"><svg class="ks-callout-icon">…</svg>Title here</p>
+ *           <div class="ks-callout-body">...</div>
+ *         </aside>
+ *
+ * The same markup as the Callout component in src/design/components.
  */
 export default defineHastPlugin({
   name: "callouts",
@@ -88,8 +74,9 @@ export default defineHastPlugin({
       const match = ctx.textContent(node).trimStart().match(CALLOUT_REGEX);
       if (!match) return;
 
-      const type = match[1].toLowerCase() as CalloutType;
-      const title = match[2].trim() || DEFAULT_TITLES[type];
+      const marker = match[1].toLowerCase() as MarkerType;
+      const type: CalloutType = marker === "important" ? "note" : marker;
+      const title = match[2].trim() || (marker === "important" ? "Important" : calloutTitles[type]);
 
       const contentChildren = node.children.map(toPlain);
       for (const child of contentChildren) {
@@ -98,32 +85,38 @@ export default defineHastPlugin({
 
       ctx.replaceNode(node, {
         type: "element",
-        tagName: "div",
-        properties: { className: ["callout", `callout-${type}`] },
+        tagName: "aside",
+        properties: { className: ["ks-callout"], dataType: type },
         children: [
           {
             type: "element",
-            tagName: "div",
-            properties: { className: ["callout-title"] },
+            tagName: "p",
+            properties: { className: ["ks-callout-title"] },
             children: [
               {
                 type: "element",
-                tagName: "span",
-                properties: { className: ["callout-icon"] },
-                children: [{ type: "text", value: CALLOUT_ICONS[type] }],
+                tagName: "svg",
+                properties: {
+                  className: ["ks-callout-icon"],
+                  viewBox: "0 0 24 24",
+                  ariaHidden: "true",
+                },
+                children: [
+                  {
+                    type: "element",
+                    tagName: "path",
+                    properties: { d: calloutIcons[type] },
+                    children: [],
+                  },
+                ],
               },
-              {
-                type: "element",
-                tagName: "span",
-                properties: {},
-                children: [{ type: "text", value: title }],
-              },
+              { type: "text", value: title },
             ],
           },
           {
             type: "element",
             tagName: "div",
-            properties: { className: ["callout-content"] },
+            properties: { className: ["ks-callout-body"] },
             children: contentChildren,
           },
         ],

@@ -1,0 +1,107 @@
+/*
+ * Design tokens as CSS custom properties. Values mirror tokens.ts;
+ * tokens.test.ts fails if they drift.
+ *
+ * The theme selectors match any element, not just <html>, so a subtree can
+ * render in the other theme (Storybook shows light and dark side by side).
+ * Without JavaScript the page has no data-theme, so the media query applies.
+ */
+
+:root,
+[data-theme="light"] {
+  --ks-paper: #f3f5f8;
+  --ks-surface: #ffffff;
+  --ks-ink: #12141a;
+  --ks-ink-2: #4a5160;
+  --ks-muted: #5f6776;
+  --ks-rule: #dde2e8;
+  --ks-accent: #8319e6;
+  --ks-accent-text: #6914b8;
+  --ks-accent-soft: #f1e8fb;
+  --ks-on-soft: #4f0f8a;
+  --ks-on-accent: #ffffff;
+  --ks-accent-hover: #4f0f8a;
+
+  --ks-note-fg: #4f0f8a;
+  --ks-note-bg: #f1e8fb;
+  --ks-tip-fg: #1e6b3f;
+  --ks-tip-bg: #e6f4ec;
+  --ks-warning-fg: #7a5200;
+  --ks-warning-bg: #fbf1d6;
+  --ks-caution-fg: #a3261b;
+  --ks-caution-bg: #fbe9e7;
+}
+
+[data-theme="dark"] {
+  --ks-paper: #121318;
+  --ks-surface: #1c1d23;
+  --ks-ink: #ecedf1;
+  --ks-ink-2: #b4bac6;
+  --ks-muted: #8e95a3;
+  --ks-rule: #2c2e36;
+  --ks-accent: #b575f0;
+  --ks-accent-text: #cda3f5;
+  --ks-accent-soft: #2a1e3d;
+  --ks-on-soft: #f3e8fc;
+  --ks-on-accent: #121318;
+  --ks-accent-hover: #e6d1fa;
+
+  --ks-note-fg: #e6d1fa;
+  --ks-note-bg: #2a1e3d;
+  --ks-tip-fg: #8fd3a8;
+  --ks-tip-bg: #15291e;
+  --ks-warning-fg: #e8c46a;
+  --ks-warning-bg: #2b2314;
+  --ks-caution-fg: #f2a49b;
+  --ks-caution-bg: #2e1715;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --ks-paper: #121318;
+    --ks-surface: #1c1d23;
+    --ks-ink: #ecedf1;
+    --ks-ink-2: #b4bac6;
+    --ks-muted: #8e95a3;
+    --ks-rule: #2c2e36;
+    --ks-accent: #b575f0;
+    --ks-accent-text: #cda3f5;
+    --ks-accent-soft: #2a1e3d;
+    --ks-on-soft: #f3e8fc;
+    --ks-on-accent: #121318;
+    --ks-accent-hover: #e6d1fa;
+
+    --ks-note-fg: #e6d1fa;
+    --ks-note-bg: #2a1e3d;
+    --ks-tip-fg: #8fd3a8;
+    --ks-tip-bg: #15291e;
+    --ks-warning-fg: #e8c46a;
+    --ks-warning-bg: #2b2314;
+    --ks-caution-fg: #f2a49b;
+    --ks-caution-bg: #2e1715;
+  }
+}
+
+:root {
+  --ks-font-display: "Lexend Variable", system-ui, sans-serif;
+  --ks-font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ks-font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --ks-space-1: 4px;
+  --ks-space-2: 8px;
+  --ks-space-3: 12px;
+  --ks-space-4: 16px;
+  --ks-space-6: 24px;
+  --ks-space-8: 32px;
+  --ks-space-12: 48px;
+  --ks-space-18: 72px;
+  --ks-space-24: 96px;
+
+  --ks-radius-chip: 4px;
+  --ks-radius-control: 8px;
+  --ks-radius-card: 12px;
+  --ks-radius-full: 999px;
+
+  --ks-width-text: 680px;
+  --ks-width-wide: 1120px;
+}

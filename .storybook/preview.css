@@ -1,0 +1,36 @@
+/* Storybook canvas only. The site's own base styles live in global.css */
+body {
+  margin: 0;
+}
+
+.sb-themes {
+  display: grid;
+  min-height: 100vh;
+}
+
+@media (min-width: 900px) {
+  .sb-themes[data-layout="row"] {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+}
+
+.sb-theme {
+  box-sizing: border-box;
+  padding: 32px;
+  background: var(--ks-paper);
+  color: var(--ks-ink);
+  font-family: var(--ks-font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.sb-theme *,
+.sb-theme *::before,
+.sb-theme *::after {
+  box-sizing: border-box;
+}
+
+.sb-theme a {
+  color: var(--ks-accent-text);
+  text-underline-offset: 3px;
+}

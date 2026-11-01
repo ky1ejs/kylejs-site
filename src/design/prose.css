@@ -1,0 +1,189 @@
+/*
+ * Post prose: everything inside `.post`. Plain CSS on the --ks-* tokens.
+ * Headings get their highlighter (h2) and squiggle (h3) from the hast
+ * plugins in src/lib; callouts use .ks-callout from components.css.
+ */
+
+.post {
+  --ks-heading-mark-bg: var(--ks-accent-soft);
+  --ks-heading-mark-text: var(--ks-on-soft);
+
+  .post-title {
+    margin: 2.5rem 0 0.5rem;
+    font-family: var(--ks-font-display);
+    font-size: 2.5rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--ks-accent-text);
+    text-wrap: balance;
+  }
+
+  article {
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--ks-accent-text);
+  }
+
+  /* More space above a heading than below, so it reads as the start of its section */
+  h2 {
+    margin-top: 2.75rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--ks-font-display);
+    font-size: 1.625rem;
+    line-height: 1.35;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--ks-heading-mark-text);
+  }
+
+  /* Pull the h2 into the gutter rather than the mark: a negative margin on the
+     mark only shifts its first line, so a wrapped heading indents its second */
+  h2:has(> .heading-mark) {
+    margin-left: -10px;
+  }
+
+  /* Highlighter behind the words, added by hast-heading-marks */
+  .heading-mark {
+    padding: 1px 10px 3px;
+    border-radius: 4px 10px 6px 12px;
+    background-color: var(--ks-heading-mark-bg);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* A heading that opens the post sits under the byline, which already has spacing */
+  article > :nth-child(2):is(h2),
+  article > :nth-child(2) > h2 {
+    margin-top: 1.5rem;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.25rem;
+    font-family: var(--ks-font-display);
+    font-size: 1.3125rem;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ks-accent-text);
+
+    /* Short hand-drawn squiggle under the start of the heading. A mask, so it
+       takes the theme's accent colour */
+    &::after {
+      content: "";
+      display: block;
+      width: 64px;
+      height: 10px;
+      margin-top: 1px;
+      border: 0;
+      background-color: var(--ks-accent);
+      --squiggle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 10'%3E%3Cpath d='M2 5 Q 7 0 12 5 T 22 5 T 32 5 T 42 5 T 52 5 T 62 5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round'/%3E%3C/svg%3E");
+      -webkit-mask: var(--squiggle) no-repeat;
+      mask: var(--squiggle) no-repeat;
+    }
+  }
+
+  p + :is(ol, ul) {
+    margin-top: 0.5rem;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Only with scripts on: the inline onload that adds img-loaded is a script */
+  @media (scripting: enabled) {
+    img.img-loading {
+      opacity: 0;
+      transition: opacity var(--img-fade, 0.3s) ease-in;
+    }
+
+    img.img-loaded {
+      opacity: 1;
+    }
+  }
+
+  table {
+    width: 100%;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.625rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+
+    /* Flush with the text column, like the paragraphs around it */
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  th {
+    padding-top: 0;
+    border-bottom: 2px solid var(--ks-accent);
+    font-family: var(--ks-font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ks-muted);
+  }
+
+  td {
+    border-bottom: 1px solid var(--ks-rule);
+  }
+
+  tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .footnotes {
+    margin-top: 3rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--ks-rule);
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+
+    li + li {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .data-footnote-backref {
+    text-decoration: none;
+  }
+
+  .mermaid-diagram {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .mermaid-diagram svg {
+    max-width: 100%;
+  }
+
+  :not(pre) > code {
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--ks-radius-chip);
+    font-family: var(--ks-font-mono);
+    font-size: 0.8125em;
+    background-color: var(--ks-accent-soft);
+    color: var(--ks-on-soft);
+  }
+}
