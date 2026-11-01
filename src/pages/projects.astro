@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from "astro:content";
+import Site from "../layouts/Site.astro";
+import { ProjectItem } from "../design/components";
+import { projectGroups } from "../lib/project-groups";
+
+const projects = await Promise.all(
+  (await getCollection("projects")).map(async (p) => ({
+    ...p,
+    // Only render a note when the file has a body
+    Content: p.body?.trim() ? (await render(p)).Content : undefined,
+  })),
+);
+
+const grouped = projectGroups
+  .map((group) => ({
+    group,
+    items: projects
+      .filter((p) => p.data.group === group.id)
+      .sort((a, b) => a.data.order - b.data.order),
+  }))
+  .filter(({ items }) => items.length > 0);
+---
+
+<Site
+  title="Projects · kylejs"
+  description="Side projects, tools and experiments by Kyle Satti: espresso hardware, iOS apps, developer tooling and a home lab."
+  section="projects"
+>
+  <div class="mt-10">
+    <p class="ks-label m-0">Projects</p>
+    <h1 class="mt-2 mb-3">Rabbit holes I didn't climb back out of.</h1>
+    <p class="text-ink-2 m-0 max-w-[60ch] text-[17px] leading-relaxed">
+      Almost everything here is on <a href="https://github.com/ky1ejs">GitHub</a>.
+    </p>
+  </div>
+
+  {
+    grouped.map(({ group, items }) => (
+      <section class="mt-12" aria-labelledby={group.id}>
+        <h2 id={group.id} class="mt-0 mb-1">{group.title}</h2>
+        <p class="text-ink-2 m-0 mb-2 max-w-[60ch]">{group.blurb}</p>
+        <ul class="ks-area-items">
+          {items.map((p) => {
+            const props = {
+              title: p.data.title,
+              description: p.data.description,
+              status: p.data.status,
+              repo: p.data.repo,
+              url: p.data.url,
+              year: p.data.year,
+            };
+            // Astro passes an empty slot as children, so only open one for a note
+            return p.Content ? (
+              <ProjectItem {...props}>
+                <p.Content />
+              </ProjectItem>
+            ) : (
+              <ProjectItem {...props} />
+            );
+          })}
+        </ul>
+      </section>
+    ))
+  }
+</Site>

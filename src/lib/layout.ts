@@ -7,3 +7,6 @@ export const TEXT_COLUMN_CLASS = "mx-auto max-w-[calc(var(--ks-width-text)+4rem)
 
 /** `sizes` for an image that fills the text column */
 export const TEXT_COLUMN_SIZES = "(min-width: 744px) 680px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 3rem)";
+
+/** 1120px plus the page gutters, for the home page and grids */
+export const WIDE_COLUMN_CLASS = "mx-auto max-w-[calc(var(--ks-width-wide)+4rem)] px-6 min-[640px]:px-8";
