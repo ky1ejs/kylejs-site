@@ -5,15 +5,36 @@ import Site from "../layouts/Site.astro";
 import RelativeDateLabel from "../components/RelativeDateLabel.astro";
 import { AreaBand, AreaCard, AreaRail, Button, MediaPlaceholder, SocialLinks } from "../design/components";
 import meImage from "../assets/me.jpg";
+import { postsByArea } from "../lib/area-posts";
 
 const areas = (await getCollection("areas")).sort((a, b) => a.data.order - b.data.order);
 const bands = areas.filter((a) => a.data.display === "band");
 const compact = areas.filter((a) => a.data.display === "compact");
 
-const latest = (await getCollection("blog")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
+const posts = await getCollection("blog");
+const latest = posts.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
 
-const postCount = (items: (typeof areas)[number]["data"]["items"]) => {
-  const n = items.filter((i) => i.writing).length;
+// Posts list their areas in frontmatter. Fails the build on an unknown area.
+const areaPosts = postsByArea(
+  areas.map((a) => a.id),
+  posts,
+);
+const postsFor = (area: (typeof areas)[number]) => areaPosts.get(area.id) ?? [];
+
+/** The area's posts, newest first, then its other items. */
+const itemsFor = (area: (typeof areas)[number]) => [
+  ...postsFor(area).map((post) => ({
+    kind: "Post",
+    title: post.data.title,
+    desc: post.data.description,
+    href: `/posts/${post.id}`,
+    writing: true,
+  })),
+  ...area.data.items,
+];
+
+const postCount = (area: (typeof areas)[number]) => {
+  const n = postsFor(area).length;
   return n === 0 ? undefined : n === 1 ? "1 post" : `${n} posts`;
 };
 ---
@@ -72,7 +93,7 @@ const postCount = (items: (typeof areas)[number]["data"]["items"]) => {
           meta: area.data.meta,
           why: area.data.why,
           chain: area.data.chain,
-          items: area.data.items,
+          items: itemsFor(area),
           mediaLayout: layout,
         };
         // Astro passes an empty slot as a prop, so only open one for images
@@ -103,8 +124,8 @@ const postCount = (items: (typeof areas)[number]["data"]["items"]) => {
             title={area.data.title}
             why={area.data.why}
             mark={area.data.mark}
-            count={postCount(area.data.items)}
-            href={area.data.items[0]?.href}
+            count={postCount(area)}
+            href={itemsFor(area)[0]?.href}
           />
         </div>
       ))
