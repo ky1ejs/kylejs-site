@@ -3,7 +3,7 @@ title: My Photography Data Workflow
 date: 2023-07-22
 ---
 
-Shutter to instgram post
+Shutter to Instagram post
 
 test
 

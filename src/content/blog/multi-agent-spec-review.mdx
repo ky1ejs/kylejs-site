@@ -18,13 +18,13 @@ shareImage: /posts/images/multi-agent-spec-review.jpg
 
 I recently had a good time using sub-agents to prevent context-rot and introduce diverse perspectives when coding with agents.
 
-What's context-rot? It's the gradual decline in output quality as a the context window becomes saturated with many lines of conversation and actions.
+What's context-rot? It's the gradual decline in output quality as the context window becomes saturated with many lines of conversation and actions.
 
 With spec-driven development and the process I outline below, I have to do far less hand-holding when I write specs with AI because I can depend on clean context windows that have been seeded with different perspectives to represent various things I want to see evaluated in every spec. This process essentially simulates the typical peer review process you see with RFCs. Taking this approach gives me the bandwidth to parallelize over writing more specs at once.
 
 ## The Goal Of This Post
 
-My goal with this post is to encourage others play with sub-agents, spec-driven development and context window management to get better results when coding with AI. I'd love to connect with you if you find this interesting (my socials etc. are on the [home page](https://kylejs.dev)).
+My goal with this post is to encourage others to play with sub-agents, spec-driven development and context window management to get better results when coding with AI. I'd love to connect with you if you find this interesting (my socials etc. are on the [home page](https://kylejs.dev)).
 
 ## Where It Started...
 Over the past few weeks, I've become obsessed with spec-driven development. 
@@ -33,7 +33,7 @@ Essentially, spec-driven development is Claude Code plan mode taken up a notch. 
 
 This allows you to parallelize across 3+ pieces of work at the same time, which becomes incredibly addictive (most folks I speak to are often working across 5 things at the same time).
 
-As of today (January 20, 2026), Claude will actually write a spec of sorts whenever its in plan mode. Spec-driven development builds upon this by being a lot more detailed and consistent across these plans, which is great for reaching a deterministic workflow and having mobility across the number of specs you're going to produce.
+As of today (January 20, 2026), Claude will actually write a spec of sorts whenever it's in plan mode. Spec-driven development builds upon this by being a lot more detailed and consistent across these plans, which is great for reaching a deterministic workflow and having mobility across the number of specs you're going to produce.
 
 > [!NOTE] Why are people obsessed with being deterministic with AI?
 >  Well, AI is very exciting, but every time you open a context window, it's like speaking to different people who work at your company; the ideas/outcomes you'll arrive at will vary widely depending on how that person (agent) happens to interpret things on that day.
@@ -46,7 +46,7 @@ After enjoying collaboratively writing specs with Claude, I started to get bored
 The value I saw in me reviewing Claude's work, aside from me knowing what is going on in the codebase (which is critical), is that I bring a fresh set of eyes and diversity of thought... I can also sense-check when the session is being too kind and appeasing the approach I want to see rather than challenging me on good grounds.
 
 ## The Solution: spec-orchestration with sub-agents
-After writing a few specs with Claude and reviewing with them with colleagues, I had an idea: what if I created multiple sub-agents with separate personas who only received the written spec with no steer from the conversation I've had with Claude prior to writing the spec, so they could review it purely on the grounds of the written spec and their own personas?!
+After writing a few specs with Claude and reviewing them with colleagues, I had an idea: what if I created multiple sub-agents with separate personas who only received the written spec with no steer from the conversation I've had with Claude prior to writing the spec, so they could review it purely on the grounds of the written spec and their own personas?!
 
 To realize this idea of multi-persona, fresh-eyed spec review and iteration, I created a `spec-orchestrator` agent that would manage the process of spec writing and review.
 
@@ -145,7 +145,7 @@ I'm also considering adding a Security Reviewer as a dedicated persona rather th
 ## The Result
 I love using this workflow. Here's what I've noticed after using it on a handful of specs:
 
-- **Catches things I miss**: In about 3 out of 4 specs, a reviewer raises something I hadn't considered. The Paranoid Engineer in particular has flagged edge cases that wouldn't have occured to me so quickly
+- **Catches things I miss**: In about 3 out of 4 specs, a reviewer raises something I hadn't considered. The Paranoid Engineer in particular has flagged edge cases that wouldn't have occurred to me so quickly
 - **Less hand-holding required**: I used to go back and forth on almost every section of a spec with `spec-writer`. Now most of my feedback is on API design, data models, and UX nuances
 - **Traceable decision-making**: Having a record of what each reviewer raised and how it was addressed is surprisingly useful when you come back to a spec weeks later
 

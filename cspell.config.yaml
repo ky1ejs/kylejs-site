@@ -1,0 +1,102 @@
+# Spell check for site content and UI text. Run with `pnpm check:spelling`.
+# Accepts US and UK spelling; posts use both.
+# Add a real word cspell does not know to `words`, keeping the list sorted.
+version: "0.2"
+language: en,en-GB
+useGitignore: true
+minWordLength: 3
+files:
+  - content/**/*.{md,mdx}
+  - src/**/*.{md,mdx,astro,ts,tsx}
+  - "*.md"
+  - docs/**/*.md
+ignoreRegExpList:
+  # All-caps acronyms, e.g. GFM, DJI's
+  - /\b[A-Z]{2,}(?:'?s)?\b/g
+  # File names in MDX attributes, e.g. path="/posts/macbook-deskmoun.3mf"
+  - /\b[\w-]+\.3mf\b/g
+  # Footnote labels, e.g. [^sneddon2003]
+  - /\[\^[\w-]+\]/g
+words:
+  - Acaia
+  - Akers
+  - anthrozoologist
+  - awww
+  - backcountry
+  - badlogic
+  - booooo
+  - brainer
+  - Brownscombe
+  - cafelat
+  - caldigit
+  - cals
+  - Cieslak
+  - Cuvillier
+  - Dawid
+  - Diggles
+  - Edelkrone
+  - evals
+  - goated
+  - haha
+  - Herzog
+  - Linea
+  - Lindgren
+  - Lindström
+  - Marzocco
+  - Mediratta
+  - Micra
+  - mirrorless
+  - mitsuhiko
+  - monopod
+  - Moza
+  - nociceptors
+  - normcore
+  - portafilter
+  - portafilters
+  - Printables
+  - prosumer
+  - prosumers
+  - Prusament
+  - redds
+  - Registe
+  - Ronin
+  - salmonids
+  - Samarth
+  - skillset
+  - skillsets
+  - Slypod
+  - Sneddon
+  - steipete
+  - Striedter
+  - Sworks
+  - Tele
+  - Tilta
+  - wesbos
+  - worktrees
+  # Site and tooling
+  - anthropics
+  - backref
+  - cwd
+  - describedby
+  - dji
+  - fontsource
+  - frontmatter
+  - Headshot
+  - kylejs
+  - lexend
+  - mozjpeg
+  - nvmrc
+  - plaiceholder
+  - prefetchable
+  - rearchitect
+  - satteri
+  - Satti
+  - shiki
+  - slugifier
+  - svh
+  - Sätteri
+  - utf
+  - Vinext
+  - webp
+  - wght
+  - workerd

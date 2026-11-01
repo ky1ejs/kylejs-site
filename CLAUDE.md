@@ -21,6 +21,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm preview` - Preview production build locally
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Run ESLint with auto-fix
+- `pnpm check:spelling` - Spell check content, components and docs with cspell (US and UK English). Add real words it does not know to `words` in `cspell.config.yaml`
 - `pnpm knip` - Find unused files, dependencies and exports (runs in CI with lint)
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted

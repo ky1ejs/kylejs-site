@@ -35,7 +35,6 @@ The organization that has been chosen as the home for the product I founded alre
 Prior to the recent change in the tech climate, Spotify would have very likely moved me into the new org as an EM without a second thought. However, the current climate has made it clear that this is not a sustainable practice.
 
 After one has founded a product, it might seem like an easy decision to follow it wherever it goes. There were trade-offs involved, and this was not a move without inherent risk.
-Risks of going back to IC from EM
 ## Risks of going back to IC from EM
 ### Risk 1. – No longer being invited to "[the room where it happens](https://en.wikipedia.org/wiki/The_Room_Where_It_Happens)"
 At Spotify, one of the cool things about moving from an IC role of Senior Engineer or lower to Engineering Manager, which is a lateral move 99% of the time, is that you gain access to channels, meetings and discussions to which only EMs, Staff Engineers and a level or two above are invited.
@@ -69,7 +68,7 @@ It's very rare that one gets the opportunity to found and build a significant pr
 
 As mentioned, the product facilitates the dissemination of high-level company goals and allows leaders/work-managers to carry out dependency resolution and prioritization discussions. This means that the project offers high visibility with senior leaders across the company and grows my network as a result.
 
-Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away; I've made a ton of learnings on how to bootstrap new products inside a big tech company and in effective practices for big tech companies plan large scale projects (maybe that should be a future post...).
+Whether my impact leads to new opportunities, a promotion, decent compensation review, or even just pats on the back, the network I've grown and the story I can now tell cannot be taken away; I've made a ton of learnings on how to bootstrap new products inside a big tech company and in effective practices for how big tech companies plan large scale projects (maybe that should be a future post...).
 
 ### Benefit 2. – Greater job security
 I know, I know... this one contradicts Risk number 2 above, but hear me out...
@@ -100,17 +99,17 @@ As mentioned in Benefit 2, middle management at Spotify, like at many big tech c
 
 Staff Engineer roles, the role above my current title of Senior Engineer, aren't exactly in abundance but seem to be ever so slightly more common additions to the jobs board than Senior Engineering Manager. 
 
-My performance reviews as an EM were always strong (one example: my reports never rated my below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need a role of the next level to become available, and there was no sign of that in my previous org.
+My performance reviews as an EM were always strong (one example: my reports never rated me below 96/100 for Spotify's key EM criteria of "would I recommend my manager to others", and another: my teams always delivered what they needed to on time and to meet requirements). Strong performance is only one part of the equation – _[fortune and prowess](https://www.litcharts.com/lit/the-prince/themes/fortune-and-prowess)_ – you also need a role of the next level to become available, and there was no sign of that in my previous org.
 
 In addition to slightly higher likelihood of Staff positions opening up, my tech lead role more neatly aligns with the Staff Engineer role than the SEM role and staying with this impactful project in general probably gives me a slightly better chance of levelling up.
 
 ## Would I have made this change if EM **_was_** an option in the new org?
-No. I probably would have stuck with the EM role had this been a posibility in the org I've joined, mainly because I wouldn't have to process a role change with US immigration in regards to my visa or delay my Green Card application process. 
+No. I probably would have stuck with the EM role had this been a possibility in the org I've joined, mainly because I wouldn't have to process a role change with US immigration in regards to my visa or delay my Green Card application process. 
 
 That said, it wouldn't have been an easy decision, since I am really interested in the Staff Engineer role and spending most of my time creating rather than managing.
 
 ## Wrap-up
 I've been thinking for the past couple of years that I've not taken a decent risk in my career for a while. I was fearing that I was becoming too safe and comfortable, so the timing felt right to take this move. 
 
-If you're considering you're next move and risk to take, I encourage you to lay out the pros/cons, take thoughtful and intentional risks, and do the best you can with the information you have at the time.
+If you're considering your next move and risk to take, I encourage you to lay out the pros/cons, take thoughtful and intentional risks, and do the best you can with the information you have at the time.
 

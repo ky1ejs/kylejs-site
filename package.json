@@ -11,6 +11,7 @@
     "check:images": "node scripts/check-images.mjs",
     "check:layout-shift": "node scripts/check-layout-shift.mjs",
     "lint:fix": "pnpm run lint --fix",
+    "check:spelling": "cspell --no-progress --show-context",
     "knip": "knip"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "cspell": "^10.4.0",
     "eslint": "10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^3.2.1",
