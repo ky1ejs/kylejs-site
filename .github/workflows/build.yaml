@@ -47,3 +47,6 @@ jobs:
 
       - name: Check layout shift
         run: pnpm check:layout-shift
+
+      - name: Check back and forward navigation
+        run: pnpm check:back-navigation

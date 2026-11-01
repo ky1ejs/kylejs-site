@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "check:images": "node scripts/check-images.mjs",
     "check:layout-shift": "node scripts/check-layout-shift.mjs",
+    "check:back-navigation": "node scripts/check-back-navigation.mjs",
     "lint:fix": "pnpm run lint --fix",
     "check:spelling": "cspell --no-progress --show-context",
     "knip": "knip",
