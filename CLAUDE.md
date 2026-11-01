@@ -21,6 +21,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm preview` - Preview production build locally
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Run ESLint with auto-fix
+- `pnpm knip` - Find unused files, dependencies and exports (runs in CI with lint)
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
 
@@ -43,7 +44,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 
 ### Components (`/src/components`)
 - `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata, PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
-- `.tsx` React components - Mermaid (client:idle), Pill, GitHubRepoCard, DownloadFile, MdxImage, Bio, Selector
+- `.tsx` React components - Mermaid (client:idle), Pill, GitHubRepoCard, DownloadFile, MdxImage
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
