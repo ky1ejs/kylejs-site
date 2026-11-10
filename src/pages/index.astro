@@ -15,6 +15,7 @@ import {
 } from "../design/components";
 import meImage from "../assets/me.jpg";
 import { groupByArea } from "../lib/area-entries";
+import { compareActivity, displayStatus, repoMeta } from "../lib/github";
 
 const areas = (await getCollection("areas")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -47,15 +48,14 @@ const areaPosts = groupByArea(
   areaIds,
   posts.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime()),
 );
-const STATUS_RANK = { active: 0, experiment: 1, shipped: 2, archived: 3 };
 const areaProjects = groupByArea(
   "Project",
   areaIds,
-  // Ranked projects first, then active before past work
+  // Ranked projects first, then the most active
   projects.toSorted(
     (a, b) =>
       (a.data.highlight ?? Infinity) - (b.data.highlight ?? Infinity) ||
-      STATUS_RANK[a.data.status] - STATUS_RANK[b.data.status] ||
+      compareActivity(a.data, b.data) ||
       a.data.order - b.data.order,
   ),
 );
@@ -63,13 +63,14 @@ const postsFor = (area: (typeof areas)[number]) => areaPosts.get(area.id) ?? [];
 
 type Project = (typeof projects)[number];
 const projectItem = (p: Project) => ({
-  kind: STATUS_LABEL[p.data.status],
+  kind: STATUS_LABEL[displayStatus(p.data)],
   title: p.data.title,
   desc: p.data.description,
   href:
     p.data.url ??
     (p.data.repo ? `https://github.com/${p.data.repo}` : undefined),
-  accent: p.data.status === "active",
+  accent: displayStatus(p.data) === "active",
+  meta: repoMeta(p.data),
 });
 
 /** Ranked projects, then posts newest first, then other projects, then the area's own items. */
@@ -156,8 +157,9 @@ const postCount = (area: (typeof areas)[number]) => {
             <ProjectCard
               title={p.data.title}
               description={p.data.description}
-              status={p.data.status}
+              status={displayStatus(p.data)}
               repo={p.data.repo}
+              meta={repoMeta(p.data)}
               url={p.data.url}
             />
           </li>

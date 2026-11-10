@@ -1,8 +1,15 @@
 ---
 import { getCollection, render } from "astro:content";
 import Site from "../layouts/Site.astro";
-import { ProjectItem } from "../design/components";
+import { ProjectItem, Segmented } from "../design/components";
 import { projectGroups } from "../lib/project-groups";
+import { statusGroups } from "../lib/project-statuses";
+import {
+  compareActivity,
+  displayStatus,
+  lastCommitAt,
+  repoMeta,
+} from "../lib/github";
 
 const projects = await Promise.all(
   (await getCollection("projects")).map(async (p) => ({
@@ -12,14 +19,26 @@ const projects = await Promise.all(
   })),
 );
 
+// Most active first; `order` breaks ties between quiet projects. The rank is
+// also the "Most active" sort key for the page script.
+const byActivity = projects.toSorted(
+  (a, b) => compareActivity(a.data, b.data) || a.data.order - b.data.order,
+);
+
+// The default view, rendered here so the page needs no script to show it:
+// grouped by topic, most active first
 const grouped = projectGroups
   .map((group) => ({
     group,
-    items: projects
-      .filter((p) => p.data.group === group.id)
-      .sort((a, b) => a.data.order - b.data.order),
+    items: byActivity.filter((p) => p.data.group === group.id),
   }))
   .filter(({ items }) => items.length > 0);
+
+// Section titles and blurbs for the script to build other groupings from
+const sections = {
+  topic: projectGroups.map(({ id, title, blurb }) => ({ id, title, blurb })),
+  status: statusGroups,
+};
 ---
 
 <Site
@@ -31,24 +50,62 @@ const grouped = projectGroups
     <p class="ks-label m-0">Projects</p>
     <h1 class="mt-2 mb-3">Rabbit holes I didn't climb back out of.</h1>
     <p class="text-ink-2 m-0 max-w-[60ch] text-[17px] leading-relaxed">
-      Almost everything here is on <a href="https://github.com/ky1ejs">GitHub</a>.
+      Almost everything here is on{" "}
+      <a href="https://github.com/ky1ejs">GitHub</a>.
     </p>
   </div>
 
-  {
-    grouped.map(({ group, items }) => (
+  <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3" data-project-controls>
+    <Segmented
+      legend="Group"
+      name="project-group"
+      value="topic"
+      options={[
+        { value: "topic", label: "Topic" },
+        { value: "status", label: "Status" },
+        { value: "none", label: "None" },
+      ]}
+    />
+    <Segmented
+      legend="Sort"
+      name="project-sort"
+      value="activity"
+      options={[
+        { value: "activity", label: "Most active" },
+        { value: "updated", label: "Last commit" },
+        { value: "name", label: "A–Z" },
+      ]}
+    />
+  </div>
+
+  <script
+    type="application/json"
+    data-project-sections
+    set:html={JSON.stringify(sections)}
+  />
+  <div data-project-list>
+    {grouped.map(({ group, items }) => (
       <section class="mt-12" aria-labelledby={group.id}>
-        <h2 id={group.id} class="mt-0 mb-1">{group.title}</h2>
+        <h2 id={group.id} class="mt-0 mb-1">
+          {group.title}
+        </h2>
         <p class="text-ink-2 m-0 mb-2 max-w-[60ch]">{group.blurb}</p>
         <ul class="ks-area-items">
           {items.map((p) => {
             const props = {
               title: p.data.title,
               description: p.data.description,
-              status: p.data.status,
+              status: displayStatus(p.data),
               repo: p.data.repo,
               url: p.data.url,
-              year: p.data.year,
+              meta: repoMeta(p.data),
+              dataset: {
+                topic: p.data.group,
+                status: displayStatus(p.data),
+                rank: String(byActivity.indexOf(p)),
+                updated: lastCommitAt(p.data),
+                name: p.data.title,
+              },
             };
             // Astro passes an empty slot as children, so only open one for a note
             return p.Content ? (
@@ -61,6 +118,106 @@ const grouped = projectGroups
           })}
         </ul>
       </section>
-    ))
-  }
+    ))}
+  </div>
 </Site>
+
+<script>
+  // Regroups and resorts the project rows when a control changes. Moves the
+  // existing <li>s, so focus and reading order follow what is shown. Only
+  // runs on input: the default view is in the HTML, so nothing shifts on load.
+  interface Section {
+    id: string;
+    title: string;
+    blurb: string;
+  }
+
+  const compare: Record<string, (a: HTMLElement, b: HTMLElement) => number> = {
+    activity: (a, b) => Number(a.dataset.rank) - Number(b.dataset.rank),
+    // Newest first; rows without a commit date go last
+    updated: (a, b) =>
+      (b.dataset.updated ?? "").localeCompare(a.dataset.updated ?? "") ||
+      Number(a.dataset.rank) - Number(b.dataset.rank),
+    name: (a, b) =>
+      (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "", "en", {
+        sensitivity: "base",
+      }),
+  };
+
+  function section(
+    id: string | undefined,
+    title: string | undefined,
+    blurb: string | undefined,
+    rows: HTMLElement[],
+  ) {
+    const el = document.createElement("section");
+    el.className = "mt-12";
+    if (id && title) {
+      const heading = document.createElement("h2");
+      heading.id = id;
+      heading.className = "mt-0 mb-1";
+      heading.textContent = title;
+      el.setAttribute("aria-labelledby", id);
+      el.append(heading);
+      if (blurb) {
+        const p = document.createElement("p");
+        p.className = "text-ink-2 m-0 mb-2 max-w-[60ch]";
+        p.textContent = blurb;
+        el.append(p);
+      }
+    } else {
+      el.setAttribute("aria-label", "All projects");
+    }
+    const list = document.createElement("ul");
+    list.className = "ks-area-items";
+    list.append(...rows);
+    el.append(list);
+    return el;
+  }
+
+  function setUp() {
+    const controls = document.querySelector<HTMLElement>(
+      "[data-project-controls]",
+    );
+    const container = document.querySelector<HTMLElement>(
+      "[data-project-list]",
+    );
+    const data = document.querySelector<HTMLScriptElement>(
+      "[data-project-sections]",
+    );
+    if (!controls || !container || !data) return;
+    const sections: Record<"topic" | "status", Section[]> = JSON.parse(
+      data.textContent ?? "{}",
+    );
+    // Every row, whichever section it is in now
+    const rows = [...container.querySelectorAll<HTMLElement>("li[data-rank]")];
+
+    controls.addEventListener("change", () => {
+      const group =
+        controls.querySelector<HTMLInputElement>("[name=project-group]:checked")
+          ?.value ?? "topic";
+      const sort =
+        controls.querySelector<HTMLInputElement>("[name=project-sort]:checked")
+          ?.value ?? "activity";
+      const sorted = rows.toSorted(compare[sort] ?? compare.activity);
+
+      const built =
+        group === "none"
+          ? [section(undefined, undefined, undefined, sorted)]
+          : sections[group as "topic" | "status"]
+              .map((s) => {
+                const key = group === "topic" ? "topic" : "status";
+                return section(
+                  s.id,
+                  s.title,
+                  s.blurb,
+                  sorted.filter((r) => r.dataset[key] === s.id),
+                );
+              })
+              .filter((el) => el.querySelector("li"));
+      container.replaceChildren(...built);
+    });
+  }
+
+  document.addEventListener("astro:page-load", setUp);
+</script>

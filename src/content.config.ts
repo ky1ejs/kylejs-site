@@ -26,9 +26,14 @@ const projects = defineCollection({
     repo: z.string().optional(),
     /** Live site, if there is one. */
     url: z.url().optional(),
-    /** Year last worked on. Omitted where it isn't known rather than guessed. */
-    year: z.number().int().optional(),
-    status: z.enum(["active", "shipped", "experiment", "archived"]).default("shipped"),
+    /** Repo to take activity and stats from instead of `repo`, e.g. a private one. Never linked. */
+    activityRepo: z.string().optional(),
+    /**
+     * Usually omitted: the shown status comes from GitHub (see src/lib/github.ts).
+     * `experiment` labels something you're trying out while it has recent commits.
+     * `archived` retires a project whose repo isn't archived on GitHub.
+     */
+    status: z.enum(["experiment", "archived"]).optional(),
     /** Lower sorts first within a group. */
     order: z.number().default(50),
     /** Rank in the home page's selected work, 1 first. Omit to leave it off the home page. */
@@ -64,7 +69,11 @@ const areas = defineCollection({
       /** The one line on why this is Kyle. */
       why: z.string(),
       /** How the interest led to projects. `accent` marks steps that became code or a site. */
-      chain: z.array(z.object({ label: z.string(), accent: z.boolean().default(false) })).default([]),
+      chain: z
+        .array(
+          z.object({ label: z.string(), accent: z.boolean().default(false) }),
+        )
+        .default([]),
       media: z
         .object({
           layout: z.enum(["side", "stack"]).default("stack"),

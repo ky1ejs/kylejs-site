@@ -4,6 +4,5 @@ description: "A set of setups that work with ESP32, to check hardware is configu
 group: workshop
 areas: [electronics]
 repo: ky1ejs/esp32-setups
-status: shipped
 order: 30
 ---

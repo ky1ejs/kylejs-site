@@ -23,6 +23,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm check:spelling` - Spell check content, components and docs with cspell (US and UK English). Add real words it does not know to `words` in `cspell.config.yaml`
 - `pnpm knip` - Find unused files, dependencies and exports (runs in CI with lint)
+- `GITHUB_TOKEN=$(gh auth token) node scripts/fetch-github-data.mjs` - Refresh `src/data/github.json`: each project repo's language, stars, last non-bot commit and commits in 90 days. `.github/workflows/github-data.yaml` runs it nightly and commits changes; the build never calls GitHub. A private `activityRepo` needs the `GH_DATA_TOKEN` secret in CI, or it keeps its last committed values
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
 - `pnpm check:back-navigation` - After a build, land on a page, follow a link, then go back and forward in a phone-sized Chromium on a slow network. Fails if a page the reader has already seen shows the loading skeleton
@@ -34,7 +35,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 
 ### Pages (`/src/pages`)
 - `index.astro` - Home page: hero, selected work (projects with `highlight`), area rail, then each area from the `areas` collection as a full band or a compact card
-- `projects.astro` - Projects grouped by `src/lib/project-groups.ts`
+- `projects.astro` - Projects grouped by topic (`src/lib/project-groups.ts`) and sorted by activity in the HTML. Two `Segmented` controls let the reader regroup (topic, status from `src/lib/project-statuses.ts`, none) and resort (most active, last commit, A–Z); a page script moves the rows only on input
 - `about.astro` - About page with bio toggle
 - `posts/index.astro` - Blog listing
 - `posts/[id].astro` - Individual blog post (dynamic route)
@@ -48,7 +49,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?, areas?). `areas` lists area IDs (file names in `areas/`); the post shows under each on the home page. An unknown ID fails the build. Projects take the same field
 - `drafts/` - Draft blog posts
 - `areas/` - One file per area on the home page. Layout is content: `display: band | compact`, `order`, `media.layout: side | stack`. An image without `src` renders as a labelled placeholder; photos go in `src/assets/areas/` with `src` relative to the area file. `items` is for things that are neither posts nor projects (a print, say): posts and projects join an area through their own `areas` field. A band lists ranked projects, then posts newest first, then other projects (active first), then `items`
-- `projects/` - One file per project for /projects (group, repo, url, status, order, highlight?, areas?; optional body becomes a note). `highlight` ranks a project in the home page's selected work, 1 first; omit it to leave the project off. Two projects with the same rank fail the build
+- `projects/` - One file per project for /projects (group, repo?, activityRepo?, url?, status?, order, highlight?, areas?; optional body becomes a note). `activityRepo` takes the project's stats from a repo that is not linked, such as a private one (Cut uses `cut-watch/cut`). `status` is usually omitted: the shown status comes from GitHub data (Archived when the repo is archived, Parked after six months without a commit, else Active). Set `experiment` or `archived` to override; there is no "shipped". `highlight` ranks a project in the home page's selected work, 1 first; omit it to leave the project off. Two projects with the same rank fail the build. Stats and the sort within a band or group come from `src/data/github.json`
 
 ### Design system (`/src/design`)
 Framework-agnostic: plain CSS plus React components that only take props and return markup. Astro renders them to HTML at build time, so they ship no JavaScript. Design source: the "kylejs.me design system" canvas on claude.ai.
@@ -56,7 +57,7 @@ Framework-agnostic: plain CSS plus React components that only take props and ret
 - `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
 - `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
 - `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
-- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, AreaRail, ProjectCard, ProjectItem, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
+- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, AreaRail, ProjectCard, ProjectItem, Segmented, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
 - `socials.ts` - The social profiles and their brand icons, used by the footer and home page
 - `stories/` - Storybook stories. Storybook shows each story in light and dark: side by side from 900px wide, stacked for stories with `themeLayout: "stack"`
 
@@ -70,6 +71,8 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
+- `github.ts` - Reads `src/data/github.json`: the status to show, activity sorting, and the "Swift · 61★ · Mar 2026" meta line
+- `project-statuses.ts` - Section titles and blurbs when /projects is grouped by status
 - `area-entries.ts` - Groups posts and projects by their `areas` frontmatter for the home page; throws on an unknown area
 - `hast-heading-ids.ts` - Sätteri hast plugin for heading anchor IDs (keeps existing anchors stable; Astro's built-in slugger would change them)
 - `hast-callouts.ts` - GitHub-style callout blockquotes

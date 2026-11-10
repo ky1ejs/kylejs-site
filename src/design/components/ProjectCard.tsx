@@ -9,13 +9,23 @@ export interface ProjectCardProps {
   repo?: string;
   /** Live site. When both exist, the card links to the site. */
   url?: string;
+  /** Short mono line, e.g. "Swift · 61★ · Mar 2026". */
+  meta?: string;
 }
 
 /** Strips the scheme and trailing slash: "https://cut.watch/" → "cut.watch". */
-const displayHost = (href: string) => href.replace(/^https?:\/\//, "").replace(/\/$/, "");
+const displayHost = (href: string) =>
+  href.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
 /** A highlighted project, for the home page's selected work. The whole card links out. */
-export function ProjectCard({ title, description, status, repo, url }: ProjectCardProps) {
+export function ProjectCard({
+  title,
+  description,
+  status,
+  repo,
+  url,
+  meta,
+}: ProjectCardProps) {
   const href = url ?? (repo ? `https://github.com/${repo}` : undefined);
   const body = (
     <>
@@ -24,7 +34,10 @@ export function ProjectCard({ title, description, status, repo, url }: ProjectCa
         <Pill accent={status === "active"}>{STATUS_LABEL[status]}</Pill>
       </span>
       <span className="ks-project-card-desc">{description}</span>
-      {href && <span className="ks-project-card-link">{displayHost(href)}</span>}
+      {meta && <span className="ks-meta">{meta}</span>}
+      {href && (
+        <span className="ks-project-card-link">{displayHost(href)}</span>
+      )}
     </>
   );
   return href ? (

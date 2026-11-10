@@ -14,6 +14,7 @@ import {
   PostListItem,
   ProjectCard,
   ProjectItem,
+  Segmented,
   SiteFooter,
   SiteHeader,
   SocialLinks,
@@ -238,6 +239,20 @@ describe("ProjectItem", () => {
     expect(out).not.toContain("Source");
     expect(out).not.toContain("data-accent");
   });
+
+  it("shows a meta line when given one", () => {
+    const out = html(
+      <ProjectCard
+        title="T"
+        description="d"
+        status="parked"
+        repo="ky1ejs/x"
+        meta="Go · Nov 2026"
+      />,
+    );
+    expect(out).toContain('<span class="ks-meta">Go · Nov 2026</span>');
+    expect(out).toContain("Parked");
+  });
 });
 
 describe("ProjectCard", () => {
@@ -272,5 +287,45 @@ describe("ProjectCard", () => {
     expect(out).toContain('href="https://github.com/ky1ejs/orca"');
     expect(out).toContain("github.com/ky1ejs/orca</span>");
     expect(out).not.toContain("data-accent");
+  });
+
+  it("shows a meta line when given one", () => {
+    const out = html(
+      <ProjectCard
+        title="T"
+        description="d"
+        status="parked"
+        repo="ky1ejs/x"
+        meta="Go · Nov 2026"
+      />,
+    );
+    expect(out).toContain('<span class="ks-meta">Go · Nov 2026</span>');
+    expect(out).toContain("Parked");
+  });
+});
+
+describe("Segmented", () => {
+  it("renders labelled native radios with the given option checked", () => {
+    const out = html(
+      <Segmented
+        legend="Sort"
+        name="sort"
+        value="name"
+        options={[
+          { value: "activity", label: "Most active" },
+          { value: "name", label: "A–Z" },
+        ]}
+      />,
+    );
+    expect(out).toContain("<legend");
+    expect(out).toContain('<input type="radio" id="sort-name" name="sort" checked="" value="name"/><label for="sort-name">A–Z</label>');
+    expect(out).not.toMatch(/id="sort-activity"[^>]*checked/);
+  });
+});
+
+describe("ProjectItem dataset", () => {
+  it("adds data attributes to the row", () => {
+    const out = html(<ProjectItem title="T" description="d" status="active" dataset={{ rank: "3", topic: "apps" }} />);
+    expect(out).toContain('<li class="ks-area-item" data-rank="3" data-topic="apps">');
   });
 });

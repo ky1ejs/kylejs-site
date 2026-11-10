@@ -18,7 +18,7 @@ export const projectGroups: ProjectGroup[] = [
   {
     id: "apps",
     title: "Apps",
-    blurb: "Things I've shipped, and things I started and haven't finished. Mostly iOS, increasingly not.",
+    blurb: "Apps I've built or am still building. Mostly iOS, increasingly not.",
   },
   {
     id: "tools",

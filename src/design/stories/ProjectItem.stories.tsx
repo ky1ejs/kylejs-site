@@ -29,6 +29,6 @@ export const WithSite: Story = {
     status: "active",
     url: "https://lm-mods.fyi",
     repo: "ky1ejs/lm-mods",
-    year: 2026,
+    meta: "Astro · Jun 2025",
   },
 };

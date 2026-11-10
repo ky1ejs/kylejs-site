@@ -5,7 +5,6 @@ group: espresso
 areas: [coffee]
 repo: ky1ejs/linea-micra-mods
 url: https://lm-mods.fyi
-status: active
 order: 10
 highlight: 4
 ---

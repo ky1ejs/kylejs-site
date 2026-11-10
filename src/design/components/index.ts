@@ -13,6 +13,7 @@ export { SocialLinks } from "./SocialLinks";
 export { socialLinks } from "../socials";
 export { AreaRail } from "./AreaRail";
 export { ProjectCard } from "./ProjectCard";
+export { Segmented } from "./Segmented";
 export { ProjectItem, STATUS_LABEL } from "./ProjectItem";
 export type { MarkProps } from "./Mark";
 export type { CalloutType } from "../callouts";

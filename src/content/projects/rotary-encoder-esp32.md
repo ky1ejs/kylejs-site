@@ -4,7 +4,6 @@ description: "A high-performance rotary encoder library for ESP32, with detent f
 group: espresso
 areas: [electronics]
 repo: ky1ejs/rotary-encoder-esp32
-status: shipped
 order: 30
 ---
 
