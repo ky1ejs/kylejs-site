@@ -19,13 +19,4 @@ media:
     - alt: "The espresso machine"
       label: "Photo — the machine"
       # src: ../../assets/areas/coffee-1.jpg
-items:
-  - kind: "Site"
-    title: "lm-mods.fyi"
-    desc: "Every Linea Micra mod, catalogued in one place."
-    href: "https://lm-mods.fyi"
-  - kind: "Repo"
-    title: "ShotStopper"
-    desc: "iOS companion for the brew-by-weight device."
-    href: "https://github.com/ky1ejs/ShotStopper"
 ---

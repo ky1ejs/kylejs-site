@@ -12,10 +12,6 @@ media:
       label: "Photo — the board"
       # src: ../../assets/areas/keyboards-1.jpg
 items:
-  - kind: "Repo"
-    title: "kylejs-zmk-configs"
-    desc: "My keymaps for ZMK."
-    href: "https://github.com/ky1ejs/kylejs-zmk-configs"
   - kind: "Print"
     title: "Skadis keyboard mount"
 ---

@@ -45,10 +45,10 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `Post.astro` - Post layout wrapping Site with `.post` class
 
 ### Content (`/src/content`)
-- `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?, areas?). `areas` lists area IDs (file names in `areas/`); the post shows under each on the home page. An unknown ID fails the build
+- `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?, areas?). `areas` lists area IDs (file names in `areas/`); the post shows under each on the home page. An unknown ID fails the build. Projects take the same field
 - `drafts/` - Draft blog posts
-- `areas/` - One file per area on the home page. Layout is content: `display: band | compact`, `order`, `media.layout: side | stack`. An image without `src` renders as a labelled placeholder; photos go in `src/assets/areas/` with `src` relative to the area file. `items` is for repos, sites and prints only: posts join an area through their own `areas` field
-- `projects/` - One file per project for /projects (group, repo, url, status, order, highlight?; optional body becomes a note). `highlight` ranks a project in the home page's selected work, 1 first; omit it to leave the project off. Two projects with the same rank fail the build
+- `areas/` - One file per area on the home page. Layout is content: `display: band | compact`, `order`, `media.layout: side | stack`. An image without `src` renders as a labelled placeholder; photos go in `src/assets/areas/` with `src` relative to the area file. `items` is for things that are neither posts nor projects (a print, say): posts and projects join an area through their own `areas` field. A band lists ranked projects, then posts newest first, then other projects (active first), then `items`
+- `projects/` - One file per project for /projects (group, repo, url, status, order, highlight?, areas?; optional body becomes a note). `highlight` ranks a project in the home page's selected work, 1 first; omit it to leave the project off. Two projects with the same rank fail the build
 
 ### Design system (`/src/design`)
 Framework-agnostic: plain CSS plus React components that only take props and return markup. Astro renders them to HTML at build time, so they ship no JavaScript. Design source: the "kylejs.me design system" canvas on claude.ai.
@@ -70,7 +70,7 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
-- `area-posts.ts` - Groups posts by their `areas` frontmatter for the home page; throws on an unknown area
+- `area-entries.ts` - Groups posts and projects by their `areas` frontmatter for the home page; throws on an unknown area
 - `hast-heading-ids.ts` - Sätteri hast plugin for heading anchor IDs (keeps existing anchors stable; Astro's built-in slugger would change them)
 - `hast-callouts.ts` - GitHub-style callout blockquotes
 - `hast-heading-marks.ts` - Wraps each h2's content in `<span class="heading-mark">` for the highlighter style

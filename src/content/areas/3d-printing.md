@@ -11,9 +11,4 @@ media:
     - alt: "A 3D print"
       label: "Photo — a print"
       # src: ../../assets/areas/3d-printing-1.jpg
-items:
-  - kind: "Repo"
-    title: "3d-printer-profiles"
-    desc: "My profiles, if you want to skip the dialling in."
-    href: "https://github.com/ky1ejs/3d-printer-profiles"
 ---

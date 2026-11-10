@@ -2,6 +2,7 @@
 title: "Cut"
 description: "An app for viewing the latest movies, remembering the ones you love and the ones you want to see."
 group: apps
+areas: [coding]
 repo: ky1ejs/cut-ios
 url: https://cut.watch
 status: active

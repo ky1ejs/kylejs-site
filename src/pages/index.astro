@@ -11,9 +11,10 @@ import {
   MediaPlaceholder,
   ProjectCard,
   SocialLinks,
+  STATUS_LABEL,
 } from "../design/components";
 import meImage from "../assets/me.jpg";
-import { postsByArea } from "../lib/area-posts";
+import { groupByArea } from "../lib/area-entries";
 
 const areas = (await getCollection("areas")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -21,8 +22,10 @@ const areas = (await getCollection("areas")).sort(
 const bands = areas.filter((a) => a.data.display === "band");
 const compact = areas.filter((a) => a.data.display === "compact");
 
+const projects = await getCollection("projects");
+
 // Projects with a `highlight` rank, 1 first
-const selected = (await getCollection("projects"))
+const selected = projects
   .filter((p) => p.data.highlight !== undefined)
   .sort((a, b) => a.data.highlight! - b.data.highlight!);
 const ranks = selected.map((p) => p.data.highlight);
@@ -37,24 +40,58 @@ const latest = posts.toSorted(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 )[0];
 
-// Posts list their areas in frontmatter. Fails the build on an unknown area.
-const areaPosts = postsByArea(
-  areas.map((a) => a.id),
-  posts,
+// Posts and projects list their areas in frontmatter. Fails the build on an unknown area.
+const areaIds = areas.map((a) => a.id);
+const areaPosts = groupByArea(
+  "Post",
+  areaIds,
+  posts.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+);
+const STATUS_RANK = { active: 0, experiment: 1, shipped: 2, archived: 3 };
+const areaProjects = groupByArea(
+  "Project",
+  areaIds,
+  // Ranked projects first, then active before past work
+  projects.toSorted(
+    (a, b) =>
+      (a.data.highlight ?? Infinity) - (b.data.highlight ?? Infinity) ||
+      STATUS_RANK[a.data.status] - STATUS_RANK[b.data.status] ||
+      a.data.order - b.data.order,
+  ),
 );
 const postsFor = (area: (typeof areas)[number]) => areaPosts.get(area.id) ?? [];
 
-/** The area's posts, newest first, then its other items. */
-const itemsFor = (area: (typeof areas)[number]) => [
-  ...postsFor(area).map((post) => ({
-    kind: "Post",
-    title: post.data.title,
-    desc: post.data.description,
-    href: `/posts/${post.id}`,
-    writing: true,
-  })),
-  ...area.data.items,
-];
+type Project = (typeof projects)[number];
+const projectItem = (p: Project) => ({
+  kind: STATUS_LABEL[p.data.status],
+  title: p.data.title,
+  desc: p.data.description,
+  href:
+    p.data.url ??
+    (p.data.repo ? `https://github.com/${p.data.repo}` : undefined),
+  accent: p.data.status === "active",
+});
+
+/** Ranked projects, then posts newest first, then other projects, then the area's own items. */
+const itemsFor = (area: (typeof areas)[number]) => {
+  const areaProjectList = areaProjects.get(area.id) ?? [];
+  return [
+    ...areaProjectList
+      .filter((p) => p.data.highlight !== undefined)
+      .map(projectItem),
+    ...postsFor(area).map((post) => ({
+      kind: "Post",
+      title: post.data.title,
+      desc: post.data.description,
+      href: `/posts/${post.id}`,
+      writing: true,
+    })),
+    ...areaProjectList
+      .filter((p) => p.data.highlight === undefined)
+      .map(projectItem),
+    ...area.data.items,
+  ];
+};
 
 const postCount = (area: (typeof areas)[number]) => {
   const n = postsFor(area).length;

@@ -11,6 +11,8 @@ export interface AreaItem {
   href?: string;
   /** Marks the item as a post: accent pill with the writing mark. */
   writing?: boolean;
+  /** Accent pill without the writing mark, e.g. an active project. */
+  accent?: boolean;
 }
 
 export interface AreaBandProps {
@@ -62,7 +64,7 @@ export function AreaBand({
                 {items.map((item) => (
                   <li className="ks-area-item" key={item.title}>
                     <span className="ks-area-item-head">
-                      <Pill accent={item.writing} mark={item.writing ? "writing" : undefined}>
+                      <Pill accent={item.writing || item.accent} mark={item.writing ? "writing" : undefined}>
                         {item.kind}
                       </Pill>
                       {item.href ? (

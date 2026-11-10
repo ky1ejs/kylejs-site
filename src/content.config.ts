@@ -33,6 +33,8 @@ const projects = defineCollection({
     order: z.number().default(50),
     /** Rank in the home page's selected work, 1 first. Omit to leave it off the home page. */
     highlight: z.number().int().positive().optional(),
+    /** Area IDs (file names in src/content/areas). The project shows in each area's band on the home page. */
+    areas: z.array(reference("areas")).default([]),
   }),
 });
 
@@ -82,7 +84,7 @@ const areas = defineCollection({
       items: z
         .array(
           z.object({
-            /** Repo, Site, Print… shown as a pill. Posts come from the post's own `areas` field. */
+            /** Site, Print… shown as a pill. Posts and projects join an area through their own `areas` field. */
             kind: z.string(),
             title: z.string(),
             desc: z.string().optional(),

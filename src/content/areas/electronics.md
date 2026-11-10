@@ -11,13 +11,4 @@ chain:
     accent: true
   - label: "linea-micra-controller"
     accent: true
-items:
-  - kind: "Repo"
-    title: "rotary-encoder-esp32"
-    desc: "Detent filtering and multi-encoder support."
-    href: "https://github.com/ky1ejs/rotary-encoder-esp32"
-  - kind: "Repo"
-    title: "homelab"
-    desc: "Infrastructure and automation, in Go."
-    href: "https://github.com/ky1ejs/homelab"
 ---

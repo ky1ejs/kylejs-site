@@ -2,6 +2,7 @@
 title: "Home lab"
 description: "Infrastructure and automation for the home lab, written in Go."
 group: workshop
+areas: [coding]
 repo: ky1ejs/homelab
 status: active
 order: 10
