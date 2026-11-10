@@ -10,21 +10,20 @@ export interface ProjectGroup {
 /** Order here is the order they appear on /projects. */
 export const projectGroups: ProjectGroup[] = [
   {
-    id: "espresso",
-    title: "Espresso",
-    blurb:
-      "A coffee habit that got out of hand. It started with picking a machine, and ended with me writing firmware for it.",
-  },
-  {
     id: "apps",
     title: "Apps",
     blurb: "Apps I've built or am still building. Mostly iOS, increasingly not.",
   },
   {
     id: "tools",
-    title: "Developer tools",
+    title: "Tools & frameworks",
     blurb:
       "Small things built to make my own work better. A few of them turned out to make other people's better too.",
+  },
+  {
+    id: "workshop",
+    title: "Home lab & workshop",
+    blurb: "The house, the printer, and the microcontrollers in between.",
   },
   {
     id: "keyboards",
@@ -32,8 +31,9 @@ export const projectGroups: ProjectGroup[] = [
     blurb: "Split, ergonomic, and endlessly re-mapped.",
   },
   {
-    id: "workshop",
-    title: "Home lab & workshop",
-    blurb: "The house, the printer, and the microcontrollers in between.",
+    id: "espresso",
+    title: "Espresso",
+    blurb:
+      "A coffee habit that got out of hand. It started with picking a machine, and ended with me writing firmware for it.",
   },
 ];
