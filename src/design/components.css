@@ -431,6 +431,133 @@ a.ks-area-card:hover {
   color: var(--ks-accent-text);
 }
 
+/* ===== Segmented control ===== */
+.ks-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ks-space-2) var(--ks-space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+/* A legend won't sit in a flex row, so float it into one */
+.ks-segmented-legend {
+  float: left;
+  padding: 0;
+  font-family: var(--ks-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ks-muted);
+}
+
+.ks-segmented-options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--ks-rule);
+  border-radius: var(--ks-radius-full);
+  background: var(--ks-surface);
+}
+
+.ks-segmented-option {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Visually hidden, still focusable */
+.ks-segmented-option input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.ks-segmented-option label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: var(--ks-radius-full);
+  font-size: 14px;
+  color: var(--ks-ink-2);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.ks-segmented-option label:hover {
+  color: var(--ks-ink);
+}
+
+.ks-segmented-option input:checked + label {
+  background: var(--ks-accent-soft);
+  color: var(--ks-on-soft);
+  font-weight: 600;
+}
+
+.ks-segmented-option input:focus-visible + label {
+  outline: 2px solid var(--ks-accent);
+  outline-offset: 1px;
+}
+
+/* ===== Project card ===== */
+.ks-project-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+  padding: 18px 20px;
+  border: 1px solid var(--ks-rule);
+  border-radius: var(--ks-radius-card);
+  background: var(--ks-surface);
+  color: var(--ks-ink);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+a.ks-project-card:hover {
+  border-color: var(--ks-accent-text);
+}
+
+a.ks-project-card:focus-visible {
+  outline: 2px solid var(--ks-accent);
+  outline-offset: 2px;
+}
+
+.ks-project-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ks-space-2);
+}
+
+.ks-project-card-title {
+  font-family: var(--ks-font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ks-project-card-desc {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ks-ink-2);
+}
+
+.ks-project-card-link {
+  padding-top: 4px;
+  font-family: var(--ks-font-mono);
+  font-size: 11px;
+  color: var(--ks-accent-text);
+}
+
 /* ===== Area band ===== */
 .ks-area-band {
   display: flex;
@@ -440,6 +567,9 @@ a.ks-area-card:hover {
   border-radius: var(--ks-radius-card);
   background: var(--ks-surface);
   color: var(--ks-ink);
+  /* Clear the area rail when jumped to; html's scroll-padding-top already
+     clears the site header */
+  scroll-margin-top: var(--ks-rail-height);
 }
 
 .ks-area-band-body {
@@ -570,6 +700,11 @@ a.ks-area-item-title:hover {
   gap: var(--ks-space-3);
 }
 
+/* A stacked placeholder spans the band, so keep it short until a photo lands */
+.ks-area-band-content:not([data-media="side"]) .ks-media-placeholder {
+  aspect-ratio: 4 / 1;
+}
+
 .ks-media-grid[data-count="2"],
 .ks-media-grid[data-count="3"] {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -583,6 +718,18 @@ a.ks-area-item-title:hover {
 }
 
 /* ===== Site header ===== */
+:root {
+  /* Fixed so sticky elements below it (the area rail) know where to stick */
+  --ks-header-height: 68px;
+  --ks-rail-height: 58px;
+}
+
+@media (max-width: 559px) {
+  :root {
+    --ks-header-height: 60px;
+  }
+}
+
 .ks-header {
   position: sticky;
   top: 0;
@@ -592,10 +739,12 @@ a.ks-area-item-title:hover {
 
 .ks-header-inner {
   display: flex;
+  min-height: var(--ks-header-height);
   align-items: center;
   justify-content: space-between;
   gap: var(--ks-space-4);
-  max-width: var(--ks-width-wide);
+  /* The wide column plus its gutters, so the wordmark lines up with wide pages */
+  max-width: calc(var(--ks-width-wide) + 64px);
   margin: 0 auto;
   padding: 12px 32px;
 }
@@ -716,4 +865,74 @@ a.ks-area-item-title:hover {
 .ks-social-link:focus-visible {
   outline: 2px solid var(--ks-accent);
   outline-offset: -4px;
+}
+
+/* ===== Area rail ===== */
+.ks-rail {
+  position: sticky;
+  top: var(--ks-header-height);
+  z-index: 900;
+  border-top: 1px solid var(--ks-rule);
+  border-bottom: 1px solid var(--ks-rule);
+  background: var(--ks-paper);
+}
+
+.ks-rail-list {
+  display: flex;
+  gap: 4px;
+  max-width: var(--ks-width-wide);
+  height: var(--ks-rail-height);
+  margin: 0 auto;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.ks-rail-list > li {
+  display: flex;
+  align-items: center;
+}
+
+.ks-rail-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 44px;
+  padding: 4px 8px;
+  border-radius: var(--ks-radius-control);
+  font-family: var(--ks-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ks-muted);
+  text-decoration: none;
+}
+
+.ks-rail-link:hover {
+  background: var(--ks-surface);
+  color: var(--ks-ink);
+}
+
+.ks-rail-link:focus-visible {
+  outline: 2px solid var(--ks-accent);
+  outline-offset: -2px;
+}
+
+/* ===== Project item ===== */
+.ks-project-note {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ks-ink-2);
+}
+
+.ks-project-note p {
+  margin: 0;
+}
+
+.ks-project-links {
+  margin: 0;
+  font-size: 14px;
 }

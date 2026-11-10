@@ -1,0 +1,170 @@
+{
+  "cut-watch/cut": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "Swift",
+    "lastCommit": "2026-11-09T21:03:21Z",
+    "commits90d": 27
+  },
+  "ky1ejs/3d-printer-profiles": {
+    "stars": 1,
+    "forks": 0,
+    "archived": false,
+    "language": null,
+    "lastCommit": "2022-03-02T23:10:49Z",
+    "commits90d": 0
+  },
+  "ky1ejs/Bugger": {
+    "stars": 1,
+    "forks": 0,
+    "archived": false,
+    "language": "Swift",
+    "lastCommit": "2026-02-18T23:02:46Z",
+    "commits90d": 0
+  },
+  "ky1ejs/Byte-iOS": {
+    "stars": 2,
+    "forks": 0,
+    "archived": true,
+    "language": "Swift",
+    "lastCommit": "2017-02-05T22:55:17Z",
+    "commits90d": 0
+  },
+  "ky1ejs/check-diff-paths-action": {
+    "stars": 1,
+    "forks": 0,
+    "archived": false,
+    "language": "TypeScript",
+    "lastCommit": "2025-08-17T23:17:04Z",
+    "commits90d": 0
+  },
+  "ky1ejs/claude-plugins": {
+    "stars": 4,
+    "forks": 0,
+    "archived": false,
+    "language": "Shell",
+    "lastCommit": "2026-09-14T21:54:20Z",
+    "commits90d": 8
+  },
+  "ky1ejs/esp32-setups": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "C++",
+    "lastCommit": "2025-07-13T17:57:11Z",
+    "commits90d": 0
+  },
+  "ky1ejs/homelab": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "Go",
+    "lastCommit": "2026-11-05T16:20:54Z",
+    "commits90d": 100
+  },
+  "ky1ejs/Jim": {
+    "stars": 61,
+    "forks": 15,
+    "archived": true,
+    "language": "Objective-C",
+    "lastCommit": "2020-10-28T17:55:43Z",
+    "commits90d": 0
+  },
+  "ky1ejs/kylejs-macOS-bootstrap": {
+    "stars": 4,
+    "forks": 0,
+    "archived": false,
+    "language": "Shell",
+    "lastCommit": "2025-07-10T21:53:18Z",
+    "commits90d": 0
+  },
+  "ky1ejs/kylejs-zmk-configs": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "HTML",
+    "lastCommit": "2026-02-19T23:08:36Z",
+    "commits90d": 0
+  },
+  "ky1ejs/linea-micra-controller": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "C++",
+    "lastCommit": "2025-07-14T01:03:21Z",
+    "commits90d": 0
+  },
+  "ky1ejs/linea-micra-mods": {
+    "stars": 3,
+    "forks": 2,
+    "archived": false,
+    "language": "Astro",
+    "lastCommit": "2025-06-23T18:13:48Z",
+    "commits90d": 0
+  },
+  "ky1ejs/orca": {
+    "stars": 1,
+    "forks": 0,
+    "archived": false,
+    "language": "TypeScript",
+    "lastCommit": "2026-11-10T19:38:19Z",
+    "commits90d": 11
+  },
+  "ky1ejs/Parasol": {
+    "stars": 13,
+    "forks": 1,
+    "archived": true,
+    "language": "Swift",
+    "lastCommit": "2016-02-04T07:59:20Z",
+    "commits90d": 0
+  },
+  "ky1ejs/release-notes-action": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "TypeScript",
+    "lastCommit": "2026-01-31T19:38:15Z",
+    "commits90d": 0
+  },
+  "ky1ejs/rotary-encoder-esp32": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "C++",
+    "lastCommit": "2025-07-13T21:46:39Z",
+    "commits90d": 0
+  },
+  "ky1ejs/ShotStopper": {
+    "stars": 1,
+    "forks": 0,
+    "archived": false,
+    "language": "Swift",
+    "lastCommit": "2026-03-29T15:26:12Z",
+    "commits90d": 0
+  },
+  "ky1ejs/splitty": {
+    "stars": 0,
+    "forks": 0,
+    "archived": false,
+    "language": "Go",
+    "lastCommit": "2026-05-05T17:00:23Z",
+    "commits90d": 0
+  },
+  "ky1ejs/Stargate": {
+    "stars": 9,
+    "forks": 0,
+    "archived": true,
+    "language": "Swift",
+    "lastCommit": "2016-09-16T15:57:54Z",
+    "commits90d": 0
+  },
+  "ky1ejs/step-widget": {
+    "stars": 1,
+    "forks": 0,
+    "archived": false,
+    "language": null,
+    "lastCommit": "2025-12-09T21:21:42Z",
+    "commits90d": 0
+  }
+}
