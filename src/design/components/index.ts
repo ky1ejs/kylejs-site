@@ -12,6 +12,7 @@ export { SiteFooter } from "./SiteFooter";
 export { SocialLinks } from "./SocialLinks";
 export { socialLinks } from "../socials";
 export { AreaRail } from "./AreaRail";
+export { ProjectCard } from "./ProjectCard";
 export { ProjectItem } from "./ProjectItem";
 export type { MarkProps } from "./Mark";
 export type { CalloutType } from "../callouts";

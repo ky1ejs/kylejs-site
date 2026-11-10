@@ -3,7 +3,7 @@ import { Pill } from "./Pill";
 
 export type ProjectStatus = "active" | "shipped" | "experiment" | "archived";
 
-const STATUS_LABEL: Record<ProjectStatus, string> = {
+export const STATUS_LABEL: Record<ProjectStatus, string> = {
   active: "Active",
   shipped: "Shipped",
   experiment: "Experiment",

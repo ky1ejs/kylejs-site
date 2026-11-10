@@ -5,4 +5,5 @@ group: workshop
 repo: ky1ejs/homelab
 status: active
 order: 10
+highlight: 3
 ---

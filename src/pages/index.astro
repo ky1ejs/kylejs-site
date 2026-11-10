@@ -3,16 +3,39 @@ import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Site from "../layouts/Site.astro";
 import RelativeDateLabel from "../components/RelativeDateLabel.astro";
-import { AreaBand, AreaCard, AreaRail, Button, MediaPlaceholder, SocialLinks } from "../design/components";
+import {
+  AreaBand,
+  AreaCard,
+  AreaRail,
+  Button,
+  MediaPlaceholder,
+  ProjectCard,
+  SocialLinks,
+} from "../design/components";
 import meImage from "../assets/me.jpg";
 import { postsByArea } from "../lib/area-posts";
 
-const areas = (await getCollection("areas")).sort((a, b) => a.data.order - b.data.order);
+const areas = (await getCollection("areas")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 const bands = areas.filter((a) => a.data.display === "band");
 const compact = areas.filter((a) => a.data.display === "compact");
 
+// Projects with a `highlight` rank, 1 first
+const selected = (await getCollection("projects"))
+  .filter((p) => p.data.highlight !== undefined)
+  .sort((a, b) => a.data.highlight! - b.data.highlight!);
+const ranks = selected.map((p) => p.data.highlight);
+if (new Set(ranks).size !== ranks.length) {
+  throw new Error(
+    `Two projects share a highlight rank: ${selected.map((p) => `${p.id}=${p.data.highlight}`).join(", ")}`,
+  );
+}
+
 const posts = await getCollection("blog");
-const latest = posts.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
+const latest = posts.toSorted(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+)[0];
 
 // Posts list their areas in frontmatter. Fails the build on an unknown area.
 const areaPosts = postsByArea(
@@ -61,74 +84,107 @@ const postCount = (area: (typeof areas)[number]) => {
     </div>
 
     <h1 class="mt-0 mb-4 max-w-[20ch] text-[2.25rem] leading-[1.05] tracking-[-0.035em] text-balance min-[640px]:text-[3.5rem]">
-      I like to build teams and create things, mostly with an <s class="decoration-accent decoration-[0.08em]">IDE</s> agents, a camera or a 3D printer.
+      I like to build teams and create things, mostly with an{" "}
+      <s class="decoration-accent decoration-[0.08em]">IDE</s> agents, a camera
+      or a 3D printer.
     </h1>
     <p class="text-ink-2 m-0 max-w-[58ch] text-[17px] leading-relaxed">
-      I also like to create with electronics, various coffee toys and to leave all that behind to hike and fish.
+      I also like to create with electronics, various coffee toys and to leave
+      all that behind to hike and fish.
     </p>
 
     <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
       <Button href={`/posts/${latest.id}`}>Latest: {latest.data.title}</Button>
-      <Button href="/posts" variant="more">All writing</Button>
+      <Button href="/posts" variant="more">
+        All writing
+      </Button>
     </div>
-    <p class="ks-meta mt-3"><RelativeDateLabel date={latest.data.date} /></p>
+    <p class="ks-meta mt-3">
+      <RelativeDateLabel date={latest.data.date} />
+    </p>
 
     <div class="mt-5">
       <SocialLinks size={22} />
     </div>
   </header>
 
+  {selected.length > 0 && (
+    <section class="mb-10" aria-labelledby="selected-work">
+      <h2 id="selected-work" class="ks-label mt-0 mb-4">
+        Selected work
+      </h2>
+      <ul class="m-0 grid list-none gap-4 p-0 min-[640px]:grid-cols-2 min-[1024px]:grid-cols-4">
+        {selected.map((p) => (
+          <li class="flex">
+            <ProjectCard
+              title={p.data.title}
+              description={p.data.description}
+              status={p.data.status}
+              repo={p.data.repo}
+              url={p.data.url}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <AreaRail
-    areas={areas.map((a) => ({ id: a.id, label: a.data.railLabel ?? a.data.title, mark: a.data.mark }))}
+    areas={areas.map((a) => ({
+      id: a.id,
+      label: a.data.railLabel ?? a.data.title,
+      mark: a.data.mark,
+    }))}
   />
 
   <div class="mt-8 flex flex-col gap-6">
-    {
-      bands.map((area) => {
-        const { images, layout } = area.data.media;
-        const props = {
-          id: area.id,
-          title: area.data.title,
-          mark: area.data.mark,
-          meta: area.data.meta,
-          why: area.data.why,
-          chain: area.data.chain,
-          items: itemsFor(area),
-          mediaLayout: layout,
-        };
-        // Astro passes an empty slot as a prop, so only open one for images
-        return images.length > 0 ? (
-          <AreaBand {...props}>
-            <div slot="media" class="ks-media-grid" data-count={images.length}>
-              {images.map((img) =>
-                img.src ? (
-                  <Image src={img.src} alt={img.alt} widths={[480, 960]} sizes="(min-width: 720px) 480px, 100vw" />
-                ) : (
-                  <MediaPlaceholder label={img.label ?? img.alt} />
-                ),
-              )}
-            </div>
-          </AreaBand>
-        ) : (
-          <AreaBand {...props} />
-        );
-      })
-    }
+    {bands.map((area) => {
+      const { images, layout } = area.data.media;
+      const props = {
+        id: area.id,
+        title: area.data.title,
+        mark: area.data.mark,
+        meta: area.data.meta,
+        why: area.data.why,
+        chain: area.data.chain,
+        items: itemsFor(area),
+        mediaLayout: layout,
+      };
+      // Astro passes an empty slot as a prop, so only open one for images
+      return images.length > 0 ? (
+        <AreaBand {...props}>
+          <div slot="media" class="ks-media-grid" data-count={images.length}>
+            {images.map((img) =>
+              img.src ? (
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  widths={[480, 960]}
+                  sizes="(min-width: 720px) 480px, 100vw"
+                />
+              ) : (
+                <MediaPlaceholder label={img.label ?? img.alt} />
+              ),
+            )}
+          </div>
+        </AreaBand>
+      ) : (
+        <AreaBand {...props} />
+      );
+    })}
   </div>
 
   <div class="mt-6 grid gap-4 min-[640px]:grid-cols-2">
-    {
-      compact.map((area) => (
-        <div id={area.id} class="scroll-mt-[var(--ks-rail-height)]">
-          <AreaCard
-            title={area.data.title}
-            why={area.data.why}
-            mark={area.data.mark}
-            count={postCount(area)}
-            href={itemsFor(area)[0]?.href}
-          />
-        </div>
-      ))
-    }
+    {compact.map((area) => (
+      <div id={area.id} class="scroll-mt-[var(--ks-rail-height)]">
+        <AreaCard
+          title={area.data.title}
+          why={area.data.why}
+          mark={area.data.mark}
+          count={postCount(area)}
+          href={itemsFor(area)[0]?.href}
+        />
+      </div>
+    ))}
   </div>
 </Site>

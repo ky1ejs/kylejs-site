@@ -12,6 +12,7 @@ import {
   AreaRail,
   Pill,
   PostListItem,
+  ProjectCard,
   ProjectItem,
   SiteFooter,
   SiteHeader,
@@ -46,27 +47,46 @@ describe("Mark", () => {
 
 describe("Button", () => {
   it("is a link with the variant class", () => {
-    const out = html(<Button href="/posts" variant="secondary">All writing</Button>);
-    expect(out).toMatch(/^<a class="ks-button ks-button-secondary" href="\/posts">/);
+    const out = html(
+      <Button href="/posts" variant="secondary">
+        All writing
+      </Button>,
+    );
+    expect(out).toMatch(
+      /^<a class="ks-button ks-button-secondary" href="\/posts">/,
+    );
   });
 
   it("adds a hidden arrow to the more variant", () => {
-    expect(html(<Button href="/posts" variant="more">All writing</Button>)).toContain(
-      '<span aria-hidden="true">→</span>',
-    );
+    expect(
+      html(
+        <Button href="/posts" variant="more">
+          All writing
+        </Button>,
+      ),
+    ).toContain('<span aria-hidden="true">→</span>');
   });
 });
 
 describe("Pill and Chain", () => {
   it("marks accent pills and draws a small mark", () => {
-    const out = html(<Pill accent mark="writing">Post</Pill>);
+    const out = html(
+      <Pill accent mark="writing">
+        Post
+      </Pill>,
+    );
     expect(out).toContain("data-accent");
     expect(out).toContain('data-size="sm"');
     expect(html(<Pill>Repo</Pill>)).not.toContain("data-accent");
   });
 
   it("renders steps as an ordered list", () => {
-    const out = html(<Chain steps={[{ label: "a" }, { label: "b", accent: true }]} label="Steps" />);
+    const out = html(
+      <Chain
+        steps={[{ label: "a" }, { label: "b", accent: true }]}
+        label="Steps"
+      />,
+    );
     expect(out).toMatch(/^<ol class="ks-chain" aria-label="Steps">/);
     expect(out.match(/<li>/g)).toHaveLength(2);
   });
@@ -74,18 +94,24 @@ describe("Pill and Chain", () => {
 
 describe("Byline", () => {
   it("falls back to initials without an avatar", () => {
-    expect(html(<Byline name="Kyle Satti" href="/" initials="KS" meta="today" />)).toContain(">KS</a>");
+    expect(
+      html(<Byline name="Kyle Satti" href="/" initials="KS" meta="today" />),
+    ).toContain(">KS</a>");
   });
 
   it("hides the avatar link from assistive tech and keyboard", () => {
-    const out = html(<Byline name="Kyle Satti" href="/" initials="KS" meta="today" />);
+    const out = html(
+      <Byline name="Kyle Satti" href="/" initials="KS" meta="today" />,
+    );
     expect(out).toContain('aria-hidden="true" tabindex="-1"');
   });
 });
 
 describe("PostListItem", () => {
   it("links the whole row and uses the given heading level", () => {
-    const out = html(<PostListItem href="/posts/a" title="A" meta="m" headingLevel={3} />);
+    const out = html(
+      <PostListItem href="/posts/a" title="A" meta="m" headingLevel={3} />,
+    );
     expect(out).toMatch(/^<a class="ks-post-item" href="\/posts\/a">/);
     expect(out).toContain('<h3 class="ks-post-item-title">A</h3>');
     expect(out).not.toContain("ks-post-item-desc");
@@ -102,7 +128,9 @@ describe("Callout", () => {
 
 describe("Areas", () => {
   it("labels the band by its heading", () => {
-    const out = html(<AreaBand id="coffee" title="Coffee" mark="coffee" why="w" />);
+    const out = html(
+      <AreaBand id="coffee" title="Coffee" mark="coffee" why="w" />,
+    );
     expect(out).toContain('aria-labelledby="coffee-title"');
     expect(out).toContain('id="coffee-title"');
   });
@@ -113,7 +141,14 @@ describe("Areas", () => {
         title="Fishing"
         mark="fishing"
         why="w"
-        items={[{ kind: "Post", title: "Why I fly fish", href: "/posts/why-i-fly-fish", writing: true }]}
+        items={[
+          {
+            kind: "Post",
+            title: "Why I fly fish",
+            href: "/posts/why-i-fly-fish",
+            writing: true,
+          },
+        ]}
       />,
     );
     expect(out).toContain("data-accent");
@@ -121,8 +156,12 @@ describe("Areas", () => {
   });
 
   it("renders a card as a link only when given an href", () => {
-    expect(html(<AreaCard title="T" why="w" mark="coffee" href="/x" />)).toMatch(/^<a /);
-    expect(html(<AreaCard title="T" why="w" mark="coffee" />)).toMatch(/^<div /);
+    expect(
+      html(<AreaCard title="T" why="w" mark="coffee" href="/x" />),
+    ).toMatch(/^<a /);
+    expect(html(<AreaCard title="T" why="w" mark="coffee" />)).toMatch(
+      /^<div /,
+    );
   });
 });
 
@@ -134,8 +173,12 @@ describe("Site chrome", () => {
   });
 
   it("limits the nav and footer to the given sections", () => {
-    expect(html(<SiteHeader sections={["writing", "about"]} />)).not.toContain("/projects");
-    expect(html(<SiteFooter year={2026} sections={["writing"]} />)).not.toContain("/about");
+    expect(html(<SiteHeader sections={["writing", "about"]} />)).not.toContain(
+      "/projects",
+    );
+    expect(
+      html(<SiteFooter year={2026} sections={["writing"]} />),
+    ).not.toContain("/about");
   });
 });
 
@@ -156,7 +199,9 @@ describe("SocialLinks", () => {
 
 describe("AreaRail", () => {
   it("links each area to its id", () => {
-    const out = html(<AreaRail areas={[{ id: "coffee", label: "Coffee", mark: "coffee" }]} />);
+    const out = html(
+      <AreaRail areas={[{ id: "coffee", label: "Coffee", mark: "coffee" }]} />,
+    );
     expect(out).toContain('aria-label="Areas"');
     expect(out).toContain('href="#coffee"');
   });
@@ -165,17 +210,67 @@ describe("AreaRail", () => {
 describe("ProjectItem", () => {
   it("links the title to the site and adds a source link when both exist", () => {
     const out = html(
-      <ProjectItem title="T" description="d" status="active" url="https://x.dev" repo="ky1ejs/x" />,
+      <ProjectItem
+        title="T"
+        description="d"
+        status="active"
+        url="https://x.dev"
+        repo="ky1ejs/x"
+      />,
     );
-    expect(out).toContain('<a class="ks-area-item-title" href="https://x.dev">T</a>');
+    expect(out).toContain(
+      '<a class="ks-area-item-title" href="https://x.dev">T</a>',
+    );
     expect(out).toContain('<a href="https://github.com/ky1ejs/x">Source</a>');
     expect(out).toContain("data-accent");
   });
 
   it("links the title to the repo without a site", () => {
-    const out = html(<ProjectItem title="T" description="d" status="archived" repo="ky1ejs/x" />);
+    const out = html(
+      <ProjectItem
+        title="T"
+        description="d"
+        status="archived"
+        repo="ky1ejs/x"
+      />,
+    );
     expect(out).toContain('href="https://github.com/ky1ejs/x">T</a>');
     expect(out).not.toContain("Source");
+    expect(out).not.toContain("data-accent");
+  });
+});
+
+describe("ProjectCard", () => {
+  it("links the card to the site and shows its host", () => {
+    const out = html(
+      <ProjectCard
+        title="Cut"
+        description="d"
+        status="active"
+        url="https://cut.watch/"
+        repo="ky1ejs/cut-ios"
+      />,
+    );
+    expect(out).toContain(
+      '<a class="ks-project-card" href="https://cut.watch/">',
+    );
+    expect(out).toContain(
+      '<span class="ks-project-card-link">cut.watch</span>',
+    );
+    expect(out).toContain("data-accent");
+  });
+
+  it("falls back to the repo without a site", () => {
+    const out = html(
+      <ProjectCard
+        title="Orca"
+        description="d"
+        status="experiment"
+        repo="ky1ejs/orca"
+      />,
+    );
+    expect(out).toContain('href="https://github.com/ky1ejs/orca"');
+    expect(out).toContain("github.com/ky1ejs/orca</span>");
     expect(out).not.toContain("data-accent");
   });
 });

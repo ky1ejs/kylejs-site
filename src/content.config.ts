@@ -31,6 +31,8 @@ const projects = defineCollection({
     status: z.enum(["active", "shipped", "experiment", "archived"]).default("shipped"),
     /** Lower sorts first within a group. */
     order: z.number().default(50),
+    /** Rank in the home page's selected work, 1 first. Omit to leave it off the home page. */
+    highlight: z.number().int().positive().optional(),
   }),
 });
 

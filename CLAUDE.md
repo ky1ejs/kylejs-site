@@ -33,7 +33,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ## Project Structure
 
 ### Pages (`/src/pages`)
-- `index.astro` - Home page: hero, area rail, then each area from the `areas` collection as a full band or a compact card
+- `index.astro` - Home page: hero, selected work (projects with `highlight`), area rail, then each area from the `areas` collection as a full band or a compact card
 - `projects.astro` - Projects grouped by `src/lib/project-groups.ts`
 - `about.astro` - About page with bio toggle
 - `posts/index.astro` - Blog listing
@@ -48,7 +48,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?, areas?). `areas` lists area IDs (file names in `areas/`); the post shows under each on the home page. An unknown ID fails the build
 - `drafts/` - Draft blog posts
 - `areas/` - One file per area on the home page. Layout is content: `display: band | compact`, `order`, `media.layout: side | stack`. An image without `src` renders as a labelled placeholder; photos go in `src/assets/areas/` with `src` relative to the area file. `items` is for repos, sites and prints only: posts join an area through their own `areas` field
-- `projects/` - One file per project for /projects (group, repo, url, status, order; optional body becomes a note)
+- `projects/` - One file per project for /projects (group, repo, url, status, order, highlight?; optional body becomes a note). `highlight` ranks a project in the home page's selected work, 1 first; omit it to leave the project off. Two projects with the same rank fail the build
 
 ### Design system (`/src/design`)
 Framework-agnostic: plain CSS plus React components that only take props and return markup. Astro renders them to HTML at build time, so they ship no JavaScript. Design source: the "kylejs.me design system" canvas on claude.ai.
@@ -56,7 +56,7 @@ Framework-agnostic: plain CSS plus React components that only take props and ret
 - `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
 - `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
 - `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
-- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, AreaRail, ProjectItem, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
+- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, AreaRail, ProjectCard, ProjectItem, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
 - `socials.ts` - The social profiles and their brand icons, used by the footer and home page
 - `stories/` - Storybook stories. Storybook shows each story in light and dark: side by side from 900px wide, stacked for stories with `themeLayout: "stack"`
 

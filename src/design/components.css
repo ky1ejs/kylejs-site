@@ -431,6 +431,58 @@ a.ks-area-card:hover {
   color: var(--ks-accent-text);
 }
 
+/* ===== Project card ===== */
+.ks-project-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+  padding: 18px 20px;
+  border: 1px solid var(--ks-rule);
+  border-radius: var(--ks-radius-card);
+  background: var(--ks-surface);
+  color: var(--ks-ink);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+a.ks-project-card:hover {
+  border-color: var(--ks-accent-text);
+}
+
+a.ks-project-card:focus-visible {
+  outline: 2px solid var(--ks-accent);
+  outline-offset: 2px;
+}
+
+.ks-project-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ks-space-2);
+}
+
+.ks-project-card-title {
+  font-family: var(--ks-font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ks-project-card-desc {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ks-ink-2);
+}
+
+.ks-project-card-link {
+  padding-top: 4px;
+  font-family: var(--ks-font-mono);
+  font-size: 11px;
+  color: var(--ks-accent-text);
+}
+
 /* ===== Area band ===== */
 .ks-area-band {
   display: flex;
