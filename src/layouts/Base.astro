@@ -37,6 +37,9 @@ const defaultShareImage = await getImage({
   width: Math.min(meImage.width, 1200),
 });
 const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
+// Cloudflare Web Analytics. The token is public: it ships in every page.
+// Unset in local and CI builds, so they send no page views.
+const webAnalyticsToken = import.meta.env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN;
 ---
 
 <!doctype html>
@@ -91,6 +94,24 @@ const imageUrl = `${siteUrl}${ogImage ?? defaultShareImage.src}`;
       document.startViewTransition = undefined;
     </script>
     <ClientRouter />
+
+    {/*
+      Page views for Cloudflare Web Analytics and the most read list
+      (src/lib/most-read.ts). It counts a view when a page is shown, not when
+      PageLoader prefetches it. ClientRouter keeps this script across
+      navigations, and the beacon counts each one by wrapping
+      `history.pushState` and listening for `popstate`.
+    */}
+    {
+      webAnalyticsToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: webAnalyticsToken })}
+        />
+      )
+    }
 
     {/* Theme detection - runs before paint to prevent flash */}
     <script is:inline>

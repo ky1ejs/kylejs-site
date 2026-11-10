@@ -65,6 +65,7 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
+- `most-read.ts` - Queries Cloudflare Web Analytics at build time for the posts with the most views; `/posts` shows the top three
 - `hast-heading-ids.ts` - Sätteri hast plugin for heading anchor IDs (keeps existing anchors stable; Astro's built-in slugger would change them)
 - `hast-callouts.ts` - GitHub-style callout blockquotes
 - `hast-heading-marks.ts` - Wraps each h2's content in `<span class="heading-mark">` for the highlighter style
@@ -97,6 +98,12 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 - Set anything that depends on the reader (relative dates, theme, viewport) before paint: in CSS, or in an inline script beside the element plus an `astro:before-swap` handler on the incoming document (see `RelativeDateLabel.astro` and `Base.astro`). A module script or `astro:after-swap` handler can run after paint, and `pnpm check:layout-shift` fails on the shift
 - Safari Reader drops a `div` whose class or id matches words like `link`, `meta` or `share`, or whose text is under 25 characters. Wrap short blocks in a `p` or a custom element instead
 - OG/Twitter metadata per post
+
+### Analytics and the most read list
+- `Base.astro` loads the Cloudflare Web Analytics beacon when `PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` is set at build time. It counts a view when a page is shown, including ClientRouter navigations; `PageLoader` prefetches are not views
+- `src/lib/most-read.ts` reads 90 days of views per path from Cloudflare's GraphQL API during the build. It needs `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_WEB_ANALYTICS_SITE_TAG` and `CLOUDFLARE_ANALYTICS_API_TOKEN` (Account Analytics: Read). Without them, or if the query fails, the build logs a line and `/posts` leaves out the "Most read" section. Local and CI builds have none of these variables
+- The list is static, so `.github/workflows/daily-rebuild.yaml` calls a Workers Builds deploy hook (`CLOUDFLARE_DEPLOY_HOOK_URL` repository secret) every day
+- Fetching the list in the browser would change the page after paint and fail `pnpm check:layout-shift`
 
 ### ViewTransitions
 - Smooth page transitions via `astro:transitions`

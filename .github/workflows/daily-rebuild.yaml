@@ -1,0 +1,32 @@
+name: Daily rebuild
+
+# Rebuilds and deploys main once a day, so build-time data such as the most
+# read list on /posts (src/lib/most-read.ts) stays at most a day old.
+# Workers Builds runs the build; this only calls its deploy hook.
+#
+# Setup: create a deploy hook for the main branch in the Cloudflare dashboard
+# (Workers & Pages > kylejs-site > Settings > Builds > Deploy Hooks), then save
+# its URL as the repository secret CLOUDFLARE_DEPLOY_HOOK_URL. Anyone with the
+# URL can start a build, so keep it secret.
+
+on:
+  schedule:
+    # 06:43 UTC, outside the busy top of the hour
+    - cron: "43 6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger a Workers Builds deploy
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::error::Set the CLOUDFLARE_DEPLOY_HOOK_URL repository secret (see the comment at the top of this workflow)"
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error --retry 3 --max-time 30 -X POST "$DEPLOY_HOOK_URL"

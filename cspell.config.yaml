@@ -18,6 +18,9 @@ ignoreRegExpList:
   # Footnote labels, e.g. [^sneddon2003]
   - /\[\^[\w-]+\]/g
 words:
+  - env
+  - geq
+  - leq
   - Acaia
   - Akers
   - anthrozoologist
