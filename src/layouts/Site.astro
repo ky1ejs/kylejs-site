@@ -3,7 +3,7 @@ import Base from "./Base.astro";
 import ThemeButton from "../components/ThemeButton.astro";
 import HeadingLinks from "../components/HeadingLinks.astro";
 import { SiteHeader, SiteFooter, type NavSection } from "../design/components";
-import { TEXT_COLUMN_CLASS } from "../lib/layout";
+import { TEXT_COLUMN_CLASS, WIDE_COLUMN_CLASS } from "../lib/layout";
 
 interface Props {
   title?: string;
@@ -14,12 +14,13 @@ interface Props {
   publishedTime?: string;
   /** Nav item marked as the current page */
   section?: NavSection;
+  /** text: 680px column for reading. wide: 1120px, for the home page and grids */
+  width?: "text" | "wide";
 }
 
-const { section, ...props } = Astro.props;
+const { section, width = "text", ...props } = Astro.props;
 
-// Projects joins the nav once /projects exists
-const sections: NavSection[] = ["writing", "about"];
+const sections: NavSection[] = ["writing", "projects", "about"];
 const year = new Date().getFullYear();
 ---
 
@@ -27,7 +28,7 @@ const year = new Date().getFullYear();
   <SiteHeader current={section} sections={sections}>
     <ThemeButton />
   </SiteHeader>
-  <div class={TEXT_COLUMN_CLASS}>
+  <div class={width === "wide" ? WIDE_COLUMN_CLASS : TEXT_COLUMN_CLASS}>
     <main data-page-content>
       <slot />
     </main>

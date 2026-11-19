@@ -24,6 +24,7 @@ words:
   - awww
   - backcountry
   - badlogic
+  - Bambu
   - booooo
   - brainer
   - Brownscombe
@@ -37,11 +38,12 @@ words:
   - Edelkrone
   - evals
   - goated
+  - Gridfinity
   - haha
   - Herzog
-  - Linea
   - Lindgren
   - Lindström
+  - Linea
   - Marzocco
   - Mediratta
   - Micra
@@ -62,10 +64,12 @@ words:
   - Ronin
   - salmonids
   - Samarth
+  - Skadis
   - skillset
   - skillsets
   - Slypod
   - Sneddon
+  - Splitwise
   - steipete
   - Striedter
   - Sworks
@@ -77,23 +81,29 @@ words:
   - anthropics
   - backref
   - cwd
+  - deeplinking
   - describedby
   - dji
   - fontsource
   - frontmatter
   - Headshot
+  - homelab
+  - keymaps
   - kylejs
   - lexend
+  - macbook
   - mozjpeg
   - nvmrc
   - plaiceholder
   - prefetchable
+  - profdata
   - rearchitect
   - satteri
   - Satti
   - Segoe
   - shiki
   - slugifier
+  - splitty
   - standfirsts
   - svh
   - Sätteri
@@ -103,3 +113,4 @@ words:
   - wght
   - wordmark
   - workerd
+  - zmk

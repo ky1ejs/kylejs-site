@@ -23,6 +23,7 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm check:spelling` - Spell check content, components and docs with cspell (US and UK English). Add real words it does not know to `words` in `cspell.config.yaml`
 - `pnpm knip` - Find unused files, dependencies and exports (runs in CI with lint)
+- `GITHUB_TOKEN=$(gh auth token) node scripts/fetch-github-data.mjs` - Refresh `src/data/github.json`: each project repo's language, stars, last non-bot commit and commits in 90 days. `.github/workflows/github-data.yaml` runs it nightly and commits changes; the build never calls GitHub. A private `activityRepo` needs the `GH_DATA_TOKEN` secret in CI, or it keeps its last committed values
 - `pnpm check:images` - After a build, fail on images in `public/` or built images over 400 KB
 - `pnpm check:layout-shift` - After a build, load every page and navigate between pages in a phone-sized Chromium on a slow network. Fails on layout shift, or on text a script rewrites after it is painted
 - `pnpm check:back-navigation` - After a build, land on a page, follow a link, then go back and forward in a phone-sized Chromium on a slow network. Fails if a page the reader has already seen shows the loading skeleton
@@ -33,7 +34,8 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 ## Project Structure
 
 ### Pages (`/src/pages`)
-- `index.astro` - Home/landing page
+- `index.astro` - Home page: hero, selected work (projects with `highlight`), area rail, then each area from the `areas` collection as a full band or a compact card
+- `projects.astro` - Projects grouped by topic (`src/lib/project-groups.ts`) and sorted by activity in the HTML. Two `Segmented` controls let the reader regroup (topic, status from `src/lib/project-statuses.ts`, none) and resort (most active, last commit, A–Z); a page script moves the rows only on input
 - `about.astro` - About page with bio toggle
 - `posts/index.astro` - Blog listing
 - `posts/[id].astro` - Individual blog post (dynamic route)
@@ -44,8 +46,10 @@ An Astro personal website/blog built with TypeScript, Tailwind CSS, and MDX for 
 - `Post.astro` - Post layout wrapping Site with `.post` class
 
 ### Content (`/src/content`)
-- `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?)
+- `blog/` - MDX/MD blog posts (frontmatter: title, description?, date, shareImage?, reviewers?, areas?). `areas` lists area IDs (file names in `areas/`); the post shows under each on the home page. An unknown ID fails the build. Projects take the same field
 - `drafts/` - Draft blog posts
+- `areas/` - One file per area on the home page. Layout is content: `display: band | compact`, `order`, `media.layout: side | stack`. An image without `src` renders as a labelled placeholder; photos go in `src/assets/areas/` with `src` relative to the area file. `items` is for things that are neither posts nor projects (a print, say): posts and projects join an area through their own `areas` field. A band lists ranked projects, then posts newest first, then other projects (active first), then `items`
+- `projects/` - One file per project for /projects (group, repo?, activityRepo?, url?, status?, order, highlight?, areas?; optional body becomes a note). `activityRepo` takes the project's stats from a repo that is not linked, such as a private one (Cut uses `cut-watch/cut`). `status` is usually omitted: the shown status comes from GitHub data (Archived when the repo is archived, Parked after six months without a commit, else Active). Set `experiment` or `archived` to override; there is no "shipped". `highlight` ranks a project in the home page's selected work, 1 first; omit it to leave the project off. Two projects with the same rank fail the build. Stats and the sort within a band or group come from `src/data/github.json`
 
 ### Design system (`/src/design`)
 Framework-agnostic: plain CSS plus React components that only take props and return markup. Astro renders them to HTML at build time, so they ship no JavaScript. Design source: the "kylejs.me design system" canvas on claude.ai.
@@ -53,18 +57,23 @@ Framework-agnostic: plain CSS plus React components that only take props and ret
 - `components.css` - `.ks-*` component classes on the tokens. `prose.css` - post body styles (`.post`)
 - `marks.ts` - The ten area marks as `{ shape, detail }` paths on a 24 grid
 - `callouts.ts` - Callout types and line icons, shared by the `Callout` component and `hast-callouts.ts`
-- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
+- `components/` - Mark, Button, Pill and PillList, Chain, Byline, PostListItem, Callout, AreaCard, AreaBand and MediaPlaceholder, AreaRail, ProjectCard, ProjectItem, Segmented, SiteHeader, SiteFooter, SocialLinks. `index.ts` is the public API
 - `socials.ts` - The social profiles and their brand icons, used by the footer and home page
 - `stories/` - Storybook stories. Storybook shows each story in light and dark: side by side from 900px wide, stacked for stories with `themeLayout: "stack"`
 
-Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props.
+Rules for design-system components: no hooks or state (interactive pieces stay separate islands); no `astro:assets` (Astro pages call `getImage()` and pass `src`/`srcSet`); styles go in `components.css`, not Tailwind classes in markup. Use them from `.astro` files without a `client:` directive. Pass Astro content into them with named slots (`<Fragment slot="meta">`), which arrive as props. Astro passes a slot even when its content is empty, so render the component without the slot when there is nothing to put in it (see `index.astro` and `projects.astro`).
+
+`Site.astro` takes `width="text"` (680px, default) or `width="wide"` (1120px, the home page).
 
 ### Components (`/src/components`)
-- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata (renders the design-system Byline), PostHeader, PostFooter, Copyright, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
+- `.astro` components - PageLoader (page prefetch cache and loading skeleton, rendered by `Base.astro`), MermaidDiagram (hydrates Mermaid with `client:idle`), ThemeButton, PostMetadata (renders the design-system Byline), PostHeader, PostFooter, RelativeDateLabel, HeadingLinks (copies a heading's URL when its link is clicked)
 - `.tsx` React components - Mermaid (client:idle), Pill (MDX override, renders the design-system Pill), GitHubRepoCard, DownloadFile, MdxImage
 
 ### Library (`/src/lib`)
 - `reading-time.ts` - Reading time calculation
+- `github.ts` - Reads `src/data/github.json`: the status to show, activity sorting, and the "Swift · 61★ · Mar 2026" meta line
+- `project-statuses.ts` - Section titles and blurbs when /projects is grouped by status
+- `area-entries.ts` - Groups posts and projects by their `areas` frontmatter for the home page; throws on an unknown area
 - `hast-heading-ids.ts` - Sätteri hast plugin for heading anchor IDs (keeps existing anchors stable; Astro's built-in slugger would change them)
 - `hast-callouts.ts` - GitHub-style callout blockquotes
 - `hast-heading-marks.ts` - Wraps each h2's content in `<span class="heading-mark">` for the highlighter style
@@ -102,17 +111,17 @@ Rules for design-system components: no hooks or state (interactive pieces stay s
 - Smooth page transitions via `astro:transitions`
 - Astro's `prefetch` is off. `PageLoader.astro` fetches internal pages into memory as their links enter the viewport and serves ClientRouter navigations from that cache. Cloudflare serves HTML with `max-age=0, must-revalidate` and no `ETag`, so an HTTP-cache prefetch is downloaded again on click. Pages build as `about.html` (`build.format: "file"`, `trailingSlash: "never"`), so Cloudflare serves them at `/about` and 307s `/about/` there. Link without a trailing slash
 - `PageLoader` also keeps each page the reader has seen, starting with the one they landed on, reading the browser's copy with `fetch(..., { cache: "force-cache" })`. Going back or forward to it needs no request and shows no skeleton. `pnpm check:back-navigation` fails if it does
-- If the page is not ready 100ms after a click, `PageLoader` replaces the `[data-page-content]` slot in `Site.astro` (or the whole body on the home page) with a skeleton shaped like the destination
+- If the page is not ready 100ms after a click, `PageLoader` replaces the `[data-page-content]` slot in `Site.astro` with a skeleton shaped like the destination
 - Scripts re-initialize via `astro:after-swap` event
 
 ## Configuration Files
 - `astro.config.mjs` - Astro config with MDX, React, Tailwind, Sätteri hast plugins
 - `tsconfig.json` - Extends astro/tsconfigs/strict
-- `src/content.config.ts` - Content collections (`blog`, `about`)
+- `src/content.config.ts` - Content collections (`blog`, `about`, `projects`, `areas`)
 
 ## Content Guidelines
 - Blog posts go in `src/content/blog/` as `.md` or `.mdx` files
-- Frontmatter must include `title` and `date`; `description`, `shareImage`, and `reviewers` are optional
+- Frontmatter must include `title` and `date`; `description`, `shareImage`, `reviewers` and `areas` are optional
 - Images in `src/assets/posts/images/`, referenced in MDX as `<Image src="/posts/images/<file>">`. A missing file fails the build
 - Add `priority` to above-the-fold images, and `sizes` to images narrower than the post column
 - Never put images in `public/`: Astro copies them unoptimized and `pnpm check:images` fails CI

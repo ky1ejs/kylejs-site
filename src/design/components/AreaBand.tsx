@@ -11,6 +11,10 @@ export interface AreaItem {
   href?: string;
   /** Marks the item as a post: accent pill with the writing mark. */
   writing?: boolean;
+  /** Accent pill without the writing mark, e.g. an active project. */
+  accent?: boolean;
+  /** Short mono line after the title, e.g. "Swift · Mar 2026". */
+  meta?: string;
 }
 
 export interface AreaBandProps {
@@ -43,26 +47,44 @@ export function AreaBand({
 }: AreaBandProps) {
   const Heading = `h${headingLevel}` as const;
   return (
-    <section className="ks-area-band" id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+    <section
+      className="ks-area-band"
+      id={id}
+      aria-labelledby={id ? `${id}-title` : undefined}
+    >
       <Mark name={mark} size={48} />
       <div className="ks-area-band-body">
         <div className="ks-area-band-head">
-          <Heading className="ks-area-band-title" id={id ? `${id}-title` : undefined}>
+          <Heading
+            className="ks-area-band-title"
+            id={id ? `${id}-title` : undefined}
+          >
             {title}
           </Heading>
           {meta && <span className="ks-label">{meta}</span>}
         </div>
         <p className="ks-area-band-why">{why}</p>
-        {chain && chain.length > 0 && <Chain steps={chain} label={`How ${title.toLowerCase()} led to projects`} />}
+        {chain && chain.length > 0 && (
+          <Chain
+            steps={chain}
+            label={`How ${title.toLowerCase()} led to projects`}
+          />
+        )}
         {(media || items.length > 0) && (
-          <div className="ks-area-band-content" data-media={media ? mediaLayout : undefined}>
+          <div
+            className="ks-area-band-content"
+            data-media={media ? mediaLayout : undefined}
+          >
             {media}
             {items.length > 0 && (
               <ul className="ks-area-items">
                 {items.map((item) => (
                   <li className="ks-area-item" key={item.title}>
                     <span className="ks-area-item-head">
-                      <Pill accent={item.writing} mark={item.writing ? "writing" : undefined}>
+                      <Pill
+                        accent={item.writing || item.accent}
+                        mark={item.writing ? "writing" : undefined}
+                      >
                         {item.kind}
                       </Pill>
                       {item.href ? (
@@ -72,8 +94,13 @@ export function AreaBand({
                       ) : (
                         <span className="ks-area-item-title">{item.title}</span>
                       )}
+                      {item.meta && (
+                        <span className="ks-meta">{item.meta}</span>
+                      )}
                     </span>
-                    {item.desc && <p className="ks-area-item-desc">{item.desc}</p>}
+                    {item.desc && (
+                      <p className="ks-area-item-desc">{item.desc}</p>
+                    )}
                   </li>
                 ))}
               </ul>
